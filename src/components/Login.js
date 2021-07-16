@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import useComponentVisible from './hookHelpers/useComponentVisible'
+import useComponentVisible from '../hookHelpers/useComponentVisible'
 
 
 
