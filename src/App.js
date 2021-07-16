@@ -1,15 +1,29 @@
-import React, { useState, useEffect } from 'react'
-import socketClient from 'socket.io-client'
-import logo from './logo.svg';
+import React, { useState } from 'react'
 import './App.css';
 import axios from 'axios'
+import { BrowserRouter as Router } from 'react-router-dom'
+import Layout from './components/Layout'
+import Login from './components/Login'
 
-const server="http://localhost:3001"
-const socket = socketClient(server)
+
 
 
 function App() {
-  const [notes, setNotes] = useState([])
+  const [user, setUser] = useState(null)
+
+
+  return (
+    <Router>
+      <div className="container">
+        <Login />
+      </div>
+    </Router>
+  );
+}
+
+export default App;
+/*
+const [notes, setNotes] = useState([])
   const [connected, setConnected] = useState(false)
 
   socket.on('updated-content', (res) => {
@@ -49,16 +63,12 @@ function App() {
     await axios.post('/api/notes', newNote)
 
   }
-
   
-  return (
-    <div className="App">
+      <div className="App">
       <button onClick={testThis}>Test</button>
       {notes.map(note => (
         <div key={note.id}>{note.content}</div>
       ))}
     </div>
-  );
-}
 
-export default App;
+  */

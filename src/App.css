@@ -1,38 +1,59 @@
-.App {
+@keyframes slideUp {
+  0% {
+    transform: translateY(25px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0px);
+    opacity: 100%;
+  }
+}
+
+.container {
+  min-height: 100vh;
+  min-width: 100vw;
+  background-color: black;
+}
+
+.loginContainer {
+  background-color: black;
+  justify-content: center;
+  color: white;
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.loginBox {
+  margin-top: 30vh;
+  background-color: grey;
+  width: 50vw;
+  min-height: 15vh;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
+.loginForm {
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  align-content: center;
 }
 
-.App-link {
-  color: #61dafb;
+.otherOptions {
+  flex-direction: row;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.otherOptions {
+  position: relative
 }
+
+.signUpBox {
+  left: 0px;
+  background-color:burlywood;
+  position: absolute;
+  min-width: 25vw;
+  animation: slideUp 300ms;
+}
+
+.signUpForm {
+  flex-direction: column;
+  align-content: center;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
