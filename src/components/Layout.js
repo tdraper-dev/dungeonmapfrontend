@@ -4,7 +4,7 @@ import Login from './Login'
 import Dashboard from './Dashboard'
 
 function Layout() {
-  const [user, setUser] = useState('Hello!')
+  const [user, setUser] = useState(null)
 
   return (
     <Switch>

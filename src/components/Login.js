@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
-import useComponentVisible from '../hookHelpers/useComponentVisible'
-
+import signUpService from '../services/signup'
+import loginService from '../services/login'
+import gameBoardService from '../services/gameboard'
 
 function JoinSession({ setVisible }) {
   const [sessionID, setSessionID] = useState('')
@@ -27,7 +28,7 @@ function JoinSession({ setVisible }) {
   return (
     <div className="joinSessionBox">
     <form ref={boxRef} className="signUpForm row pt-3" onSubmit={handleSubmit}>
-      <label className="col-lg-7 col-md-6 col-8 mb-2">Session ID</label>
+      <label className="label col-lg-7 col-md-6 col-8 mb-2">Session ID</label>
       <input
         type="text"
         value={sessionID}
@@ -41,19 +42,38 @@ function JoinSession({ setVisible }) {
 }
 
 
-function LoginForm() {
+function LoginForm({ setUser }) {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
- 
-    console.log('you tried to log in', username, password)
+
+    try {
+      const user = {
+        username,
+        password
+      }
+      
+      const loggedUser = await loginService.login(user)
+      window.localStorage.setItem(
+        'loggedDungeonMaster', JSON.stringify(loggedUser)
+      )
+  
+      gameBoardService.setToken(loggedUser.token)
+      
+      setUser(loggedUser.id)
+
+      setUsername('')
+      setPassword('')
+    } catch (exception) {
+      console.log(exception)
+    }
   }
 
   return (
     <form className="loginForm row py-5" onSubmit={handleSubmit}>
-      <label className="col-lg-6 col-md-6 col-8">Username</label>
+      <label className="label col-lg-6 col-md-6 col-8">Username</label>
       <input
           type='text'
           placeholder='Username'
@@ -61,7 +81,7 @@ function LoginForm() {
           value={username}
           onChange={({ target }) => setUsername(target.value)}
       />
-      <label className="col-lg-6 col-md-6 col-8">Password</label>
+      <label className="label col-lg-6 col-md-6 col-8">Password</label>
       <input
         type='password'
         placeholder='Password'
@@ -77,19 +97,34 @@ function LoginForm() {
 }
 
 
-function SignUpForm ({ setVisible, testRef }) {
+function SignUpForm ({ setVisible }) {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [passwordConfirm, setPasswordConfirm] = useState('')
+  const boxRef = useRef()
 
-  console.log(testRef)
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     console.log('You tried to sign up!')
-    setVisible(false);
-  }
+    if(password === passwordConfirm) {
+      try {
+        const newUser = {
+          username,
+          password
+        }
+        const response = await signUpService.createUser(newUser)
+        setVisible(false);
+        setUsername('')
+        setPassword('')
+        console.log('SUCCESS', response.data)
+      } catch (exception) {
+        console.log(exception)
+      }
+    } else {
+      console.log('make sure passwords match')
+    }
 
-  const boxRef = useRef()
+  }
   
   const checkForClick = (event) => {
     if(!boxRef.current || !boxRef.current.contains(event.target)) {
@@ -107,21 +142,21 @@ function SignUpForm ({ setVisible, testRef }) {
   return (
     <div className="signUpBox">
       <form ref={boxRef} className="signUpForm row pt-3" onSubmit={handleSubmit}>
-        <label className="col-lg-6 col-md-8 col-8 mb-2" >Username</label>
+        <label className="label col-lg-6 col-md-8 col-8 mb-2" >Username</label>
         <input
           type='text'
           className="col-lg-6 col-md-8 col-8 mb-2 inputs"
           value={username}
           onChange={({ target }) => setUsername(target.value)}
         />
-        <label className="col-lg-6 col-md-8 col-8 mb-2">Password</label>
+        <label className="label col-lg-6 col-md-8 col-8 mb-2">Password</label>
         <input
           type='password'
           className="col-lg-6 col-md-8 col-8 mb-2 inputs"
           value={password}
           onChange={({ target }) => setPassword(target.value)}
         />
-        <label className="col-lg-6 col-md-8 col-8 mb-2">Confirm Password</label>
+        <label className="label col-lg-6 col-md-8 col-8 mb-2">Confirm Password</label>
         <input
           type='password'
           className="col-lg-6 col-md-8 col-8 mb-2 inputs"
@@ -139,15 +174,15 @@ function SignUpForm ({ setVisible, testRef }) {
 
 function OptionButton (props) {
   const [visible, setVisible] = useState(false)
+
   const toggleVisible = () => {
     setVisible(!visible)
   }
-  const testRef = useRef();
 
   return (
-    <div className="optionItems col-6">
+    <div className="optionItems px-1 py-1">
       <button onClick={toggleVisible} className="buttons signUpButton">{props.label}</button>
-      { visible ? React.cloneElement(props.children, { ...props, setVisible: setVisible, ref: testRef })
+      { visible ? React.cloneElement(props.children, { ...props, setVisible: setVisible })
         : null
       }
       
@@ -165,10 +200,10 @@ function Login({ setUser }) {
     <div className='loginContainer row mx-3'>
       <div className='loginBox d-flex'>
         <h2 className="titles formTitle">Login</h2>
-          <LoginForm />
-          <div className=" otherOptions d-flex">
+          <LoginForm setUser={setUser} />
+          <div className=" otherOptions d-flex mx-2">
           <OptionButton label="Sign Up">
-            <SignUpForm />
+            <SignUpForm setUser={setUser} />
           </OptionButton>
           <OptionButton label="Join Game">
             <JoinSession />

@@ -14,13 +14,13 @@
   }
 }
 
-/*#background {
+#background {
   position:fixed;
   top: 0;
   bottom: -80px;
   left: 0;
   right: 0;
-  background-image: url('./images/travel_background.jpg');
+  background-image: url('./images/woodenBoards.jpeg');
   background-repeat: no-repeat;
   background-position:left;
 }
@@ -28,13 +28,11 @@
   #background {
     background-position: center;
   }
-}*/
+}
+
 .container {
   min-height: 100vh;
   min-width: 100vw;
-  background-image: url('./images/woodenBoards.jpeg');
-  background-repeat: no-repeat;
-  background-position:left;
 }
 
 .loginTitle {
@@ -92,14 +90,21 @@
 }
 
 .otherOptions {
+  justify-content: space-between;
   margin-top: auto;
   margin-bottom: 20px;
 }
 
+.optionItems {
+  background-color: burlywood;
+  border: 4px groove rgb(156, 89, 0);
+}
+
 .signUpBox,
 .joinSessionBox {
-  bottom: 60px;
-  left: 95px;
+  bottom: 115px;
+  left: 50px;
+  right: 50px;
   background-color:burlywood;
   position: absolute;
   min-width: 20vw;
@@ -121,10 +126,25 @@
   margin-right: 0 !important;
 }
 
+.signUpButton,
+.buttons, 
+.submitButtons
+ {
+  font-weight: 600;
+}
+
 .submitButtons {
   align-self: center;
 }
 
 .buttons {
   background-color: antiquewhite;
+}
+
+.buttons:hover {
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+.label {
+  font-weight: 600;
 }

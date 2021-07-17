@@ -14,11 +14,12 @@ function App() {
 
   return (
     <Router>
-      <div id="background">
-        <div className="container">
-          <Login />
-        </div>
-      </div>
+        {user ?
+        <div>Hello World </div>
+        : <div id="background">
+            <Login setUser={setUser} />
+          </div>
+        }
     </Router>
   );
 }
