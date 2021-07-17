@@ -243,6 +243,11 @@ html {
   color: rgb(103, 250, 103);
 }
 
+.enterButton:hover,
+.deleteButton:hover {
+  font-size: 30px;
+}
+
 .mapTrayContainer {
   background-image: url('./images/woodenBoards.jpeg');
   background-repeat: no-repeat;
