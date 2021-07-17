@@ -63,9 +63,6 @@ function LoginForm({ setUser }) {
       gameBoardService.setToken(loggedUser.token)
       
       setUser(loggedUser.id)
-
-      setUsername('')
-      setPassword('')
     } catch (exception) {
       console.log(exception)
     }

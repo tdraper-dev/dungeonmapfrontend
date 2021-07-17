@@ -1,9 +1,11 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import './App.css';
 import axios from 'axios'
 import { BrowserRouter as Router } from 'react-router-dom'
 import Layout from './components/Layout'
 import Login from './components/Login'
+import gameBoardService from './services/gameboard'
+import Dashboard from './components/Dashboard';
 
 
 
@@ -11,11 +13,20 @@ import Login from './components/Login'
 function App() {
   const [user, setUser] = useState(null)
 
+  useEffect(() => {
+    const loggedUserJson = window.localStorage.getItem('loggedDungeonMaster')
+    if(loggedUserJson) {
+      const user = JSON.parse(loggedUserJson)
+      setUser(user.id)
+      gameBoardService
+        .setToken(user.token)
+    }
+  }, [])
 
   return (
     <Router>
         {user ?
-        <div>Hello World </div>
+        <Dashboard user={user} setUser={setUser} />
         : <div id="background">
             <Login setUser={setUser} />
           </div>

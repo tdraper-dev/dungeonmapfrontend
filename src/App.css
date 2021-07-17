@@ -1,3 +1,20 @@
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.boardsDisplay::-webkit-scrollbar {
+  display: none; 
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.boardsDisplay {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
 @font-face {
   font-family: dungeonFont;
   src: url('./fonts/DUNGRG__.TTF')
@@ -12,6 +29,13 @@
     transform: translateX(0px);
     opacity: 100%;
   }
+}
+
+#root,
+body,
+html {
+  height: 100%;
+  width: 100%;
 }
 
 #background {
@@ -147,4 +171,86 @@
 
 .label {
   font-weight: 600;
+}
+
+
+/* ------------------------------------------------------- */
+
+.dashboardRow {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  margin: 0;
+}
+.sideBarColumn {
+  padding-left: 0;
+  flex-direction: column;
+  color: white;
+  height: 100%;
+  background-color:rgba(0, 0, 0, 0.8);
+  padding-right: 0;
+  overflow: hidden;
+}
+
+.dashTitle {
+  font-family: dungeonFont;
+  font-size: 40px
+}
+.dashUsername {
+  font-family: dungeonFont;
+  font-size: 40px;
+}
+.userBlock {
+  text-align: center;
+  border: 8px groove rgb(136, 104, 81);
+  background-image: url('./images/redFelt.jpg');
+  background-repeat: no-repeat;
+  background-position:left;
+}
+
+.dmButtonsBox {
+  justify-content: space-between;
+}
+.dmButton {
+  width: 100%;
+  border: none;
+  background-color: grey;
+  border: 2px groove rgb(136, 104, 81);
+}
+.boardsDisplay {
+  overflow-y: scroll;
+}
+
+.boardTile {
+  border-bottom: 4px groove rgb(136, 104, 81);
+}
+.boardTile:hover {
+  background-color: rgba(59, 226, 255, 0.2);
+}
+.deleteButton {
+  justify-content:flex-end;
+  padding-right: 20px;
+  color: red;
+}
+.boardTitle {
+  padding-right: 0;
+  font-family: dungeonFont;
+  font-size: 25px;
+}
+.enterButton {
+  padding: 0;
+  padding-left: 5px !important;
+  color: rgb(103, 250, 103);
+}
+
+.mapTrayContainer {
+  background-color:rgba(0, 0, 0, 0.2);
+  justify-content: center;
+}
+
+.mapImageView {
+  text-align: center;
+  background-image: url('./images/redFelt.jpg');
+  background-repeat: no-repeat;
+  background-position:center;
 }
