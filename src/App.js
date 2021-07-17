@@ -14,8 +14,10 @@ function App() {
 
   return (
     <Router>
-      <div className="container">
-        <Login />
+      <div id="background">
+        <div className="container">
+          <Login />
+        </div>
       </div>
     </Router>
   );

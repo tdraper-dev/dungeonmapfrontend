@@ -1,59 +1,130 @@
-@keyframes slideUp {
+@font-face {
+  font-family: dungeonFont;
+  src: url('./fonts/DUNGRG__.TTF')
+}
+
+@keyframes slideDown {
   0% {
-    transform: translateY(25px);
+    transform: translateY(-25px);
     opacity: 0;
   }
   100% {
-    transform: translateY(0px);
+    transform: translateX(0px);
     opacity: 100%;
   }
 }
 
+/*#background {
+  position:fixed;
+  top: 0;
+  bottom: -80px;
+  left: 0;
+  right: 0;
+  background-image: url('./images/travel_background.jpg');
+  background-repeat: no-repeat;
+  background-position:left;
+}
+@media(max-width: 1199px) {
+  #background {
+    background-position: center;
+  }
+}*/
 .container {
   min-height: 100vh;
   min-width: 100vw;
-  background-color: black;
+  background-image: url('./images/woodenBoards.jpeg');
+  background-repeat: no-repeat;
+  background-position:left;
 }
 
+.loginTitle {
+  color: white;
+  font-family: dungeonFont;
+  font-size: 150px;
+  padding-top: 5vh;
+  text-align: center;
+}
+@media(max-width: 877px) {
+  .loginTitle {
+    font-size: 80px;
+  }
+}
+@media(max-width: 570px) {
+  .loginTitle {
+    font-size: 40px;
+  }
+}
+
+.titles {
+  font-family: dungeonFont;
+}
+.inputs {
+  border: 2px groove black;
+  background-color: antiquewhite;
+}
 .loginContainer {
-  background-color: black;
   justify-content: center;
   color: white;
   text-align: center;
 }
 
 .loginBox {
-  margin-top: 30vh;
-  background-color: grey;
-  width: 50vw;
-  min-height: 15vh;
+  position: relative;
+  flex-direction: column;
+  justify-content: space-around;
+  margin-top: 1vh;
+  background-image: url('./images/redFelt.jpg');
+  background-repeat: no-repeat;
+  background-position:center;
+  border: 8px groove rgb(136, 104, 81);
+  min-height: 50vh;
+  max-width: 500px;
 }
 
 .loginForm {
+  background-color:burlywood;
+  border: 4px groove rgb(156, 89, 0);
   flex-direction: column;
+  align-self: center;
   align-content: center;
+  width: 80%;
+  box-shadow: 5px 10px 8px rgb(0 0 0 / 50%);
 }
 
 .otherOptions {
-  flex-direction: row;
+  margin-top: auto;
+  margin-bottom: 20px;
 }
 
-.otherOptions {
-  position: relative
-}
-
-.signUpBox {
-  left: 0px;
+.signUpBox,
+.joinSessionBox {
+  bottom: 60px;
+  left: 95px;
   background-color:burlywood;
   position: absolute;
-  min-width: 25vw;
-  animation: slideUp 300ms;
+  min-width: 20vw;
+  animation: slideDown 300ms;
+  border: 2px groove black;
+  box-shadow: 5px 10px 8px rgb(0 0 0 / 50%);
+  border-radius: 10px;
 }
 
+.formTitle {
+  font-size: 50px;
+}
 .signUpForm {
   flex-direction: column;
+  justify-content: space-evenly;
+  align-content: space-between;
   align-content: center;
   margin-left: 0 !important;
   margin-right: 0 !important;
 }
 
+.submitButtons {
+  align-self: center;
+}
+
+.buttons {
+  background-color: antiquewhite;
+}
