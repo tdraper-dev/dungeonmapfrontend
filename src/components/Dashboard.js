@@ -16,9 +16,13 @@ function BoardTile() {
 
   return (
     <div className="boardTile row">
-      <div className="deleteButton col-12 d-flex my-2"><BsXCircle /></div>
-      <div className="boardTitle col-10">Waterdeep Dragon Heist</div>
-      <div className="enterButton col-2 d-flex"><BsCheckCircle /></div>
+      <div className="boardTitle col-10">
+        <div className="boardTitleText mt-4">Waterdeep Dragon Heist</div>
+        </div>
+      <div className="buttonContainer col-2 row">
+        <div className="deleteButton py-2"><BsXCircle /></div>
+        <div className="enterButton py-2"><BsCheckCircle /></div>
+      </div>
     </div>
   )
 }
@@ -81,7 +85,7 @@ function SideBar() {
 function MapImageView() {
 
   return (
-    <div className="mapImageView col-11 my-4">
+    <div className="mapImageView col-8 my-4">
       <div >image</div>
     </div> 
   )

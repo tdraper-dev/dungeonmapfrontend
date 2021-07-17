@@ -223,28 +223,30 @@ html {
 
 .boardTile {
   border-bottom: 4px groove rgb(136, 104, 81);
+  padding-right: 10px;
 }
 .boardTile:hover {
   background-color: rgba(59, 226, 255, 0.2);
 }
+
+.boardTitle {
+  font-family: dungeonFont;
+  font-size: 20px;
+}
+.buttonContainer {
+  flex-direction: column;
+}
 .deleteButton {
-  justify-content:flex-end;
-  padding-right: 20px;
   color: red;
 }
-.boardTitle {
-  padding-right: 0;
-  font-family: dungeonFont;
-  font-size: 25px;
-}
 .enterButton {
-  padding: 0;
-  padding-left: 5px !important;
   color: rgb(103, 250, 103);
 }
 
 .mapTrayContainer {
-  background-color:rgba(0, 0, 0, 0.2);
+  background-image: url('./images/woodenBoards.jpeg');
+  background-repeat: no-repeat;
+  background-position:left;
   justify-content: center;
 }
 
