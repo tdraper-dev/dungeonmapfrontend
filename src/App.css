@@ -5,12 +5,14 @@ input::-webkit-inner-spin-button {
 }
 
 /* Hide scrollbar for Chrome, Safari and Opera */
-.boardsDisplay::-webkit-scrollbar {
+.boardsDisplay::-webkit-scrollbar,
+.sideBarColumn::-webkit-scrollbar {
   display: none; 
 }
 
 /* Hide scrollbar for IE, Edge and Firefox */
-.boardsDisplay {
+.boardsDisplay,
+.sideBarColumn {
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;  /* Firefox */
 }
@@ -186,26 +188,47 @@ html {
   padding-left: 0;
   flex-direction: column;
   color: white;
-  height: 100%;
   background-color:rgba(0, 0, 0, 0.8);
   padding-right: 0;
-  overflow: hidden;
+  overflow:scroll;
+  height: 100%;
+}
+
+@media(max-width: 991px) {
+  .sideBarColumn {
+    height: 750px;
+  }
 }
 
 .dashTitle {
   font-family: dungeonFont;
-  font-size: 40px
+  font-size: 40px;
+  padding: 0 !important;
 }
 .dashUsername {
   font-family: dungeonFont;
   font-size: 40px;
+  padding: 0 !important;
 }
 .userBlock {
+  margin: 0;
   text-align: center;
   border: 8px groove rgb(136, 104, 81);
   background-image: url('./images/redFelt.jpg');
   background-repeat: no-repeat;
   background-position:left;
+}
+@media(max-width: 991px) {
+  .userBlock {
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-image: none;
+    background-color:rgba(0, 0, 0, 0.8);
+  }
+  .dashTitle {
+    font-size: 20px;
+  }
 }
 
 .dmButtonsBox {
@@ -219,6 +242,7 @@ html {
 }
 .boardsDisplay {
   padding-left: 5px;
+  overflow-y: scroll;
 }
 
 .boardTile {
@@ -272,6 +296,14 @@ html {
   justify-content: center;
 }
 
+@media(max-width: 991px) {
+  .mapTrayContainer {
+    order: 1
+  }
+  .sideBarColumn {
+    order: 2
+  }
+}
 
 .mapImageView {
   text-align: center;
@@ -285,4 +317,5 @@ html {
   background-image: url('./images/redFelt.jpg');
   background-repeat: no-repeat;
   background-position:center;
+  border: 8px groove rgb(136, 104, 81);
 }

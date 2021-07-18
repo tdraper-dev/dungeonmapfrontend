@@ -49,6 +49,22 @@ function BoardDisplay() {
   return (
     <div className="boardsDisplay">
       <BoardTile />
+      <BoardTile />
+      <BoardTile />
+      <BoardTile />
+      <BoardTile />
+      <BoardTile />
+      <BoardTile />
+      <BoardTile />
+      <BoardTile />
+      <BoardTile />
+      <BoardTile />
+      <BoardTile />
+      <BoardTile />
+      <BoardTile />
+      <BoardTile />
+      <BoardTile />
+
  
     </div>
   )
@@ -76,9 +92,8 @@ function DmButtons() {
 function UserBlock() {
 
   return (
-    <div className="userBlock pt-3 pb-3">
-      <h2 className="dashTitle">Dungeon Master:</h2>
-      <h3 className="dashUsername">Jeffrey_Evans</h3>
+    <div className="userBlock pt-1 pb-1 pt-lg-3 pb-lg-3 row">
+      <div className="dashTitle col-12">Dungeon Master: <br /> Jeffrey Evans</div>
     </div>
   )
 }
@@ -86,7 +101,7 @@ function UserBlock() {
 function SideBar() {
 
   return (
-    <div className="sideBarColumn col-4 col-lg-2 d-flex">
+    <div className="sideBarColumn col-12 col-lg-2 d-flex">
       <UserBlock />
       <DmButtons />
       <BoardDisplay />
@@ -109,7 +124,7 @@ function MapImageView() {
 function MapTray() {
 
   return (
-    <div className="mapTrayContainer col-8 col-lg-10  d-flex">
+    <div className="mapTrayContainer col-12 col-lg-10  d-flex">
       <MapImageView />
     </div>
   )
