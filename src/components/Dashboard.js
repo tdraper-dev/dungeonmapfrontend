@@ -113,7 +113,7 @@ function MapImageView() {
 
   return (
     <div className="mapImageView col-8 my-4 d-flex">
-      <div className="imageBox py-5 px-5 d-flex">
+      <div className="imageBox py-1 px-1 py-md-5 px-md-5 d-flex">
         <img className="mapImage img-fluid" alt='' src="https://d20.pub/assets/uploads/2018/03/Simple-battlemap-for-Hoard-of-the-Dragon-Queen-Dungeons-and-Dragons-Adventure-Module-Part-1-Keep-in-Greenest-on-Fire.jpg" />
       </div>
 
