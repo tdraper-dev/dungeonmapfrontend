@@ -12,16 +12,33 @@ function LogoutButton() {
   )
 }
 
+
+function PopUpNotice(props) {
+  const [visible, setVisible] = useState(false)
+  const { label, className } = props
+
+  return (
+    <div onMouseEnter={() => setVisible(true)} onMouseLeave={() => setVisible(false)} className={`${className} my-2`}>
+      {props.children}
+      {visible ? <div className='popUpVisible'>{label}</div> : null }
+    </div>
+  )
+}
+
 function BoardTile() {
 
   return (
     <div className="boardTile row">
       <div className="boardTitle col-10">
         <div className="boardTitleText mt-4">Waterdeep Dragon Heist</div>
-        </div>
+      </div>
       <div className="buttonContainer col-2 row">
-        <div className="deleteButton py-2"><BsXCircle /></div>
-        <div className="enterButton py-2"><BsCheckCircle /></div>
+        <PopUpNotice label='Delete Gameboard' className="deleteButton">
+          <BsXCircle className="deleteIcon" />
+        </PopUpNotice>
+        <PopUpNotice label='Host Gameboard' className="enterButton">
+          <BsCheckCircle className="enterIcon"/>
+        </PopUpNotice>
       </div>
     </div>
   )
@@ -32,12 +49,7 @@ function BoardDisplay() {
   return (
     <div className="boardsDisplay">
       <BoardTile />
-      <BoardTile />
-      <BoardTile />
-      <BoardTile />
-      <BoardTile />
-      <BoardTile />
-      <BoardTile />
+ 
     </div>
   )
 }
@@ -85,8 +97,11 @@ function SideBar() {
 function MapImageView() {
 
   return (
-    <div className="mapImageView col-8 my-4">
-      <div >image</div>
+    <div className="mapImageView col-8 my-4 d-flex">
+      <div className="imageBox py-5 px-5 d-flex">
+        <img className="mapImage img-fluid" alt='' src="https://d20.pub/assets/uploads/2018/03/Simple-battlemap-for-Hoard-of-the-Dragon-Queen-Dungeons-and-Dragons-Adventure-Module-Part-1-Keep-in-Greenest-on-Fire.jpg" />
+      </div>
+
     </div> 
   )
 }
