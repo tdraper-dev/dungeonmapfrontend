@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react'
+import { Switch, Route, Link, Redirect, useHistory } from 'react-router-dom'
 import { useAuth } from '../services/use-auth'
 import { useNotify } from '../services/use-notification'
 import { NotificationError, NotificationSuccess } from './Notification'
 
 function JoinSession({ setVisible }) {
   const [sessionID, setSessionID] = useState('')
+  const history = useHistory()
 
   const checkForClick = (event) => {
     if(!boxRef.current || !boxRef.current.contains(event.target)) {
@@ -22,6 +24,9 @@ function JoinSession({ setVisible }) {
     e.preventDefault()
     setVisible(false);
     console.log('you tried to join a session')
+    return (
+      history.push('/gameboard/:id', {from: '/login'})
+    )
   }
 
   const boxRef = useRef()
@@ -208,10 +213,11 @@ function Login() {
 
   return (
     <div id="background">
-      <NotificationSuccess successType="userCreated" />
-    <h1 className="loginTitle">Dungeon Map!</h1>
+    <h1 className="loginTitle">
+        Dungeon Map!
+    </h1>
     <div className='loginContainer row mx-3'>
-      <div className='loginBox d-flex'>
+      <div className='loginBox notifyBoxes d-flex'>
         <h2 className="titles formTitle">Login</h2>
           <LoginForm />
           <div className=" otherOptions d-flex mx-2">
@@ -222,7 +228,9 @@ function Login() {
             <JoinSession />
           </OptionButton>
           </div>
+          <NotificationSuccess successType="userCreated" />
       </div>
+
   </div>
   </div>
   )

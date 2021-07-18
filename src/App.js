@@ -1,11 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import './App.css';
-import axios from 'axios'
 import { BrowserRouter as Router } from 'react-router-dom'
 import Layout from './components/Layout'
-import Login from './components/Login'
-import gameBoardService from './services/gameboard'
-import Dashboard from './components/Dashboard';
 import { ProvideAuth } from './services/use-auth'
 import { ProvideNotify } from './services/use-notification'
 

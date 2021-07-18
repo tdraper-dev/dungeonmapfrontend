@@ -63,12 +63,12 @@ html {
 }
 
 .successMessage {
+  position: absolute;
+  left: 3vw;
+  bottom: -10vh;
   padding: 5px;
-  position: fixed;
   font-weight: 600;
   font-size: 25px;
-  left: 34vw;
-  top: 3vw;
   width:fit-content;
   text-align: center;
   flex-wrap: wrap;
@@ -78,6 +78,24 @@ html {
   border: 1px solid rgba(82, 219, 82, 0.2);
   animation: slideDown 300ms;
 }
+@media(max-width: 1199px) {
+  .successMessage {
+    left: 3.5vw;
+  }
+}
+@media(max-width: 768px) {
+  .successMessage {
+    left: 14vw;
+    bottom: -15vh;
+    max-width: 300px;
+  }
+}
+@media(max-width: 576px) {
+  .successMessage {
+    left: 2vw;
+  }
+}
+
 
 
 /*--------------------------------- */
@@ -109,6 +127,11 @@ html {
   font-size: 150px;
   padding-top: 5vh;
   text-align: center;
+  justify-content: center;
+}
+
+.titleBox{
+  width: fit-content;
 }
 @media(max-width: 877px) {
   .loginTitle {
@@ -304,8 +327,11 @@ html {
   position: relative;
 }
 .enterButton {
-  color: rgb(103, 250, 103);
   position: relative;
+}
+.toGameboardLink,
+.toGameboardLink:hover {
+  color: rgb(103, 250, 103);
 }
 
 

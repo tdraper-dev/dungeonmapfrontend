@@ -39,7 +39,9 @@ function BoardTile() {
           <BsXCircle className="deleteIcon" />
         </PopUpNotice>
         <PopUpNotice label='Host Gameboard' className="enterButton">
-          <BsCheckCircle className="enterIcon"/>
+          <Link className="toGameboardLink" to="/gameboard/123">
+            <BsCheckCircle className="enterIcon"/>
+          </Link>
         </PopUpNotice>
       </div>
     </div>
@@ -76,7 +78,7 @@ function CreateBoard() {
 
   return(
     <div className="col-6">
-      <button className="dmButton">Add Board</button>
+      <button className="dmButton" >Add Board</button>
     </div>
   )
 }

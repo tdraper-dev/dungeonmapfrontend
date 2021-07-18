@@ -4,6 +4,11 @@ import Login from './Login'
 import Dashboard from './Dashboard'
 import { useAuth } from '../services/use-auth'
 
+function Gameboard() {
+  return (
+    <div>This is the gameboard!</div>
+  )
+}
 
 function Layout() {
   const auth = useAuth()
@@ -21,6 +26,7 @@ function Layout() {
       <Switch>
         <Route path="/dashboard/:id" component={Dashboard} />
         <Route path='/login' component={Login} />
+        <Route path='/gameboard/:id' component={Gameboard} />
       </Switch>
     </>
   )
