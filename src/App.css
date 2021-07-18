@@ -196,7 +196,7 @@ html {
 
 @media(max-width: 991px) {
   .sideBarColumn {
-    height: 750px;
+    height: 30vh;
   }
 }
 
@@ -298,10 +298,11 @@ html {
 
 @media(max-width: 991px) {
   .mapTrayContainer {
-    order: 1
+    order: 1;
+    height: 70vh;
   }
   .sideBarColumn {
-    order: 2
+    order: 2;
   }
 }
 
