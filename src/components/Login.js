@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
-import signUpService from '../services/signup'
-import loginService from '../services/login'
-import gameBoardService from '../services/gameboard'
+import { useAuth } from '../services/use-auth'
+import { useNotify } from '../services/use-notification'
+import { NotificationError, NotificationSuccess } from './Notification'
 
 function JoinSession({ setVisible }) {
   const [sessionID, setSessionID] = useState('')
@@ -45,6 +45,7 @@ function JoinSession({ setVisible }) {
 function LoginForm({ setUser }) {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+  const auth = useAuth()
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -54,17 +55,10 @@ function LoginForm({ setUser }) {
         username,
         password
       }
-      
-      const loggedUser = await loginService.login(user)
-      window.localStorage.setItem(
-        'loggedDungeonMaster', JSON.stringify(loggedUser)
-      )
-  
-      gameBoardService.setToken(loggedUser.token)
-      
-      setUser(loggedUser.id)
+      auth.logIn(user)
     } catch (exception) {
       console.log(exception)
+      
     }
   }
 
@@ -86,43 +80,34 @@ function LoginForm({ setUser }) {
         value={password}
         onChange={({ target }) => setPassword(target.value)}
       />
-      <div className="col-lg-6 col-md-6 col-8 mb-2">
-      <button className="buttons" type="submit">Login</button>
+      <div className="notifyBoxes col-lg-6 col-md-6 col-8 mb-2">
+        <button className="buttons" type="submit">Login</button>
+        <NotificationError errorType='badCredentials' />
       </div>
     </form>
   )
 }
 
-
-function SignUpForm ({ setVisible }) {
-  const [username, setUsername] = useState('')
+function SignUp({ setVisible, handleSignUp }) {
+  const[username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [passwordConfirm, setPasswordConfirm] = useState('')
   const boxRef = useRef()
+  const notify = useNotify();
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault()
-    console.log('You tried to sign up!')
-    if(password === passwordConfirm) {
-      try {
-        const newUser = {
-          username,
-          password
-        }
-        const response = await signUpService.createUser(newUser)
-        setVisible(false);
-        setUsername('')
-        setPassword('')
-        console.log('SUCCESS', response.data)
-      } catch (exception) {
-        console.log(exception)
-      }
-    } else {
-      console.log('make sure passwords match')
-    }
 
+    if(password === passwordConfirm) {
+      handleSignUp(username, password)
+    } else {
+      notify.notify({
+        notification: 'Please ensure passwords match',
+        errorType: 'passwordMatch'
+      })
+    }
   }
-  
+
   const checkForClick = (event) => {
     if(!boxRef.current || !boxRef.current.contains(event.target)) {
         setVisible(false)
@@ -135,35 +120,65 @@ function SignUpForm ({ setVisible }) {
       document.removeEventListener('click', checkForClick)
     }
   })
+ 
+  return (
+    <form ref={boxRef} className="signUpForm row pt-3" onSubmit={handleSubmit}>
+      <label className="label col-lg-6 col-md-8 col-8 mb-2" >Username</label>
+      <input
+        type='text'
+        className="col-lg-6 col-md-8 col-8 mb-2 inputs"
+        value={username}
+        onChange={({ target }) => setUsername(target.value)}
+      />
+        <NotificationError errorType='usernameLength' />
+      <label className="label col-lg-6 col-md-8 col-8 mb-2">Password</label>
+      <input
+        type='password'
+        className="col-lg-6 col-md-8 col-8 mb-2 inputs"
+        value={password}
+        onChange={({ target }) => setPassword(target.value)}
+      />
+      <label className="label col-lg-6 col-md-8 col-8 mb-2">Confirm Password</label>
+      <input
+        type='password'
+        className="col-lg-6 col-md-8 col-8 mb-2 inputs"
+        value={passwordConfirm}
+        onChange={({ target }) => setPasswordConfirm(target.value)}
+      />
+      <div className="notifyBoxes col-lg-6 col-md-8 col-8 mb-2 pt-2">
+        <button className="buttons" type="submit">Sign Up</button>
+        <NotificationError errorType='passwordMatch' />
+      </div>
+    </form> 
+  )
+}
 
+function SignUpForm ({ setVisible }) {
+  const notify = useNotify();
+  const auth = useAuth()
+
+  const handleSignUp = async (username, password) => {
+    try {
+      const newUser = { username, password }
+      const response = await auth.signUp(newUser)
+      if(response) {
+        setVisible(false);
+        notify.notify({
+          notification: `New user ${username} created!`,
+          successType: 'userCreated'
+        })
+      }
+    } catch (exception) {
+      notify.notify({
+        notification: 'Please ensure username is at least 5 characters in length',
+        errorType: 'usernameLength'
+      })
+      console.log(exception)
+    }
+  }
   return (
     <div className="signUpBox">
-      <form ref={boxRef} className="signUpForm row pt-3" onSubmit={handleSubmit}>
-        <label className="label col-lg-6 col-md-8 col-8 mb-2" >Username</label>
-        <input
-          type='text'
-          className="col-lg-6 col-md-8 col-8 mb-2 inputs"
-          value={username}
-          onChange={({ target }) => setUsername(target.value)}
-        />
-        <label className="label col-lg-6 col-md-8 col-8 mb-2">Password</label>
-        <input
-          type='password'
-          className="col-lg-6 col-md-8 col-8 mb-2 inputs"
-          value={password}
-          onChange={({ target }) => setPassword(target.value)}
-        />
-        <label className="label col-lg-6 col-md-8 col-8 mb-2">Confirm Password</label>
-        <input
-          type='password'
-          className="col-lg-6 col-md-8 col-8 mb-2 inputs"
-          value={passwordConfirm}
-          onChange={({ target }) => setPasswordConfirm(target.value)}
-        />
-        <div className="col-lg-6 col-md-8 col-8 mb-2 pt-2">
-          <button className="buttons" type="submit">Sign Up</button>
-        </div>
-      </form>
+      <SignUp setVisible={setVisible} handleSignUp={handleSignUp} />
     </div>
   )
 }
@@ -189,18 +204,19 @@ function OptionButton (props) {
 
 
 
-function Login({ setUser }) {
+function Login() {
 
   return (
-    <>
+    <div id="background">
+      <NotificationSuccess successType="userCreated" />
     <h1 className="loginTitle">Dungeon Map!</h1>
     <div className='loginContainer row mx-3'>
       <div className='loginBox d-flex'>
         <h2 className="titles formTitle">Login</h2>
-          <LoginForm setUser={setUser} />
+          <LoginForm />
           <div className=" otherOptions d-flex mx-2">
           <OptionButton label="Sign Up">
-            <SignUpForm setUser={setUser} />
+            <SignUpForm />
           </OptionButton>
           <OptionButton label="Join Game">
             <JoinSession />
@@ -208,7 +224,7 @@ function Login({ setUser }) {
           </div>
       </div>
   </div>
-  </>
+  </div>
   )
 }
 

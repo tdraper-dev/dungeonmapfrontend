@@ -2,26 +2,27 @@ import React, { useState } from 'react'
 import { Switch, Route, Link, Redirect } from 'react-router-dom'
 import Login from './Login'
 import Dashboard from './Dashboard'
+import { useAuth } from '../services/use-auth'
+
 
 function Layout() {
-  const [user, setUser] = useState(null)
+  const auth = useAuth()
 
   return (
-    <Switch>
-      <Route
-      exact
-      path="/"
-      render={() => {
-        return (
-          user === null ?
-          <Redirect to="/login" />:
-          <Redirect to={'/dashboard/'+123} />
+    <>
+      <Route path="/"
+        render={() => (
+          auth.userId 
+          ? <Redirect to={`/dashboard/${auth.userId}`}/> 
+          : <Redirect to='/login' />
         )
-      }}
-    />
-    <Route path="/login" component={Login} />
-    <Route path ="/dashboard/:id" component={Dashboard} />
-  </Switch>
+      }
+      />
+      <Switch>
+        <Route path="/dashboard/:id" component={Dashboard} />
+        <Route path='/login' component={Login} />
+      </Switch>
+    </>
   )
 }
 

@@ -1,13 +1,15 @@
 import React, { useState } from 'react'
 import { Switch, Route, Link, Redirect, useRouteMatch } from 'react-router-dom'
 import { BsXCircle, BsCheckCircle } from 'react-icons/bs'
+import { useAuth } from '../services/use-auth'
 
 
 function LogoutButton() {
+  const auth = useAuth()
 
   return (
     <div className="logoutBox col-6">
-      <button className="dmButton">Logout</button>
+      <button className="dmButton" onClick={() => auth.logOut()}>Logout</button>
     </div>
   )
 }
@@ -90,10 +92,11 @@ function DmButtons() {
 }
 
 function UserBlock() {
+  const auth = useAuth()
 
   return (
     <div className="userBlock pt-1 pb-1 pt-lg-3 pb-lg-3 row">
-      <div className="dashTitle col-12">Dungeon Master: <br /> Jeffrey Evans</div>
+      <div className="dashTitle col-12">Dungeon Master: <br />{auth.username}</div>
     </div>
   )
 }
@@ -130,7 +133,7 @@ function MapTray() {
   )
 }
 
-function Dashboard({user, setUser }) {
+function Dashboard() {
 
   return (
     <div className="row dashboardRow">

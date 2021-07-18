@@ -6,31 +6,27 @@ import Layout from './components/Layout'
 import Login from './components/Login'
 import gameBoardService from './services/gameboard'
 import Dashboard from './components/Dashboard';
+import { ProvideAuth } from './services/use-auth'
+import { ProvideNotify } from './services/use-notification'
 
 
-
+/*{user ?
+  <Dashboard user={user} setUser={setUser} />
+  : <div id="background">
+      <Login setUser={setUser} />
+  </div>
+}*/
 
 function App() {
-  const [user, setUser] = useState(null)
-
-  useEffect(() => {
-    const loggedUserJson = window.localStorage.getItem('loggedDungeonMaster')
-    if(loggedUserJson) {
-      const user = JSON.parse(loggedUserJson)
-      setUser(user.id)
-      gameBoardService
-        .setToken(user.token)
-    }
-  }, [])
 
   return (
     <Router>
-        {user ?
-        <Dashboard user={user} setUser={setUser} />
-        : <div id="background">
-            <Login setUser={setUser} />
-          </div>
-        }
+      <ProvideNotify>
+        <ProvideAuth>
+          <Layout />
+        </ProvideAuth>
+      </ProvideNotify>
+
     </Router>
   );
 }

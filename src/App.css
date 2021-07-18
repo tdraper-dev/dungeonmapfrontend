@@ -40,6 +40,48 @@ html {
   width: 100%;
 }
 
+/*--------------------------------- */
+
+.notifyBoxes {
+  position: relative;
+}
+
+.errorMessage {
+  position: absolute;
+  left: 140px;
+  top: -40px;
+  color: black;
+  text-align: center;
+  font-weight: 600;
+  width: 200px;
+  flex-wrap: wrap;
+  background-color: white;
+  border: 2px solid black;
+  border-radius: 10px;
+  border-bottom-left-radius: 0;
+  box-shadow: 5px 10px 8px rgb(0 0 0 / 50%);
+}
+
+.successMessage {
+  padding: 5px;
+  position: fixed;
+  font-weight: 600;
+  font-size: 25px;
+  left: 34vw;
+  top: 3vw;
+  width:fit-content;
+  text-align: center;
+  flex-wrap: wrap;
+  background-color: rgba(82, 219, 82, 0.5);
+  border-radius: 10px;
+  box-shadow: 5px 10px 8px rgb(0 0 0 / 50%);
+  border: 1px solid rgba(82, 219, 82, 0.2);
+  animation: slideDown 300ms;
+}
+
+
+/*--------------------------------- */
+
 #background {
   position:fixed;
   top: 0;
@@ -214,17 +256,13 @@ html {
   margin: 0;
   text-align: center;
   border: 8px groove rgb(136, 104, 81);
-  background-image: url('./images/redFelt.jpg');
-  background-repeat: no-repeat;
-  background-position:left;
+  background-color: rgb(73, 3, 3);
 }
 @media(max-width: 991px) {
   .userBlock {
     position: fixed;
     top: 0;
     left: 0;
-    background-image: none;
-    background-color:rgba(0, 0, 0, 0.8);
   }
   .dashTitle {
     font-size: 20px;
@@ -317,6 +355,10 @@ html {
 .imageBox {
   background-image: url('./images/redFelt.jpg');
   background-repeat: no-repeat;
-  background-position:center;
-  border: 8px groove rgb(136, 104, 81);
+  background-position:left;
+  border: 50px groove rgb(121, 91, 70);
+}
+
+.mapImage {
+  border: 2px solid black;
 }
