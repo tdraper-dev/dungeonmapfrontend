@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { Switch, Route, Link, Redirect, useHistory } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import { useAuth } from '../services/use-auth'
 import { useNotify } from '../services/use-notification'
 import { NotificationError, NotificationSuccess } from './Notification'
@@ -23,7 +23,6 @@ function JoinSession({ setVisible }) {
   const handleSubmit = (e) => {
     e.preventDefault()
     setVisible(false);
-    console.log('you tried to join a session')
     return (
       history.push('/gameboard/:id', {from: '/login'})
     )

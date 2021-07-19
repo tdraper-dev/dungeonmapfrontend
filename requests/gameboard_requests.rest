@@ -1,0 +1,8 @@
+POST http://localhost:3001/api/gameboards
+Content-Type: application/json
+
+{
+  "board": "TestBoard",
+  "userId": "60f4a78d2022c1787806be43"
+
+}

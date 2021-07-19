@@ -135,8 +135,7 @@ function MapTray() {
   )
 }
 
-function Dashboard() {
-
+function Dashboard(props) {
   return (
     <div className="row dashboardRow">
       <SideBar />
@@ -147,3 +146,5 @@ function Dashboard() {
 }
 
 export default Dashboard
+
+/*YOU DON'T NEED TO PASS AN ID TO YOUR URL IF YOU ARE USING LOCAL STORAGE TO STORE THE ID; IT SEEMS REDUNDANT */
