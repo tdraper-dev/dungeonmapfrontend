@@ -9,6 +9,34 @@ const setToken = (newToken) => {
     : token = `bearer ${newToken}`
 }
 
+const getGameBoards = async (sourceToken) => {
+  const config = {
+    headers: { Authorization: token },
+    cancelToken: sourceToken
+  }
+
+  const response = await axios.get(baseUrl, config)
+  return response.data
+}
+
+const createGameBoard = async (newBoard) => {
+  const config = {
+    headers: { Authorization: token }
+  }
+
+  const response = await axios.post(baseUrl, newBoard, config)
+  return response.data
+}
+
+const deleteGameBoard = async(id) => {
+  const config = {
+    headers: { Authorization: token }
+  }
+
+  const response = await axios.delete(`${baseUrl}/${id}`, config)
+  return response.data
+}
+
 export default {
-  setToken
+  setToken, getGameBoards, createGameBoard, deleteGameBoard
 }

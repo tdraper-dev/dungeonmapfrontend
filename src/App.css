@@ -28,6 +28,28 @@ input::-webkit-inner-spin-button {
     opacity: 0;
   }
   100% {
+    transform: translateY(0px);
+    opacity: 100%;
+  }
+}
+
+@keyframes slideRight {
+  0% {
+    transform: translateX(-25px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0px);
+    opacity: 100%;
+  }
+}
+
+@keyframes slideUp {
+  0% {
+    transform: translateY(25px);
+    opacity: 0;
+  }
+  100% {
     transform: translateX(0px);
     opacity: 100%;
   }
@@ -191,11 +213,7 @@ html {
   border: 4px groove rgb(156, 89, 0);
 }
 
-.signUpBox,
-.joinSessionBox {
-  bottom: 115px;
-  left: 50px;
-  right: 50px;
+.popUpBoxes {
   background-color:burlywood;
   position: absolute;
   min-width: 20vw;
@@ -203,6 +221,13 @@ html {
   border: 2px groove black;
   box-shadow: 5px 10px 8px rgb(0 0 0 / 50%);
   border-radius: 10px;
+}
+
+.joinSessionBox,
+.signUpBox {
+  bottom: 115px;
+  left: 50px;
+  right: 50px;
 }
 
 .formTitle {
@@ -222,6 +247,7 @@ html {
 .submitButtons
  {
   font-weight: 600;
+  white-space:nowrap;
 }
 
 .submitButtons {
@@ -275,6 +301,7 @@ html {
   font-size: 40px;
   padding: 0 !important;
 }
+
 .userBlock {
   margin: 0;
   text-align: center;
@@ -294,13 +321,52 @@ html {
 
 .dmButtonsBox {
   justify-content: space-between;
+  text-align: center;
 }
+
 .dmButton {
   width: 100%;
   border: none;
   background-color: grey;
   border: 2px groove rgb(136, 104, 81);
 }
+
+.newBoardFormBox {
+  text-align: center;
+  left: 120px;
+  top: 167px;
+  animation: slideRight 300ms ease;
+}
+@media(max-width: 1300px) {
+  .buttonFix {
+    font-size: 10px;
+    padding-top: 10px;
+  }
+  .dashTitle {
+      font-size: 30px;
+  }
+  .newBoardFormBox {
+    top: 135px;
+    left: 90px;
+  }
+}
+@media(max-width: 991px) {
+  .newBoardFormBox {
+    top: 600px;
+    left: 5%;
+    animation: slideUp 300ms ease;
+  }
+  .buttonFix {
+    font-size: 16px;
+  }
+}
+.newMapNameLabel {
+  padding-right: 5px;
+}
+.newMapName {
+ margin: 0 auto;
+}
+
 .boardsDisplay {
   padding-left: 5px;
   overflow-y: scroll;
@@ -382,7 +448,7 @@ html {
   background-image: url('./images/redFelt.jpg');
   background-repeat: no-repeat;
   background-position:left;
-  border: 50px groove rgb(121, 91, 70);
+  border: 20px groove rgb(121, 91, 70);
 }
 
 .mapImage {

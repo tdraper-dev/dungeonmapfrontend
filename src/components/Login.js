@@ -3,6 +3,7 @@ import { useHistory } from 'react-router-dom'
 import { useAuth } from '../services/use-auth'
 import { useNotify } from '../services/use-notification'
 import { NotificationError, NotificationSuccess } from './Notification'
+import VisibleButton from './VisibleButton'
 
 function JoinSession({ setVisible }) {
   const [sessionID, setSessionID] = useState('')
@@ -30,7 +31,7 @@ function JoinSession({ setVisible }) {
 
   const boxRef = useRef()
   return (
-    <div className="joinSessionBox">
+    <div className="joinSessionBox popUpBoxes">
     <form ref={boxRef} className="signUpForm row pt-3" onSubmit={handleSubmit}>
       <label className="label col-lg-7 col-md-6 col-8 mb-2">Session ID</label>
       <input
@@ -181,32 +182,11 @@ function SignUpForm ({ setVisible }) {
     }
   }
   return (
-    <div className="signUpBox">
+    <div className="signUpBox popUpBoxes">
       <SignUp setVisible={setVisible} handleSignUp={handleSignUp} />
     </div>
   )
 }
-
-
-function OptionButton (props) {
-  const [visible, setVisible] = useState(false)
-
-  const toggleVisible = () => {
-    setVisible(!visible)
-  }
-
-  return (
-    <div className="optionItems px-1 py-1">
-      <button onClick={toggleVisible} className="buttons signUpButton">{props.label}</button>
-      { visible ? React.cloneElement(props.children, { ...props, setVisible: setVisible })
-        : null
-      }
-      
-    </div>
-  )
-}
-
-
 
 function Login() {
 
@@ -220,12 +200,12 @@ function Login() {
         <h2 className="titles formTitle">Login</h2>
           <LoginForm />
           <div className=" otherOptions d-flex mx-2">
-          <OptionButton label="Sign Up">
+          <VisibleButton label="Sign Up" className="optionItems px-1 py-1">
             <SignUpForm />
-          </OptionButton>
-          <OptionButton label="Join Game">
+          </VisibleButton>
+          <VisibleButton label="Join Game" className="optionItems px-1 py-1">
             <JoinSession />
-          </OptionButton>
+          </VisibleButton>
           </div>
           <NotificationSuccess successType="userCreated" />
       </div>

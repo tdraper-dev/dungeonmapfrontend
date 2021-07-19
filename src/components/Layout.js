@@ -18,13 +18,13 @@ function Layout() {
       <Route path="/"
         render={() => (
           auth.userId 
-          ? <Redirect to={`/dashboard/${auth.userId}`}/> 
+          ? <Redirect to='/dashboard' /> 
           : <Redirect to='/login' />
         )
       }
       />
       <Switch>
-        <Route path="/dashboard/:id" component={Dashboard} />
+        <Route path="/dashboard" component={Dashboard} />
         <Route path='/login' component={Login} />
         <Route path='/gameboard/:id' component={Gameboard} />
       </Switch>
