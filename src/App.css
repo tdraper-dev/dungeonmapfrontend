@@ -454,3 +454,11 @@ html {
 .mapImage {
   border: 2px solid black;
 }
+
+.apple {
+  justify-content: center;
+  text-align: center;
+}
+.cake {
+  width: 10000px;
+}
