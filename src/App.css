@@ -462,3 +462,21 @@ html {
 .cake {
   width: 10000px;
 }
+
+/* ------------------------------------- */
+
+.gameBoardPage {
+  height: 100%;
+}
+
+.fileUpload {
+  width: fit-content;
+  margin: 0 auto;
+}
+
+#fileUpload {
+  background-color: antiquewhite;
+  width: fit-content;
+  height:fit-content;
+  visibility: hidden;
+}
