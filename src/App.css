@@ -80,6 +80,18 @@ html {
   width: 100%;
 }
 
+@keyframes spinning {
+  0% {
+    transform: rotate(0deg)
+  }
+  50% {
+    transform: rotate(180deg)
+  }
+  100% {
+    transform: rotate(360deg)
+  }
+}
+
 /*--------------------------------- */
 
 .notifyBoxes {
@@ -263,7 +275,8 @@ html {
 
 .signUpButton,
 .buttons, 
-.submitButtons
+.submitButtons,
+.logOutButton
  {
   font-weight: 600;
   white-space:nowrap;
@@ -417,6 +430,11 @@ html {
   font-family: dungeonFont;
   font-size: 20px;
 }
+
+.thumbnailImage {
+  border: 2px groove rgb(121, 91, 70);
+}
+
 .buttonContainer {
   flex-direction: column;
   overflow-y: visible !important;
@@ -520,18 +538,32 @@ html {
   display: none;
 }
 
-.loadingCircle {
+.addContentBox {
+  display: flex;
+  align-content: center;
+}
+
+.AddContentCircle {
   align-self: center;
   text-align: center;
   background-color: grey;
-  box-shadow: 5px 10px 8px rgb(0 0 0 / 50%);
+  font-size: 45px;
   border-radius: 100%;
-  width: 400px;
-  height: 400px;
+  width: 200px;
+  height: 200px;
+  transition: 300ms;
 }
 
-.loadingText {
+.AddContentCircle:hover {
+  transition: 300ms;
   font-size: 100px;
+  height: 400px;
+  width: 400px;
+  box-shadow: 150px 150px 100px rgb(0 0 0 / 50%);
+}
+
+.AddContentCircleText,
+.loadingSquareText {
   font-family: dungeonFont;
   color: white;
   width: 100%;
@@ -545,4 +577,23 @@ html {
 a.hidden {
   text-decoration: none !important;
   align-self: center;
+}
+.addContentButton {
+  align-self: center;
+}
+
+/* --------------------------- */
+
+.loadingSquare {
+  align-self: center;
+  height: 400px;
+  width: 400px;
+  background-color: rgba(187, 0, 0, 0.8);
+  animation: spinning;
+  animation-timing-function: linear; 
+  animation-duration: 3s;
+  animation-iteration-count: infinite;
+}
+.loadingSquareText {
+  font-size: 100px;
 }

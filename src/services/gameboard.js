@@ -23,14 +23,32 @@ const getGameBoards = async (sourceToken) => {
   return response.data
 }
 
-const createGameBoard = async (newBoard) => {
+/*const createGameBoard = async (newBoard) => {
   const config = {
     headers: { Authorization: token }
   }
 
   const response = await axios.post(baseUrl, newBoard, config)
   return response.data
+}*/
+
+const createGameBoard = async (newBoard) => {
+  const config = {
+    headers: {
+      Authorization: token,
+      'Content-type': 'multipart/form-data'
+    }
+  }
+
+  const formData = new FormData();
+  formData.append('myImage', newBoard.mapImage)
+  formData.append('title', newBoard.name)
+
+  const response = await axios.post(baseUrl, formData, config)
+  return response.data
 }
+
+
 
 const getGameBoard = async (boardId) => [
   

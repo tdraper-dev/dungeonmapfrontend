@@ -3,7 +3,7 @@ import Dashboard from './Dashboard'
 import axios from 'axios'
 import imageService from '../services/image'
 import imageUtility from '../utils/imageHelper'
-import LoadingCircle from './LoadingCircle'
+import LoadingSquare from './LoadingSquare'
 
 function MapImageView(props) {
 
@@ -21,8 +21,8 @@ function MapTray({ mapSrc, loading }) {
 
   return (
     <div className="mapTrayContainer col-12   d-flex">
-      {loading 
-        ? <LoadingCircle color={'rgba(0, 230, 64, 1)'}/>
+      {loading
+        ? <LoadingSquare />
         : <MapImageView>
             <img className="mapImage img-fluid" alt='' src={mapSrc} />
           </MapImageView>
@@ -38,6 +38,7 @@ function Gameboard(props) {
   
   useEffect(() => {
     const source = axios.CancelToken.source()
+    setLoading(true)
     const loadMapImage = async() => {
       try {
         const buffer = await imageService.retrieveMapImage(boardId, source.token)
