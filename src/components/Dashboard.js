@@ -34,12 +34,7 @@ function PopUpNotice(props) {
   )
 }
 
-function BoardTile({
-  thisBoard, 
-  gameBoards, 
-  setBoards, 
-  setBoardId
-  }) {
+function BoardTile({ thisBoard, gameBoards, setBoards, setBoardId}) {
   const [thumbnail, setThumbnail] = useState('')
   const clickRef = useRef()
 
@@ -49,10 +44,9 @@ function BoardTile({
         await gameBoardService.deleteGameBoard(thisBoard.id)
         const newGameBoards = gameBoards.filter(board => board.id !== thisBoard.id)
         setBoards(newGameBoards)
-        const tiles = document.getElementsByClassName('boardTile')
-        if (tiles.length > 0) {
-          tiles[tiles.length-1].click();
-        }  
+        if(newGameBoards.length > 0) {
+          document.getElementsByClassName('boardTile')[newGameBoards.length-1].click()
+        }
       }
     } catch (exception) {
       console.log(exception)
@@ -74,15 +68,8 @@ function BoardTile({
     const thumbNailImage = imageUtility.convertBuffertoBlob(thisBoard.mapImage.thumbnail.data)
         .then( response => setThumbnail(response))
         .catch( error => console.log(error) )
-  }, [])
 
-  useEffect(() => {
-    const boardWithImage = gameBoards.find(board => board.hasOwnProperty('mapImage'))
-    if(boardWithImage) {
-      document.getElementsByClassName(`${boardWithImage.board}`)[0].click()
-    } else {
-      document.getElementsByClassName('boardTile')[0].click()
-    }
+    document.getElementsByClassName('boardTile')[0].click()
   }, [])
 
   return (
@@ -198,13 +185,13 @@ function SideBar(props) {
   )
 }
 
-function MapImageView({ displayImage }) {
+function MapImageView({ displayImage, boardId }) {
 
 
   return (
     <div className="mapImageView col-8 my-4 d-flex">
       <div className="imageBox py-1 px-1 py-md-5 px-md-5 d-flex">
-        <img className="mapImage img-fluid" alt='' src={displayImage} />
+        <img className="mapImage img-fluid" key={boardId} alt='' src={displayImage} />
       </div>
 
     </div> 
@@ -234,9 +221,12 @@ function Dashboard() {
         mapImage: file
       }
       const postedBoard = await gameBoardService.createGameBoard(newBoard)
+      console.log(postedBoard)
       if(postedBoard) {
-        setLoading(false)
+        await updateDashBoard(postedBoard)
         setBoards(boards.concat(postedBoard))
+        setLoading(false)
+        document.getElementsByClassName('boardTile')[boards.length].click()
       }
     } catch (exception) {
       console.log(exception)
@@ -324,7 +314,7 @@ function Dashboard() {
         {loading
           ? <LoadingSquare />
           :  boards.length > 0
-              ? <MapImageView displayImage={displayImage} />
+              ? <MapImageView boardId={boardId} displayImage={displayImage} />
               : <div onClick={handleLinkClick} className="addContentBox">
                   <AddContentCircle color={'rgb(187, 0, 0)'}/>
                 </div>

@@ -25,7 +25,7 @@ function NotificationSuccess({successType}) {
 function Notification({ notification, type }) {
 
   return (
-    <div className={type}>
+    <div className={`noselect ${type}`}>
       {notification}
     </div>
   )

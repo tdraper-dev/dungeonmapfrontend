@@ -4,7 +4,7 @@ const LoadingSquare = () => {
 
   return (
     <div className="loadingSquare">
-        <div className="loadingSquareText d-flex">
+        <div className="noselect loadingSquareText d-flex">
         Loading
       </div> 
     </div>

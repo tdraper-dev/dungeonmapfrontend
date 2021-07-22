@@ -192,12 +192,12 @@ function Login() {
 
   return (
     <div id="background">
-    <h1 className="loginTitle">
+    <h1 className="noselect loginTitle">
         Dungeon Map!
     </h1>
     <div className='loginContainer row mx-3'>
       <div className='loginBox notifyBoxes d-flex'>
-        <h2 className="titles formTitle">Login</h2>
+        <h2 className="noselect titles formTitle">Login</h2>
           <LoginForm />
           <div className=" otherOptions d-flex mx-2">
           <VisibleButton label="Sign Up" className="optionItems px-1 py-1">
