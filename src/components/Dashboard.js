@@ -5,6 +5,7 @@ import { useAuth } from '../services/use-auth'
 import gameBoardService from '../services/gameboard'
 import VisibleButton from './VisibleButton'
 import axios from 'axios'
+import imageUtility from '../utils/imageHelper'
 
 
 function LogoutButton() {
@@ -30,7 +31,7 @@ function PopUpNotice(props) {
   )
 }
 
-function BoardTile({thisBoard, gameBoards, setBoards}) {
+function BoardTile({thisBoard, gameBoards, setBoards, setBoardId}) {
 
   const deleteGameboard = async() => {
     try {
@@ -41,11 +42,10 @@ function BoardTile({thisBoard, gameBoards, setBoards}) {
     } catch (exception) {
       console.log(exception)
     }
-    
   }
 
   return (
-    <div className="boardTile row">
+    <div onClick={() => setBoardId(thisBoard.id)} className="boardTile row">
       <div className="boardTitle col-10">
         <div className="boardTitleText mt-4">{thisBoard.board}</div>
       </div>
@@ -63,12 +63,12 @@ function BoardTile({thisBoard, gameBoards, setBoards}) {
   )
 }
 
-function BoardDisplay({gameBoards, setBoards}) {
+function BoardDisplay({gameBoards, setBoards, setBoardId}) {
 
   return (
     <div className="boardsDisplay">
       {gameBoards.map(board => ( 
-        <BoardTile key={board.id} gameBoards={gameBoards} setBoards={setBoards} thisBoard={board} /> 
+        <BoardTile key={board.id} gameBoards={gameBoards} setBoards={setBoards} thisBoard={board} setBoardId={setBoardId} /> 
       ))}
     </div>
   )
@@ -146,29 +146,32 @@ function SideBar(props) {
   )
 }
 
-function MapImageView() {
+function MapImageView({ displayImage }) {
+
 
   return (
     <div className="mapImageView col-8 my-4 d-flex">
       <div className="imageBox py-1 px-1 py-md-5 px-md-5 d-flex">
-        <img className="mapImage img-fluid" alt='' src="https://d20.pub/assets/uploads/2018/03/Simple-battlemap-for-Hoard-of-the-Dragon-Queen-Dungeons-and-Dragons-Adventure-Module-Part-1-Keep-in-Greenest-on-Fire.jpg" />
+        <img className="mapImage img-fluid" alt='' src={displayImage} />
       </div>
 
     </div> 
   )
 }
 
-function MapTray() {
+function MapTray({ displayImage }) {
 
   return (
     <div className="mapTrayContainer col-12 col-lg-10  d-flex">
-      <MapImageView />
+      <MapImageView displayImage={displayImage} />
     </div>
   )
 }
 
 function Dashboard() {
   const [boards, setBoards] = useState([])
+  const [boardId, setBoardId] = useState('')
+  const [displayImage, setDisplayImage] = useState('')
 
 
   const createNewBoard = async(boardName) => {
@@ -187,10 +190,15 @@ function Dashboard() {
 
   useEffect(() => {
     const source = axios.CancelToken.source()
+
     const getBoards = async() => {
       try {
         const loadedBoards = await gameBoardService.getGameBoards(source.token);
         setBoards(loadedBoards)
+
+        imageUtility.convertBuffertoBlob(loadedBoards[0].mapImage.img.data)
+          .then( response => setDisplayImage(response) )
+
       } catch(exception) {
         console.log(exception)
       }
@@ -199,6 +207,26 @@ function Dashboard() {
     return () => {source.cancel()}
   }, [])
 
+
+  useEffect(() => {
+    const updateMapTile = async(boards) => {
+      try {
+        const boardFocus = boards.find(board => board.id === boardId)
+        console.log(boardFocus)
+        imageUtility.convertBuffertoBlob(boardFocus.mapImage.img.data)
+          .then( response => {
+            const base64 = response;
+            setDisplayImage(base64) 
+          })
+      } catch(exception) {
+        console.log(exception)
+      }
+    }
+    updateMapTile(boards)
+    return () => updateMapTile()
+  }, [boardId])
+  
+  console.log('boardId', boardId)
   return (
     <div className="row dashboardRow">
       <SideBar>
@@ -209,9 +237,9 @@ function Dashboard() {
           </VisibleButton>
           <LogoutButton />
         </DmButtons>
-        <BoardDisplay setBoards={setBoards} gameBoards={boards} />
+        <BoardDisplay setBoards={setBoards} gameBoards={boards} setBoardId={setBoardId} />
       </SideBar>
-      <MapTray />
+      <MapTray displayImage={displayImage} />
     </div>
   )
 }

@@ -9,6 +9,10 @@ const setToken = (newToken) => {
     : token = `bearer ${newToken}`
 }
 
+const retrieveToken = () => {
+  return token;
+}
+
 const getGameBoards = async (sourceToken) => {
   const config = {
     headers: { Authorization: token },
@@ -28,6 +32,10 @@ const createGameBoard = async (newBoard) => {
   return response.data
 }
 
+const getGameBoard = async (boardId) => [
+  
+]
+
 const deleteGameBoard = async(id) => {
   const config = {
     headers: { Authorization: token }
@@ -38,5 +46,5 @@ const deleteGameBoard = async(id) => {
 }
 
 export default {
-  setToken, getGameBoards, createGameBoard, deleteGameBoard
+  setToken, getGameBoards, createGameBoard, deleteGameBoard, retrieveToken
 }

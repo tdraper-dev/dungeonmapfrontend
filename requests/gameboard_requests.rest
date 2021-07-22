@@ -6,3 +6,6 @@ Content-Type: application/json
   "userId": "60f4a78d2022c1787806be43"
 
 }
+
+###
+GET http://localhost:3001/api/images
