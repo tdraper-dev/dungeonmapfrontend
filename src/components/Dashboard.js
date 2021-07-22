@@ -6,6 +6,7 @@ import gameBoardService from '../services/gameboard'
 import VisibleButton from './VisibleButton'
 import axios from 'axios'
 import imageUtility from '../utils/imageHelper'
+import LoadingCircle from './LoadingCircle'
 
 
 function LogoutButton() {
@@ -37,7 +38,9 @@ function BoardTile({thisBoard, gameBoards, setBoards, setBoardId}) {
     try {
       if (window.confirm('Do you want to delete this board?')) {
         await gameBoardService.deleteGameBoard(thisBoard.id)
-        setBoards(gameBoards.filter(board => board.id !== thisBoard.id))
+        const newGameBoards = gameBoards.filter(board => board.id !== thisBoard.id)
+        setBoards(newGameBoards)
+        
       }
     } catch (exception) {
       console.log(exception)
@@ -159,11 +162,11 @@ function MapImageView({ displayImage }) {
   )
 }
 
-function MapTray({ displayImage }) {
+function MapTray(props) {
 
   return (
     <div className="mapTrayContainer col-12 col-lg-10  d-flex">
-      <MapImageView displayImage={displayImage} />
+      {props.children}
     </div>
   )
 }
@@ -171,7 +174,7 @@ function MapTray({ displayImage }) {
 function Dashboard() {
   const [boards, setBoards] = useState([])
   const [boardId, setBoardId] = useState('')
-  const [displayImage, setDisplayImage] = useState('')
+  const [displayImage, setDisplayImage] = useState(null)
 
 
   const createNewBoard = async(boardName) => {
@@ -211,13 +214,15 @@ function Dashboard() {
   useEffect(() => {
     const updateMapTile = async(boards) => {
       try {
+        if(boards && displayImage) {
         const boardFocus = boards.find(board => board.id === boardId)
-        console.log(boardFocus)
         imageUtility.convertBuffertoBlob(boardFocus.mapImage.img.data)
           .then( response => {
-            const base64 = response;
-            setDisplayImage(base64) 
+            setDisplayImage(response) 
           })
+        } else {
+          setDisplayImage('EMPTY')
+        }
       } catch(exception) {
         console.log(exception)
       }
@@ -226,7 +231,6 @@ function Dashboard() {
     return () => updateMapTile()
   }, [boardId])
   
-  console.log('boardId', boardId)
   return (
     <div className="row dashboardRow">
       <SideBar>
@@ -239,7 +243,13 @@ function Dashboard() {
         </DmButtons>
         <BoardDisplay setBoards={setBoards} gameBoards={boards} setBoardId={setBoardId} />
       </SideBar>
-      <MapTray displayImage={displayImage} />
+      <MapTray>
+        {displayImage === 'EMPTY'
+          ?  <LoadingCircle />
+          : <MapImageView displayImage={displayImage} />
+        }
+      </MapTray>
+      
     </div>
   )
 }
