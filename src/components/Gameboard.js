@@ -22,7 +22,7 @@ function MapTray({ mapSrc, loading }) {
   return (
     <div className="mapTrayContainer col-12   d-flex">
       {loading 
-        ? <LoadingCircle />
+        ? <LoadingCircle color={'rgba(0, 230, 64, 1)'}/>
         : <MapImageView>
             <img className="mapImage img-fluid" alt='' src={mapSrc} />
           </MapImageView>

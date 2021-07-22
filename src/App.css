@@ -234,6 +234,7 @@ html {
 .popUpBoxes {
   background-color:burlywood;
   position: absolute;
+  z-index: 1000;
   min-width: 20vw;
   animation: slideDown 300ms;
   border: 2px groove black;
@@ -355,6 +356,16 @@ html {
   top: 167px;
   animation: slideRight 300ms ease;
 }
+
+#uploadFormDash {
+  display: flex;
+  flex-direction: column;
+}
+
+#fileUploadDash {
+  display: none;
+}
+
 @media(max-width: 1300px) {
   .buttonFix {
     font-size: 10px;
@@ -368,6 +379,7 @@ html {
     left: 90px;
   }
 }
+
 @media(max-width: 991px) {
   .newBoardFormBox {
     top: 600px;
@@ -396,6 +408,9 @@ html {
 }
 .boardTile:hover {
   background-color: rgba(59, 226, 255, 0.2);
+}
+#highlightSelect {
+  background-color: rgba(73, 3, 3, 0.5);
 }
 
 .boardTitle {
@@ -509,7 +524,6 @@ html {
   align-self: center;
   text-align: center;
   background-color: grey;
-  background-color: rgb(187, 0, 0);
   box-shadow: 5px 10px 8px rgb(0 0 0 / 50%);
   border-radius: 100%;
   width: 400px;
@@ -526,4 +540,9 @@ html {
   align-content: center;
   align-items: center;
   text-align: center;
+}
+
+a.hidden {
+  text-decoration: none !important;
+  align-self: center;
 }

@@ -3,6 +3,7 @@ import { Switch, Route, Link, Redirect, useRouteMatch } from 'react-router-dom'
 import { BsXCircle, BsCheckCircle, BsMicFill } from 'react-icons/bs'
 import { useAuth } from '../services/use-auth'
 import gameBoardService from '../services/gameboard'
+import imageService from '../services/image'
 import VisibleButton from './VisibleButton'
 import axios from 'axios'
 import imageUtility from '../utils/imageHelper'
@@ -33,6 +34,7 @@ function PopUpNotice(props) {
 }
 
 function BoardTile({thisBoard, gameBoards, setBoards, setBoardId}) {
+  const clickRef = useRef()
 
   const deleteGameboard = async() => {
     try {
@@ -40,15 +42,35 @@ function BoardTile({thisBoard, gameBoards, setBoards, setBoardId}) {
         await gameBoardService.deleteGameBoard(thisBoard.id)
         const newGameBoards = gameBoards.filter(board => board.id !== thisBoard.id)
         setBoards(newGameBoards)
-        
+
       }
     } catch (exception) {
       console.log(exception)
     }
   }
 
+  const highlightClick = (e) => {
+    setBoardId(thisBoard.id)
+    if(!clickRef.current.hasAttribute('id')) {
+      const oldSelect = document.getElementById('highlightSelect')
+      if(oldSelect) { 
+        oldSelect.removeAttribute('id') 
+      }
+      clickRef.current.setAttribute('id', 'highlightSelect')
+    }
+  }
+
+  useEffect(() => {
+    const boardWithImage = gameBoards.find(board => board.hasOwnProperty('mapImage'))
+    if(boardWithImage) {
+      document.getElementsByClassName(`${boardWithImage.board}`)[0].click()
+    } else {
+      document.getElementsByClassName('boardTile')[0].click()
+    }
+  }, [])
+
   return (
-    <div onClick={() => setBoardId(thisBoard.id)} className="boardTile row">
+    <div ref={clickRef} onClick={highlightClick} className={`boardTile row ${thisBoard.board}`}>
       <div className="boardTitle col-10">
         <div className="boardTitleText mt-4">{thisBoard.board}</div>
       </div>
@@ -79,11 +101,13 @@ function BoardDisplay({gameBoards, setBoards, setBoardId}) {
 
 function CreateBoard({setVisible, createNewBoard}) {
   const [boardName, setBoardName] = useState('')
-  const boxRef = useRef()
+  const boxRef = useRef();
+  const fileRef = useRef();
 
   const handleSubmit = async (e) => {
     e.preventDefault()
     try {
+      console.log(fileRef.current.files[0])
       await createNewBoard(boardName)
       setVisible(false)
     } catch (exception) {
@@ -107,7 +131,7 @@ function CreateBoard({setVisible, createNewBoard}) {
 
   return(
     <div ref={boxRef} className="newBoardFormBox popUpBoxes py-2 px-2">
-      <form onSubmit={handleSubmit}>
+      <form id="uploadFormDash" encType='multipart/form-data' onSubmit={handleSubmit}>
         <label className="label newMapNameLabel">Board Name:</label>
         <input
           type="text"
@@ -116,6 +140,15 @@ function CreateBoard({setVisible, createNewBoard}) {
           onChange={({ target }) => setBoardName(target.value)}
           autoFocus
         />
+        <label htmlFor="fileUploadDash" className="fileUpload">Upload Image</label>
+        <input
+          type='file'
+          className='inputs newMapName my-2'
+          ref={fileRef}
+          id="fileUploadDash"
+          name="file"
+        />
+        <button type='submit'>Create</button>
       </form>
     </div>
   )
@@ -193,15 +226,17 @@ function Dashboard() {
 
   useEffect(() => {
     const source = axios.CancelToken.source()
-
     const getBoards = async() => {
       try {
         const loadedBoards = await gameBoardService.getGameBoards(source.token);
         setBoards(loadedBoards)
-
-        imageUtility.convertBuffertoBlob(loadedBoards[0].mapImage.img.data)
-          .then( response => setDisplayImage(response) )
-
+        if(loadedBoards.length >= 1) {
+          if(loadedBoards[0].mapImage) {
+          imageUtility.convertBuffertoBlob(loadedBoards[0].mapImage.img.data)
+            .then( response => setDisplayImage(response))
+            .catch( error => console.log(error) )
+          }
+        } 
       } catch(exception) {
         console.log(exception)
       }
@@ -214,14 +249,19 @@ function Dashboard() {
   useEffect(() => {
     const updateMapTile = async(boards) => {
       try {
-        if(boards && displayImage) {
-        const boardFocus = boards.find(board => board.id === boardId)
-        imageUtility.convertBuffertoBlob(boardFocus.mapImage.img.data)
-          .then( response => {
-            setDisplayImage(response) 
-          })
+        if(boards) {
+          const boardFocus = boards.find(board => board.id === boardId)
+          if(boardFocus && boardFocus.mapImage) {
+            imageUtility.convertBuffertoBlob(boardFocus.mapImage.img.data)
+              .then( response => {
+                setDisplayImage(response) 
+              })
+              .catch(error => {
+                console.log(error)
+              })
+          }
         } else {
-          setDisplayImage('EMPTY')
+          setDisplayImage(null)
         }
       } catch(exception) {
         console.log(exception)
@@ -230,7 +270,8 @@ function Dashboard() {
     updateMapTile(boards)
     return () => updateMapTile()
   }, [boardId])
-  
+
+
   return (
     <div className="row dashboardRow">
       <SideBar>
@@ -244,8 +285,10 @@ function Dashboard() {
         <BoardDisplay setBoards={setBoards} gameBoards={boards} setBoardId={setBoardId} />
       </SideBar>
       <MapTray>
-        {displayImage === 'EMPTY'
-          ?  <LoadingCircle />
+        {!displayImage
+          ? <Link onClick={boardId ? null : ()=>console.log('yo')} className="hidden" to={boardId ? `/gameboard/${boardId}` : '/dashboard'}>
+              <LoadingCircle color={'rgb(187, 0, 0)'}/>
+            </Link>
           : <MapImageView displayImage={displayImage} />
         }
       </MapTray>

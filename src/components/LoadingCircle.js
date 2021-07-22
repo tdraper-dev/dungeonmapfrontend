@@ -1,9 +1,9 @@
 import React from 'react'
 
 
-function LoadingCircle() {
+function LoadingCircle({ color }) {
   return (
-    <div className="loadingCircle "> 
+    <div style={{'backgroundColor': `${color}`}} className="loadingCircle"> 
       <div className="loadingText d-flex">
         Add content
       </div> 
