@@ -65,7 +65,7 @@ function BoardTile({ thisBoard, gameBoards, setBoards, setBoardId}) {
   }
 
   useEffect(() => {
-    const thumbNailImage = imageUtility.convertBuffertoBlob(thisBoard.mapImage.thumbnail.data)
+    const thumbNailImage = imageUtility.convertBuffertoBlob(thisBoard.thumbnail.data)
         .then( response => setThumbnail(response))
         .catch( error => console.log(error) )
 
@@ -221,7 +221,7 @@ function Dashboard() {
         mapImage: file
       }
       const postedBoard = await gameBoardService.createGameBoard(newBoard)
-      console.log(postedBoard)
+      console.log('THIS WAS THE POSTED BOARD', postedBoard)
       if(postedBoard) {
         await updateDashBoard(postedBoard)
         setBoards(boards.concat(postedBoard))
@@ -234,7 +234,7 @@ function Dashboard() {
   }
 
   const updateDashBoard = (board) => {
-    imageUtility.convertBuffertoBlob(board.mapImage.img.data)
+    imageUtility.convertBuffertoBlob(board.dashImage.data)
       .then(response => {
         setDisplayImage(response)
       })
@@ -270,7 +270,8 @@ function Dashboard() {
       try {
         if(boards) {
           const boardFocus = boards.find(board => board.id === boardId)
-          if(boardFocus && boardFocus.mapImage) {
+          console.log('boardFocus', boardFocus)
+          if(boardFocus && boardFocus.dashImage) {
             await updateDashBoard(boardFocus)
             setLoading(false)
           }
