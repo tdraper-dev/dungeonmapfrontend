@@ -76,17 +76,17 @@ function BoardTile({ thisBoard, gameBoards, setBoards, setBoardId, loading, setL
 
   return (
     <div ref={clickRef} className={`boardTile row ${thisBoard.board}`}>
-      <div onClick={highlightClick}  className="boardTitle col-4">
-        <div className="boardTitleText mt-4">{thisBoard.board}</div>
+      <div onClick={highlightClick}  className="boardTitle pe-0 d-flex col-4">
+        <div className="boardTitleText">{thisBoard.board}</div>
       </div>
-      <div onClick={highlightClick} className="thumbnailBox col-5 py-2 ps-3">
+      <div onClick={highlightClick} className="thumbnailBox col-6 py-2 ps-3">
         <img className="thumbnailImage img-fluid" src={thumbnail} />
       </div>
-      <div className="buttonContainer pe-0 col-2 row">
-        <PopUpNotice label='Delete Gameboard'className="deleteButton">
+      <div className="buttonContainer ps-0 pe-0 col-2 row">
+        <PopUpNotice label='Delete Gameboard'className="ps-0 deleteButton">
           <BsXCircle className="deleteIcon" onClick={deleteGameboard}/>
         </PopUpNotice>
-        <PopUpNotice label='Host Gameboard' className="enterButton">
+        <PopUpNotice label='Host Gameboard' className="ps-0  enterButton">
           <Link className="toGameboardLink" to={`/gameboard/${thisBoard.id}`}>
             <BsCheckCircle className="enterIcon"/>
           </Link>
@@ -136,26 +136,26 @@ function CreateBoard({setVisible, createNewBoard}) {
 
   return(
     <div ref={boxRef} className="newBoardFormBox popUpBoxes py-2 px-2">
-      <form id="uploadFormDash" encType='multipart/form-data' onSubmit={handleSubmit}>
+      <form id="uploadFormDash" className="row py-3 px-3" encType='multipart/form-data' onSubmit={handleSubmit}>
         <label className="label newMapNameLabel">Board Name:</label>
         <input
           type="text"
-          className="inputs newMapName my-2"
+          className="inputs pb-2 newMapName col-10 my-2"
           value={boardName}
           onChange={({ target }) => setBoardName(target.value)}
           required
           autoFocus
         />
-        <label htmlFor="fileUploadDash" className="fileUpload">Upload Image</label>
+        <label htmlFor="fileUploadDash" className="col-4 px-1 py-1 mb-2 fileUpload submitButtons buttons">Upload Image</label>
         <input
           type='file'
-          className='inputs newMapName my-2'
+          className='inputs newMapName'
           ref={fileRef}
           id="fileUploadDash"
           name="file"
           required
         />
-        <button type='submit'>Create</button>
+        <button className="col-6 mt-4 submitButtons buttons" type='submit'>Create</button>
       </form>
     </div>
   )
