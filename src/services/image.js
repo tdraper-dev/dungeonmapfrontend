@@ -19,8 +19,9 @@ const retrieveMapImage = async (boardId, sourceToken) => {
   const config = {
     cancelToken: sourceToken
   }
-  const response = await axios.get(`${baseUrl}/${boardId}`)
-  console.log('RESPONSE', response.data)
+
+  const response = await axios.get(`${baseUrl}/${boardId}`, config)
+
 
   return response.data.image.data
 }

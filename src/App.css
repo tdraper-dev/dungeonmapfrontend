@@ -518,11 +518,21 @@ html {
   line-height: 15px;
 }
 
+
+.gameBoardRow {
+  height: 100%;
+}
+
+.navBox {
+ background-color: black;
+}
+
 .mapTrayContainer {
   background-image: url('./images/woodenBoards.jpeg');
   background-repeat: no-repeat;
   background-position:left;
   justify-content: center;
+  flex: 1 1 auto;
 }
 
 @media(max-width: 991px) {
@@ -569,11 +579,12 @@ html {
   height: 100%;
 }
 
-#uploadForm {
-  position: absolute;
+.navBox {
+  height: fit-content;
 }
 .fileUpload {
-  color: black;
+  color: grey;
+  background-color: white;
   border: 2px groove black;
 
 }

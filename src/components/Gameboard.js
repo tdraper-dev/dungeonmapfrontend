@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react'
+import { useHistory } from "react-router-dom"
 import Dashboard from './Dashboard'
 import axios from 'axios'
 import imageService from '../services/image'
@@ -6,7 +7,7 @@ import imageUtility from '../utils/imageHelper'
 import LoadingSquare from './LoadingSquare'
 
 function MapImageView(props) {
-
+  
   return (
     <div className="mapImageView col-8 my-4 d-flex">
       <div className="imageBox py-1 px-1 py-md-5 px-md-5 d-flex">
@@ -35,6 +36,7 @@ function Gameboard(props) {
   const [image64, setImage64] = useState('')
   const boardId = props.match.params.id
   const [loading, setLoading] = useState(true)
+  let history = useHistory()
   
   useEffect(() => {
     const source = axios.CancelToken.source()
@@ -45,7 +47,6 @@ function Gameboard(props) {
         if(buffer) {
           imageUtility.convertBuffertoBlob(buffer)
             .then(response => {
-              console.log('RESPONSE TO CONVERSION', response)
               setImage64(response)
               setLoading(false)
             })
@@ -58,14 +59,26 @@ function Gameboard(props) {
     return () => {source.cancel()}
   }, [])
 
-  console.log('loading', loading)
+
   return (
-    <div className="gameBoardPage row">
-      <MapTray mapSrc={image64} loading={loading} />
-      <FileBase64 setLoading={setLoading} boardId={boardId}
-      multiple={false}
-      onDone={({ base64 }) => setImage64(base64)} />
+    <>
+    <div className="navBox row">
+        <FileBase64 
+          setLoading={setLoading} 
+          boardId={boardId}
+          setImage64={setImage64}
+          multiple={false}
+          onDone={({ base64 }) => setImage64(base64)} 
+        />
+        <div className="backBox d-flex col-2">
+         <button onClick={() => history.goBack()}>Back</button>
+        </div>
     </div>
+    <div className="gameBoardRow row">
+
+      <MapTray mapSrc={image64} loading={loading} />
+    </div>
+    </>
   )
 }
 
@@ -86,7 +99,7 @@ function FileBase64(props) {
 
   const fileRef = useRef()
   return (
-    <form id="uploadForm" encType='multipart/form-data' onSubmit={handleChange}>
+    <form id="uploadForm" className="d-flex col-2" encType='multipart/form-data' onSubmit={handleChange}>
 
       <label htmlFor="fileUpload" className='fileUpload' >Upload Image</label>
 
