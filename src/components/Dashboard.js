@@ -47,7 +47,7 @@ function BoardTile({ thisBoard, gameBoards, setBoards, setBoardId, loading, setL
         setBoards(newGameBoards)
         setLoading(false)
         if(newGameBoards.length > 0) {
-          document.getElementsByClassName('boardTile')[newGameBoards.length-1].click()
+          document.getElementsByClassName('thumbnailBox')[newGameBoards.length-1].click()
         }
       }
     } catch (exception) {
@@ -71,15 +71,15 @@ function BoardTile({ thisBoard, gameBoards, setBoards, setBoardId, loading, setL
         .then( response => setThumbnail(response))
         .catch( error => console.log(error) )
 
-    document.getElementsByClassName('boardTile')[0].click()
+    document.getElementsByClassName('thumbnailBox')[0].click()
   }, [])
 
   return (
-    <div ref={clickRef} onClick={highlightClick} className={`boardTile row ${thisBoard.board}`}>
-      <div className="boardTitle col-4">
+    <div ref={clickRef} className={`boardTile row ${thisBoard.board}`}>
+      <div onClick={highlightClick}  className="boardTitle col-4">
         <div className="boardTitleText mt-4">{thisBoard.board}</div>
       </div>
-      <div className="thumbnailBox col-5 py-2 ms-3">
+      <div onClick={highlightClick} className="thumbnailBox col-5 py-2 ps-3">
         <img className="thumbnailImage img-fluid" src={thumbnail} />
       </div>
       <div className="buttonContainer pe-0 col-2 row">
@@ -225,12 +225,11 @@ function Dashboard() {
         mapImage: file
       }
       const postedBoard = await gameBoardService.createGameBoard(newBoard)
-      console.log('THIS WAS THE POSTED BOARD', postedBoard)
       if(postedBoard) {
         await updateDashBoard(postedBoard)
         setBoards(boards.concat(postedBoard))
         setLoading(false)
-        document.getElementsByClassName('boardTile')[boards.length].click()
+        document.getElementsByClassName('thumbnailBox')[boards.length].click()
       }
     } catch (exception) {
       console.log(exception)
