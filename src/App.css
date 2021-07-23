@@ -565,13 +565,6 @@ html {
   border: 2px solid black;
 }
 
-.apple {
-  justify-content: center;
-  text-align: center;
-}
-.cake {
-  width: 10000px;
-}
 
 /* ------------------------------------- */
 
@@ -582,17 +575,30 @@ html {
 .navBox {
   height: fit-content;
 }
+
 .fileUpload {
   color: grey;
   background-color: white;
   border: 2px groove black;
-
 }
 
 #fileUpload {
   display: none;
 }
 
+.testingIconBox {
+  width: 300px;
+  height: 300px;
+  background-color: grey;
+}
+
+.icon {
+  width: 20px;
+  height: 20px;
+  text-align: center;
+}
+
+/* --------------------------- */
 .addContentBox {
   display: flex;
   align-content: center;
@@ -640,11 +646,10 @@ a.hidden {
   text-decoration: none !important;
   align-self: center;
 }
+
 .addContentButton {
   align-self: center;
 }
-
-/* --------------------------- */
 
 .loadingSquare {
   align-self: center;

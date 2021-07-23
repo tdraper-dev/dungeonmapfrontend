@@ -25,7 +25,7 @@ function JoinSession({ setVisible }) {
     e.preventDefault()
     setVisible(false);
     return (
-      history.push('/gameboard/:id', {from: '/login'})
+      history.push(`/gameboard/${sessionID}`, {from: '/'})
     )
   }
 

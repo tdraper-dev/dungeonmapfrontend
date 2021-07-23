@@ -20,8 +20,21 @@ function MapImageView(props) {
 
 function MapTray({ mapSrc, loading }) {
 
+  const onDragStart = (event, id) => {
+
+  }
+
   return (
     <div className="mapTrayContainer col-12   d-flex">
+    <div className="testingIconBox">
+      <div 
+        className="icon draggable" 
+        draggable
+        onDragStart = {(e) => onDragStart(e, )} 
+        style={{backgroundColor: 'red'}}
+      > T
+      </div>
+    </div>
       {loading
         ? <LoadingSquare />
         : <MapImageView>
