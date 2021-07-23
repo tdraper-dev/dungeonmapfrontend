@@ -39,9 +39,9 @@ function BoardTile({ thisBoard, gameBoards, setBoards, setBoardId, loading, setL
   const clickRef = useRef()
 
   const deleteGameboard = async() => {
-    setLoading(true)
     try {
       if (window.confirm('Do you want to delete this board?')) {
+        setLoading(true)
         await gameBoardService.deleteGameBoard(thisBoard.id)
         const newGameBoards = gameBoards.filter(board => board.id !== thisBoard.id)
         setBoards(newGameBoards)

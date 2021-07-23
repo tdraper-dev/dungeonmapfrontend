@@ -464,6 +464,7 @@ html {
 
 .popUpVisible {
   position: absolute;
+  z-index: 1000;
   padding: 5px;
   top: 20px;
   right: 15px;

@@ -55,6 +55,7 @@ const getGameBoard = async (boardId) => [
 ]
 
 const deleteGameBoard = async(id) => {
+  console.log('id', id)
   const config = {
     headers: { Authorization: token }
   }
