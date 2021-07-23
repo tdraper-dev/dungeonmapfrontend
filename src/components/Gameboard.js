@@ -45,6 +45,7 @@ function Gameboard(props) {
         if(buffer) {
           imageUtility.convertBuffertoBlob(buffer)
             .then(response => {
+              console.log('RESPONSE TO CONVERSION', response)
               setImage64(response)
               setLoading(false)
             })

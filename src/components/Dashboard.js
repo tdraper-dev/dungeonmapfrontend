@@ -34,16 +34,18 @@ function PopUpNotice(props) {
   )
 }
 
-function BoardTile({ thisBoard, gameBoards, setBoards, setBoardId}) {
+function BoardTile({ thisBoard, gameBoards, setBoards, setBoardId, loading, setLoading}) {
   const [thumbnail, setThumbnail] = useState('')
   const clickRef = useRef()
 
   const deleteGameboard = async() => {
+    setLoading(true)
     try {
       if (window.confirm('Do you want to delete this board?')) {
         await gameBoardService.deleteGameBoard(thisBoard.id)
         const newGameBoards = gameBoards.filter(board => board.id !== thisBoard.id)
         setBoards(newGameBoards)
+        setLoading(false)
         if(newGameBoards.length > 0) {
           document.getElementsByClassName('boardTile')[newGameBoards.length-1].click()
         }
@@ -141,6 +143,7 @@ function CreateBoard({setVisible, createNewBoard}) {
           className="inputs newMapName my-2"
           value={boardName}
           onChange={({ target }) => setBoardName(target.value)}
+          required
           autoFocus
         />
         <label htmlFor="fileUploadDash" className="fileUpload">Upload Image</label>
@@ -150,6 +153,7 @@ function CreateBoard({setVisible, createNewBoard}) {
           ref={fileRef}
           id="fileUploadDash"
           name="file"
+          required
         />
         <button type='submit'>Create</button>
       </form>
@@ -307,6 +311,8 @@ function Dashboard() {
               setBoards={setBoards} 
               thisBoard={board} 
               setBoardId={setBoardId}
+              loading={loading}
+              setLoading={setLoading}
             /> 
           ))}
         </BoardDisplay>

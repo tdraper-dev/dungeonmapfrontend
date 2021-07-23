@@ -19,13 +19,10 @@ const retrieveMapImage = async (boardId, sourceToken) => {
   const config = {
     cancelToken: sourceToken
   }
-  const response = await axios.get(`${baseUrl}/${boardId}`, config)
-  if (response.data) {
-    return response.data.img.data
-  } else {
-    return null
-  }
+  const response = await axios.get(`${baseUrl}/${boardId}`)
+  console.log('RESPONSE', response.data)
 
+  return response.data.image.data
 }
 
 const saveMapImage = async (file, boardId) => {
