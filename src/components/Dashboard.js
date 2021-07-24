@@ -273,7 +273,6 @@ function Dashboard() {
       try {
         if(boards) {
           const boardFocus = boards.find(board => board.id === boardId)
-          console.log('boardFocus', boardFocus)
           if(boardFocus && boardFocus.dashImage) {
             await updateDashBoard(boardFocus)
             setLoading(false)
