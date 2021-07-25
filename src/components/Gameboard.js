@@ -3,42 +3,49 @@ import { useHistory } from "react-router-dom"
 import Dashboard from './Dashboard'
 import axios from 'axios'
 import imageService from '../services/image'
+import iconService from '../services/icon'
+import gameBoardService from '../services/gameboard'
 import imageUtility from '../utils/imageHelper'
 import LoadingSquare from './LoadingSquare'
+import Icon from './Icon'
 
 function MapImageView(props) {
   
   return (
     <div className="mapImageView col-8 my-4 d-flex">
       <div className="imageBox py-1 px-1 py-md-5 px-md-5 d-flex">
-        {props.children}
+        <div id="aspectRatioBox">
+          {props.children}
+        </div>
       </div>
 
     </div> 
   )
 }
 
-function MapTray({ mapSrc, loading }) {
+function MapTray({ mapSrc, loading, icons, setIcons }) {
 
-  const onDragStart = (event, id) => {
-
+  const createIcon = async (iconInfo) => {
+    const newIcon = await iconService.createIcon(iconInfo)
+    setIcons(icons.concat(newIcon))
   }
 
   return (
     <div className="mapTrayContainer col-12   d-flex">
-    <div className="testingIconBox">
-      <div 
-        className="icon draggable" 
-        draggable
-        onDragStart = {(e) => onDragStart(e, )} 
-        style={{backgroundColor: 'red'}}
-      > T
-      </div>
-    </div>
       {loading
         ? <LoadingSquare />
         : <MapImageView>
-            <img className="mapImage img-fluid" alt='' src={mapSrc} />
+            {icons.map(icon => {
+              return <Icon 
+                  updatePosition={'no'} 
+                  style={{backgroundColor: icon.color, left: icon.position.x, top: icon.position.y}}
+                  content={icon.content}
+                  id={icon.id}
+                  key={icon.id}
+                  position={icon.position}
+                /> 
+            })}
+            <img className="mapImage img-fluid noselect" alt='' src={mapSrc} />
           </MapImageView>
       }
     </div>
@@ -47,31 +54,30 @@ function MapTray({ mapSrc, loading }) {
 
 function Gameboard(props) {
   const [image64, setImage64] = useState('')
-  const boardId = props.match.params.id
+  const [icons, setIcons] = useState([])
   const [loading, setLoading] = useState(true)
+  const boardId = props.match.params.id
   let history = useHistory()
   
   useEffect(() => {
     const source = axios.CancelToken.source()
     setLoading(true)
-    const loadMapImage = async() => {
+
+    const loadGameBoard = async() => {
       try {
-        const buffer = await imageService.retrieveMapImage(boardId, source.token)
-        if(buffer) {
-          imageUtility.convertBuffertoBlob(buffer)
-            .then(response => {
-              setImage64(response)
-              setLoading(false)
-            })
-        }
+        const gameBoard = await gameBoardService.getGameBoard(boardId, source.token)
+        console.log('THIS IS YOUR GAMEBOARD', gameBoard)
+        const boardImage = await imageUtility.convertBuffertoBlob(gameBoard.image.data)
+        setImage64(boardImage)
+        setIcons(gameBoard.icons)
+        setLoading(false)
       } catch (exception) {
-        console.log(exception)
+        console.log('loading mapImage failed', exception)
       }
     }
-    loadMapImage()
+    loadGameBoard()
     return () => {source.cancel()}
   }, [])
-
 
   return (
     <>
@@ -89,7 +95,7 @@ function Gameboard(props) {
     </div>
     <div className="gameBoardRow row">
 
-      <MapTray mapSrc={image64} loading={loading} />
+      <MapTray mapSrc={image64} loading={loading} icons={icons} setIcons={setIcons} />
     </div>
     </>
   )

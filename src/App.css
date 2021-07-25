@@ -561,6 +561,7 @@ html {
   background-repeat: no-repeat;
   background-position:left;
   border: 20px groove rgb(121, 91, 70);
+  position: relative;
 }
 
 .mapImage {
@@ -665,4 +666,26 @@ a.hidden {
 }
 .loadingSquareText {
   font-size: 100px;
+}
+
+.draggableBox {
+  height: fit-content;
+  width: fit-content;
+  position: absolute;
+  z-index: 100000;
+}
+
+#aspectRatioBox {
+  display: flex;
+  justify-content: center;
+  position: relative;
+}
+
+.playerIcon {
+  background-color: antiquewhite;
+  border-radius: 5px;
+  padding: 5px;
+  width: fit-content;
+  font-family: dungeonFont;
+  font-weight: 600;
 }

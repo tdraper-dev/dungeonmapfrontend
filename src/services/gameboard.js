@@ -50,9 +50,13 @@ const createGameBoard = async (newBoard) => {
 
 
 
-const getGameBoard = async (boardId) => [
-  
-]
+const getGameBoard = async (boardId, sourceToken) => {
+  const config = {
+    cancelToken: sourceToken
+  }
+  const response = await axios.get(`${baseUrl}/${boardId}`, config)
+  return response.data
+}
 
 const deleteGameBoard = async(id) => {
   console.log('id', id)
@@ -65,5 +69,5 @@ const deleteGameBoard = async(id) => {
 }
 
 export default {
-  setToken, getGameBoards, createGameBoard, deleteGameBoard, retrieveToken
+  setToken, getGameBoards, getGameBoard, createGameBoard, deleteGameBoard, retrieveToken
 }
