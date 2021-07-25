@@ -24,11 +24,6 @@ function MapImageView(props) {
 
 function MapTray({ mapSrc, loading, icons, setIcons }) {
 
-  const createIcon = async (iconInfo) => {
-    const newIcon = await iconService.createIcon(iconInfo)
-    setIcons(icons.concat(newIcon))
-  }
-
   return (
     <div className="mapTrayContainer col-12   d-flex">
       {loading
@@ -56,6 +51,11 @@ function Gameboard(props) {
   const [loading, setLoading] = useState(true)
   const boardId = props.match.params.id
   let history = useHistory()
+
+  const createIcon = async (iconInfo) => {
+    const newIcon = await iconService.createIcon(iconInfo)
+    setIcons(icons.concat(newIcon))
+  }
   
   useEffect(() => {
     const source = axios.CancelToken.source()
@@ -90,6 +90,7 @@ function Gameboard(props) {
         <div className="backBox d-flex col-2">
          <button onClick={() => history.goBack()}>Back</button>
         </div>
+        <BuildIcon createIcon={createIcon} boardId={boardId} />
     </div>
     <div className="gameBoardRow row">
 
@@ -99,6 +100,43 @@ function Gameboard(props) {
   )
 }
 
+function BuildIcon({ createIcon, boardId }) {
+  const [content, setContent] = useState('')
+  const [color, setColor] = useState('')
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    console.log(content, ',', color, ',', boardId)
+    createIcon({
+      content,
+      color,
+      boardId
+    })
+  }
+ 
+  return (
+    <div className="buildIconFormBox">
+      <form onSubmit={handleSubmit}>
+        <label htmlFor='iconContentInput'>Content: </label>
+        <input
+          id="iconContentInput"
+          type='text'
+          value={content}
+          onChange={({ target }) => setContent(target.value) }
+          required
+        />
+        <label htmlFor='iconColorInput'>Color: </label>
+        <input
+          id="iconColorInput"
+          type='text'
+          value={color}
+          onChange={({ target }) => setColor(target.value) }
+        />
+        <button className="ms-2" type="submit">Create Icon</button>
+      </form>
+    </div>
+  )
+}
 
 function FileBase64(props) {
 

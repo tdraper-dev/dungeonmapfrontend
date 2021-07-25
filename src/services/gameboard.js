@@ -23,14 +23,13 @@ const getGameBoards = async (sourceToken) => {
   return response.data
 }
 
-/*const createGameBoard = async (newBoard) => {
+const getGameBoard = async (boardId, sourceToken) => {
   const config = {
-    headers: { Authorization: token }
+    cancelToken: sourceToken
   }
-
-  const response = await axios.post(baseUrl, newBoard, config)
+  const response = await axios.get(`${baseUrl}/${boardId}`, config)
   return response.data
-}*/
+}
 
 const createGameBoard = async (newBoard) => {
   const config = {
@@ -48,15 +47,7 @@ const createGameBoard = async (newBoard) => {
   return response.data
 }
 
-
-
-const getGameBoard = async (boardId, sourceToken) => {
-  const config = {
-    cancelToken: sourceToken
-  }
-  const response = await axios.get(`${baseUrl}/${boardId}`, config)
-  return response.data
-}
+//const updateGameBoardImage = async()
 
 const deleteGameBoard = async(id) => {
   console.log('id', id)
