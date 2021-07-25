@@ -190,8 +190,7 @@ function SideBar(props) {
 }
 
 function MapImageView({ displayImage, boardId, icons }) {
-
-
+  
   return (
     <div className="mapImageView col-8 my-4 d-flex">
       <div className="imageBox py-1 px-1 py-md-5 px-md-5 d-flex">

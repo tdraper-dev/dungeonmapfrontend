@@ -45,61 +45,6 @@ function MapTray({ mapSrc, loading, icons, setIcons }) {
   )
 }
 
-function Gameboard(props) {
-  const [image64, setImage64] = useState('')
-  const [icons, setIcons] = useState([])
-  const [loading, setLoading] = useState(true)
-  const boardId = props.match.params.id
-  let history = useHistory()
-
-  const createIcon = async (iconInfo) => {
-    const newIcon = await iconService.createIcon(iconInfo)
-    setIcons(icons.concat(newIcon))
-  }
-  
-  useEffect(() => {
-    const source = axios.CancelToken.source()
-    setLoading(true)
-
-    const loadGameBoard = async() => {
-      try {
-        const gameBoard = await gameBoardService.getGameBoard(boardId, source.token)
-        console.log('THIS IS YOUR GAMEBOARD', gameBoard)
-        const boardImage = await imageUtility.convertBuffertoBlob(gameBoard.image.data)
-        setImage64(boardImage)
-        setIcons(gameBoard.icons)
-        setLoading(false)
-      } catch (exception) {
-        console.log('loading mapImage failed', exception)
-      }
-    }
-    loadGameBoard()
-    return () => {source.cancel()}
-  }, [])
-
-  return (
-    <>
-    <div className="navBox row">
-        <FileBase64 
-          setLoading={setLoading} 
-          boardId={boardId}
-          setImage64={setImage64}
-          multiple={false}
-          onDone={({ base64 }) => setImage64(base64)} 
-        />
-        <div className="backBox d-flex col-2">
-         <button onClick={() => history.goBack()}>Back</button>
-        </div>
-        <BuildIcon createIcon={createIcon} boardId={boardId} />
-    </div>
-    <div className="gameBoardRow row">
-
-      <MapTray mapSrc={image64} loading={loading} icons={icons} setIcons={setIcons} />
-    </div>
-    </>
-  )
-}
-
 function BuildIcon({ createIcon, boardId }) {
   const [content, setContent] = useState('')
   const [color, setColor] = useState('')
@@ -138,18 +83,17 @@ function BuildIcon({ createIcon, boardId }) {
   )
 }
 
-function FileBase64(props) {
+function FileBase64({setLoading, boardId, setImage64, onDone, image64 }) {
 
   const handleChange = async (e) => {
+    const currentMap = image64; 
     e.preventDefault()
-
+    setLoading(true)
     let file = fileRef.current.files[0]
-    const buffer = await imageService.saveMapImage(file, props.boardId);
-    imageUtility.convertBuffertoBlob(buffer)
-      .then( response => {
-        props.setLoading(false)
-        props.onDone({ base64: response }) 
-      })
+    const buffer = await gameBoardService.updateGameBoardImage(file, boardId);
+    const mapImage = await imageUtility.convertBuffertoBlob(buffer.data)
+    await setImage64(mapImage)
+    setLoading(false)
   }
 
   const fileRef = useRef()
@@ -164,12 +108,62 @@ function FileBase64(props) {
 
     </form>
   )
-
 }
 
-FileBase64.defaultProps = {
-  multiple: false,
-};
+
+function Gameboard(props) {
+  const [image64, setImage64] = useState('')
+  const [icons, setIcons] = useState([])
+  const [loading, setLoading] = useState(true)
+  const boardId = props.match.params.id
+  let history = useHistory()
+
+  const createIcon = async (iconInfo) => {
+    const newIcon = await iconService.createIcon(iconInfo)
+    setIcons(icons.concat(newIcon))
+  }
+  
+  useEffect(() => {
+    const source = axios.CancelToken.source()
+    setLoading(true)
+
+    const loadGameBoard = async() => {
+      try {
+        const gameBoard = await gameBoardService.getGameBoard(boardId, source.token)
+        const boardImage = await imageUtility.convertBuffertoBlob(gameBoard.image.data)
+        setImage64(boardImage)
+        setIcons(gameBoard.icons)
+        setLoading(false)
+      } catch (exception) {
+        console.log('loading mapImage failed', exception)
+      }
+    }
+    loadGameBoard()
+    return () => {source.cancel()}
+  }, [])
+  return (
+    <>
+    <div className="navBox row">
+        <FileBase64 
+          setLoading={setLoading} 
+          boardId={boardId} 
+          setImage64={setImage64}
+          image64={image64}
+          />
+        <div className="backBox d-flex col-2">
+          <button onClick={() => history.goBack()}>Back</button>
+        </div>
+        <BuildIcon createIcon={createIcon} boardId={boardId} />
+    </div>
+    <div className="gameBoardRow row">
+
+      <MapTray mapSrc={image64} loading={loading} icons={icons} setIcons={setIcons} />
+    </div>
+    </>
+  )
+}
+
+
 
 export default Gameboard
 

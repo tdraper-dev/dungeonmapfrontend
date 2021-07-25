@@ -47,7 +47,13 @@ const createGameBoard = async (newBoard) => {
   return response.data
 }
 
-//const updateGameBoardImage = async()
+const updateGameBoardImage = async(file, boardId) => {
+  const formData = new FormData();
+  formData.append('myImage', file)
+
+  const response = await axios.put(`${baseUrl}/${boardId}`, formData)
+  return response.data
+}
 
 const deleteGameBoard = async(id) => {
   console.log('id', id)
@@ -60,5 +66,11 @@ const deleteGameBoard = async(id) => {
 }
 
 export default {
-  setToken, getGameBoards, getGameBoard, createGameBoard, deleteGameBoard, retrieveToken
+  setToken, 
+  getGameBoards, 
+  getGameBoard, 
+  createGameBoard, 
+  updateGameBoardImage,
+  deleteGameBoard, 
+  retrieveToken
 }
