@@ -9,16 +9,17 @@ const getIcons = async(boardId) => {
 
 const createIcon = async(iconInfo) => {
   const response = await axios.post(baseUrl, iconInfo)
-  console.log('NEW ICON ', response.data)
   return response.data
 }
 
 const updateIcon = async(iconInfo, id) => {
   const response = await axios.put(`${baseUrl}/${id}`, iconInfo)
+  return response.data
 }
 
 const deleteIcon = async(id) => {
-  const response = await axios.put(`${baseUrl}/${id}`)
+  console.log(id)
+  const response = await axios.delete(`${baseUrl}/${id}`)
   return response.data
 }
 

@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
-import PropTypes from 'prop-types';
+import iconServices from '../services/icon'
 
-function Draggable({ children, isSvg = false, position, updatePosition }) {
+function Draggable({ children, isSvg = false, position, updatePosition, deleteIcon, id }) {
   const [dragging, setDragging] = useState(false)
-  const [drop, setDrop] = useState({ x: 0, y: 0 })
+  const [drop, setDrop] = useState({ x: position.x, y: position.y })
   const dragRef = useRef()
 
   const handleDragMove = (e) => {
@@ -17,12 +17,21 @@ function Draggable({ children, isSvg = false, position, updatePosition }) {
   }
 
   const handlePointerUp = (e) => {
+    const bounding = dragRef.current.getBoundingClientRect();
     setDragging(false);
-
-    setDrop({
-      x: dragRef.current.style.left,
-      y: dragRef.current.style.top
-    })
+    if(bounding.x < 100 && bounding.y < 100) {
+      try {
+        deleteIcon(id)
+        dragRef.current.remove()
+      } catch(exception) {
+        console.log('Unable to delete icon', exception)
+      }
+    } else if (drop.x !== dragRef.current.style.left && drop.y !== dragRef.current.style.top) {
+      setDrop({
+        x: dragRef.current.style.left,
+        y: dragRef.current.style.top
+      })
+    }
   }
 
   const handlePointerMove = (e) => {
@@ -42,9 +51,10 @@ function Draggable({ children, isSvg = false, position, updatePosition }) {
       window.removeEventListener('pointerup', handlePointerUp)
       window.removeEventListener('touchmove', preventBehavior, {passive: false})
     } 
-  }, [])
-  const firstRender = useRef(true);
 
+  }, [])
+
+  const firstRender = useRef(true);
   useEffect(() => {
     if(!firstRender.current) {
       updatePosition({ 
@@ -53,13 +63,14 @@ function Draggable({ children, isSvg = false, position, updatePosition }) {
       })
       //THIS IS WHERE WE DO A SOCKET.IO EMISSION AND PUSH TO SERVER
     }
-  }, [drop, updatePosition] ) 
+  }, [drop.x, drop.y] ) 
   
   useEffect(() => { firstRender.current = false }, [])
   return (
     <div
       onPointerDown={handlePointerDown}
       onPointerMove={handlePointerMove}
+      handlePointerUp={handlePointerUp}
       style={{top: position.y, left: position.x}}
       className="draggableBox"
       ref={dragRef}

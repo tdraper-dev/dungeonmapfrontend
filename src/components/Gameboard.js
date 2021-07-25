@@ -9,7 +9,7 @@ import LoadingSquare from './LoadingSquare'
 import Icon from './Icon'
 
 function MapImageView(props) {
-  
+
   return (
     <div className="mapImageView col-8 my-4 d-flex">
       <div className="imageBox py-1 px-1 py-md-5 px-md-5 d-flex">
@@ -22,10 +22,11 @@ function MapImageView(props) {
   )
 }
 
-function MapTray({ mapSrc, loading, icons, setIcons }) {
+function MapTray({ mapSrc, loading, icons, setIcons }) { 
 
   return (
     <div className="mapTrayContainer col-12   d-flex">
+      <div id="dropZoneTest">TEST</div>
       {loading
         ? <LoadingSquare />
         : <MapImageView>
@@ -36,6 +37,8 @@ function MapTray({ mapSrc, loading, icons, setIcons }) {
                   id={icon.id}
                   key={icon.id}
                   position={icon.position}
+                  setIcons={setIcons}
+                  icons={icons}
                 /> 
             })}
             <img draggable="false" className="noselect mapImage img-fluid" alt='' src={mapSrc} />
@@ -51,7 +54,6 @@ function BuildIcon({ createIcon, boardId }) {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    console.log(content, ',', color, ',', boardId)
     createIcon({
       content,
       color,
@@ -60,7 +62,7 @@ function BuildIcon({ createIcon, boardId }) {
   }
  
   return (
-    <div className="buildIconFormBox">
+    <div className="buildIconFormBox d-flex">
       <form onSubmit={handleSubmit}>
         <label htmlFor='iconContentInput'>Content: </label>
         <input

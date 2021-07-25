@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react'
 import Draggable from './DragComponent'
 import iconService from '../services/icon'
+import icon from '../services/icon';
 
 function debounce(func, timeout = 1000) {
   let timer;
@@ -21,6 +22,11 @@ function Icon({ style, content, id, position, display=false }) {
     []
   )
 
+  const deleteIcon = async(iconId) => {
+    console.log('DELETE THIS ICON ID ', iconId)
+    const response = await iconService.deleteIcon(iconId)
+  }
+
   return (
     <>
     {display
@@ -29,7 +35,12 @@ function Icon({ style, content, id, position, display=false }) {
             {content}
           </div>
         </div>
-      : <Draggable updatePosition={updateIcon} position={position}>
+      : <Draggable 
+          updatePosition={updateIcon} 
+          deleteIcon={deleteIcon} 
+          position={position}
+          id={id}
+        >
           <div style={style} className="noselect playerIcon">
             {content}
           </div>
