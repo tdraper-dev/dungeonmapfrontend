@@ -1,50 +1,24 @@
 import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 
-function Draggable({ children, isSvg = false, position }) {
+function Draggable({ children, isSvg = false, position, updatePosition }) {
   const [dragging, setDragging] = useState(false)
-  const [translate, setTranslate] = useState({
-    x: 0,
-    y: 0
-  });
-  const [drop, setDrop] = useState({
-    x: 0,
-    y: 0
-  })
+  const [drop, setDrop] = useState({ x: 0, y: 0 })
   const dragRef = useRef()
 
-  const onPointerDown = (e) => {
-
-    setTranslate({
-      x: e.clientX,
-      y: e.clientY
-    })
-  }
-
   const handleDragMove = (e) => {
-    let newposX = translate.x - e.clientX
-    let newposY = translate.y - e.clientY
-
-    setTranslate({
-      x: e.clientX,
-      y: e.clientY
-    })
-
     const aspectBox = document.getElementById('aspectRatioBox')
-
-    dragRef.current.style.left = `${((dragRef.current.offsetLeft - newposX)/aspectBox.clientWidth)*100}%`
-    dragRef.current.style.top = `${((dragRef.current.offsetTop - newposY)/aspectBox.clientHeight)*100}%`
+    dragRef.current.style.left = `${((dragRef.current.offsetLeft + e.movementX)/aspectBox.clientWidth)*100}%`
+    dragRef.current.style.top = `${((dragRef.current.offsetTop + e.movementY)/aspectBox.clientHeight)*100}%`
   };
 
   const handlePointerDown = (e) => {
     setDragging(true);
-    onPointerDown(e)
   }
 
   const handlePointerUp = (e) => {
     setDragging(false);
-    e.stopPropagation()
-    e.preventDefault()
+
     setDrop({
       x: dragRef.current.style.left,
       y: dragRef.current.style.top
@@ -52,27 +26,38 @@ function Draggable({ children, isSvg = false, position }) {
   }
 
   const handlePointerMove = (e) => {
+    e.preventDefault();
     if (dragging) handleDragMove(e) 
   }
 
+  const preventBehavior =(e) => {
+    e.preventDefault();
+  }
 
   useEffect(() => {
     window.addEventListener('pointerup', handlePointerUp);
+    window.addEventListener('touchmove', preventBehavior, {passive: false})
 
     return () => {
       window.removeEventListener('pointerup', handlePointerUp)
-    }
+      window.removeEventListener('touchmove', preventBehavior, {passive: false})
+    } 
   }, [])
+  const firstRender = useRef(true);
 
   useEffect(() => {
-    console.log('YOU DROPPED THE ICON!')
-    //THIS IS WHERE WE DO A SOCKET.IO EMISSION AND PUSH TO SERVER
-
-  }, [drop.x, drop.y])  
-
-  const Tag = isSvg ? 'g' : 'div';
+    if(!firstRender.current) {
+      updatePosition({ 
+        x: drop.x, 
+        y: drop.y 
+      })
+      //THIS IS WHERE WE DO A SOCKET.IO EMISSION AND PUSH TO SERVER
+    }
+  }, [drop, updatePosition] ) 
+  
+  useEffect(() => { firstRender.current = false }, [])
   return (
-    <Tag
+    <div
       onPointerDown={handlePointerDown}
       onPointerMove={handlePointerMove}
       style={{top: position.y, left: position.x}}
@@ -80,7 +65,7 @@ function Draggable({ children, isSvg = false, position }) {
       ref={dragRef}
     >
       {children}
-    </Tag>
+    </div>
 
   )
 }

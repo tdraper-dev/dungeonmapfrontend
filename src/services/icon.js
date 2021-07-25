@@ -13,7 +13,18 @@ const createIcon = async(iconInfo) => {
   return response.data
 }
 
+const updateIcon = async(iconInfo, id) => {
+  const response = await axios.put(`${baseUrl}/${id}`, iconInfo)
+}
+
+const deleteIcon = async(id) => {
+  const response = await axios.put(`${baseUrl}/${id}`)
+  return response.data
+}
+
 export default {
   getIcons,
-  createIcon
+  createIcon,
+  updateIcon,
+  deleteIcon
 }

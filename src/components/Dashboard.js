@@ -9,7 +9,7 @@ import axios from 'axios'
 import imageUtility from '../utils/imageHelper'
 import AddContentCircle from './AddContentCircle'
 import LoadingSquare from './LoadingSquare'
-
+import Icon from './Icon'
 
 function LogoutButton() {
   const auth = useAuth()
@@ -189,15 +189,26 @@ function SideBar(props) {
   )
 }
 
-function MapImageView({ displayImage, boardId }) {
+function MapImageView({ displayImage, boardId, icons }) {
 
 
   return (
     <div className="mapImageView col-8 my-4 d-flex">
       <div className="imageBox py-1 px-1 py-md-5 px-md-5 d-flex">
-        <img className="mapImage img-fluid" key={boardId} alt='' src={displayImage} />
+        <div id="aspectRatioBox">
+          {icons.map(icon => {
+            return <Icon
+              key={icon.id} 
+              style={{backgroundColor: icon.color}} 
+              content={icon.content}
+              id={icon.id}
+              position={icon.position}
+              display={true}
+              />
+          })}
+          <img className="mapImage img-fluid" key={boardId} alt='' src={displayImage} />
+        </div>
       </div>
-
     </div> 
   )
 }
@@ -215,6 +226,7 @@ function Dashboard() {
   const [boards, setBoards] = useState([])
   const [boardId, setBoardId] = useState('')
   const [displayImage, setDisplayImage] = useState(null)
+  const [icons, setIcons] = useState([])
   const [loading, setLoading] = useState(true)
 
   const createNewBoard = async(boardName, file) => {
@@ -250,10 +262,12 @@ function Dashboard() {
       setLoading(true)
       try {
         const loadedBoards = await gameBoardService.getGameBoards(source.token);
+        
         setBoards(loadedBoards)
         if(loadedBoards.length > 0) {
-          if(loadedBoards[0].mapImage) {
+          if(loadedBoards[0].dashImage) {
             await updateDashBoard(loadedBoards[0])
+            setIcons(loadedBoards[0].icons)
             setLoading(false)
           }
         } else {
@@ -275,6 +289,7 @@ function Dashboard() {
           const boardFocus = boards.find(board => board.id === boardId)
           if(boardFocus && boardFocus.dashImage) {
             await updateDashBoard(boardFocus)
+            setIcons(boardFocus.icons)
             setLoading(false)
           }
         } 
@@ -319,7 +334,7 @@ function Dashboard() {
         {loading
           ? <LoadingSquare />
           :  boards.length > 0
-              ? <MapImageView boardId={boardId} displayImage={displayImage} />
+              ? <MapImageView boardId={boardId} displayImage={displayImage} icons={icons} />
               : <div onClick={handleLinkClick} className="addContentBox">
                   <AddContentCircle color={'rgb(187, 0, 0)'}/>
                 </div>

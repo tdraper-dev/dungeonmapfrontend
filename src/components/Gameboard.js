@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { useHistory } from "react-router-dom"
-import Dashboard from './Dashboard'
 import axios from 'axios'
 import imageService from '../services/image'
 import iconService from '../services/icon'
@@ -36,16 +35,15 @@ function MapTray({ mapSrc, loading, icons, setIcons }) {
         ? <LoadingSquare />
         : <MapImageView>
             {icons.map(icon => {
-              return <Icon 
-                  updatePosition={'no'} 
-                  style={{backgroundColor: icon.color, left: icon.position.x, top: icon.position.y}}
+              return <Icon  
+                  style={{backgroundColor: icon.color}}
                   content={icon.content}
                   id={icon.id}
                   key={icon.id}
                   position={icon.position}
                 /> 
             })}
-            <img className="mapImage img-fluid noselect" alt='' src={mapSrc} />
+            <img draggable="false" className="noselect mapImage img-fluid" alt='' src={mapSrc} />
           </MapImageView>
       }
     </div>
