@@ -8,8 +8,8 @@ function Draggable({ children, isSvg = false, position, updatePosition, deleteIc
 
   const handlePointerDown = (e) => {
     setDragging(true);
-    window.addEventListener('mousemove', handleDragMove);
-    window.addEventListener('mouseup', handlePointerUp);
+    window.addEventListener('pointermove', handleDragMove);
+    window.addEventListener('pointerup', handlePointerUp);
   };
 
   const handlePointerMove = (e) => {
@@ -38,8 +38,8 @@ function Draggable({ children, isSvg = false, position, updatePosition, deleteIc
         y: dragRef.current.style.top
       })
     }
-    window.removeEventListener('mousemove', handleDragMove);
-    window.removeEventListener('mouseup', handlePointerUp);
+    window.removeEventListener('pointermove', handleDragMove);
+    window.removeEventListener('pointerup', handlePointerUp);
   }
 
 
@@ -53,10 +53,10 @@ function Draggable({ children, isSvg = false, position, updatePosition, deleteIc
     window.addEventListener('touchmove', preventBehavior, {passive: false})
 
     return () => {
-      window.removeEventListener('mouseup', handlePointerUp)
+      window.removeEventListener('pointerup', handlePointerUp)
       window.removeEventListener('touchmove', preventBehavior, {passive: false})
-      window.removeEventListener('mousemove', handleDragMove);
-      window.removeEventListener('mouseup', handlePointerUp);
+      window.removeEventListener('pointermove', handleDragMove);
+      window.removeEventListener('pointerup', handlePointerUp);
     } 
 
   }, [])
@@ -75,7 +75,7 @@ function Draggable({ children, isSvg = false, position, updatePosition, deleteIc
   useEffect(() => { firstRender.current = false }, [])
   return (
     <div
-      onMouseDown={handlePointerDown}
+      onPointerDown={handlePointerDown}
       style={{top: position.y, left: position.x}}
       className="draggableBox"
       ref={dragRef}
