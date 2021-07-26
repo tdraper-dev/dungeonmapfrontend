@@ -7,6 +7,7 @@ function Draggable({ children, isSvg = false, position, updatePosition, deleteIc
   const dragRef = useRef()
 
   const handleDragMove = (e) => {
+    console.log('e.movementX', e.movementX)
     const aspectBox = document.getElementById('aspectRatioBox')
     dragRef.current.style.left = `${((dragRef.current.offsetLeft + e.movementX)/aspectBox.clientWidth)*100}%`
     dragRef.current.style.top = `${((dragRef.current.offsetTop + e.movementY)/aspectBox.clientHeight)*100}%`
@@ -35,7 +36,6 @@ function Draggable({ children, isSvg = false, position, updatePosition, deleteIc
   }
 
   const handlePointerMove = (e) => {
-    e.preventDefault();
     if (dragging) handleDragMove(e) 
   }
 
