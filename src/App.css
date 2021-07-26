@@ -420,6 +420,7 @@ html {
   display: none;
 }
 
+
 @media(max-width: 1300px) {
   .buttonFix {
     font-size: 10px;
@@ -523,6 +524,7 @@ html {
 
 .gameBoardRow {
   height: 100%;
+  position: relative;
 }
 
 .navBox {
@@ -603,6 +605,104 @@ html {
   width: 20px;
   height: 20px;
   text-align: center;
+}
+
+.backBox {
+  position: absolute;
+  left: 43%;
+  top: 15px;
+  
+}
+
+#dungeonMasterSideBar {
+  position: fixed;
+  top: 20%;
+  right: 0;
+  transform: translateX(100%);
+  height: 40%;
+  width: 300px;
+  background-color:rgba(0, 0, 0, 0.8);
+  border: 2px groove black;
+  box-shadow: 5px 10px 8px rgb(0 0 0 / 50%);
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+  transition: 300ms;
+  justify-content: center;
+  align-content: flex-start;
+}
+#dungeonMasterSideBar[aria-hidden="false"] {
+  transform: translateX(0%);
+  transition: 300ms;
+}
+
+@keyframes toRest {
+  0%{
+    transform: translateX(-40%)
+  }
+  100% {
+    transform: translateX(-26%)
+  }
+}
+.buttonArmBox {
+  position: absolute;
+  animation: toRest;
+  animation-duration: 300ms;
+  animation-fill-mode: forwards;
+  animation-direction:alternate-reverse;
+  animation-timing-function:cubic-bezier(0.645, 0.045, 0.355, 1);
+  animation-iteration-count: 4;
+  /*transform: translateX(-19%); */
+  width: 100%;
+  height: 50px;
+  border-top-left-radius: 100px;
+  border-bottom-left-radius: 100px;
+  transition: 600ms;
+}
+
+.toggleClickBox {
+  display: flex;
+  height: 100%;
+  width: 50px;
+  justify-self: flex-start;
+  background-color: rgba(255, 58, 58, 0.692);
+  border-radius: 100%;
+  transition: 600ms;
+  justify-content: center;
+  align-items:center;
+  display: flex;
+  font-family: dungeonFont;
+  font-size: 25px;
+  font-weight: 600;
+}
+#dungeonMasterSideBar[aria-hidden="false"] .toggleClickBox {
+  transform: translateX(-100%);
+  background-color: rgb(189, 8, 8);
+  transition: 600ms;
+}
+
+.toolBarRow {
+  padding: 0 !important;
+  position: relative;
+  z-index: 100;
+  text-align: center;
+}
+
+.toolButtonBar {
+  height: fit-content;
+}
+
+.changeMap,
+.addIcon {
+  width: 50%;
+  color: white;
+  background-color: rgba(0,0,0,0.8)
+}
+.changeMap {
+  border-top-left-radius: 10px;
+}
+
+.buildIconFormBox {
+  justify-content: center;
 }
 
 /* --------------------------- */
@@ -694,11 +794,55 @@ a.hidden {
   font-weight: 600;
 }
 
-#dropZoneTest {
+#dropZoneDelete {
   position: fixed;
+  font-family: dungeonFont;
+  font-size: 25px;
+  font-weight: 600;
+  text-align: center;
   top: 0;
   left: 0;
   width: 100px;
   height: 100px;
   background-color: rgba(255, 58, 58, 0.692);
+  transition: 300ms;
+  justify-content: center;
+  align-items: center;
+  border-radius: 100%;
+  border-top-left-radius: 0;
+}
+#dropZoneDelete:hover {
+  font-size: 100px;
+  transition: 300ms;
+  height: 200px;
+  width: 200px;
+}
+
+@keyframes appearDown {
+  0%{
+    opacity: 0%;
+    transform: translateY(0%);
+  }
+  100%{
+    opacity: 100%;
+    transform: translateY(10%);
+  }
+}
+
+.visibleTool {
+  position: absolute;
+  animation: appearDown; 
+  animation-duration: 300ms;
+  animation-fill-mode: forwards;
+}
+
+.changeMapRow {
+  flex-direction: column;
+  align-items: center;
+  color: white;
+  text-align: center;
+}
+
+.submitButtonFix {
+  text-align: center;
 }

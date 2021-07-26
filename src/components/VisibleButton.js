@@ -8,9 +8,9 @@ function VisibleButton (props) {
   }
 
   return (
-    <div className={props.className}>
+    <div className={props.className} style={props.style}>
       <button ref={makeContentRef} onClick={toggleVisible} className="buttons signUpButton">{props.label}</button>
-      { visible ? React.cloneElement(props.children, { ...props, setVisible: setVisible })
+      { visible ? React.cloneElement(props.children, { ...props, visible: visible, setVisible: setVisible })
         : null
       }
       

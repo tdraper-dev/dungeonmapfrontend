@@ -7,9 +7,10 @@ import gameBoardService from '../services/gameboard'
 import imageUtility from '../utils/imageHelper'
 import LoadingSquare from './LoadingSquare'
 import Icon from './Icon'
+import MasterBuilderNav from './MasterBuilderBar.js'
 
 function MapImageView(props) {
-
+  
   return (
     <div className="mapImageView col-8 my-4 d-flex">
       <div className="imageBox py-1 px-1 py-md-5 px-md-5 d-flex">
@@ -23,10 +24,12 @@ function MapImageView(props) {
 }
 
 function MapTray({ mapSrc, loading, icons, setIcons }) { 
-
+  
   return (
     <div className="mapTrayContainer col-12   d-flex">
-      <div id="dropZoneTest">TEST</div>
+      <div id="dropZoneDelete" className="d-flex">
+        <p className="pt-3">Delete</p>
+      </div>
       {loading
         ? <LoadingSquare />
         : <MapImageView>
@@ -85,10 +88,9 @@ function BuildIcon({ createIcon, boardId }) {
   )
 }
 
-function FileBase64({setLoading, boardId, setImage64, onDone, image64 }) {
+function FileBase64({setLoading, boardId, setImage64, onDone }) {
 
   const handleChange = async (e) => {
-    const currentMap = image64; 
     e.preventDefault()
     setLoading(true)
     let file = fileRef.current.files[0]
@@ -118,12 +120,7 @@ function Gameboard(props) {
   const [icons, setIcons] = useState([])
   const [loading, setLoading] = useState(true)
   const boardId = props.match.params.id
-  let history = useHistory()
-
-  const createIcon = async (iconInfo) => {
-    const newIcon = await iconService.createIcon(iconInfo)
-    setIcons(icons.concat(newIcon))
-  }
+  let history = useHistory();
   
   useEffect(() => {
     const source = axios.CancelToken.source()
@@ -143,27 +140,37 @@ function Gameboard(props) {
     loadGameBoard()
     return () => {source.cancel()}
   }, [])
+  console.log('initial icons', icons)
   return (
     <>
+    <div className="gameBoardRow row">
+      <div className="backBox d-flex">
+          <button className="buttons" onClick={() => history.goBack()}>Return to Dashboard</button>
+      </div>
+      <MapTray mapSrc={image64} loading={loading} icons={icons} setIcons={setIcons} />
+    </div>
+    <MasterBuilderNav
+      setLoading={setLoading}
+      boardId={boardId}
+      setImage64={setImage64}
+      icons={icons}
+      setIcons={setIcons}
+    />
+    </>
+  )
+}
+
+/*
     <div className="navBox row">
         <FileBase64 
           setLoading={setLoading} 
           boardId={boardId} 
           setImage64={setImage64}
-          image64={image64}
           />
-        <div className="backBox d-flex col-2">
-          <button onClick={() => history.goBack()}>Back</button>
-        </div>
+       
         <BuildIcon createIcon={createIcon} boardId={boardId} />
     </div>
-    <div className="gameBoardRow row">
-
-      <MapTray mapSrc={image64} loading={loading} icons={icons} setIcons={setIcons} />
-    </div>
-    </>
-  )
-}
+    */
 
 
 
