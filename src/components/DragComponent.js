@@ -4,13 +4,23 @@ import iconServices from '../services/icon'
 function Draggable({ children, isSvg = false, position, updatePosition, deleteIcon, id }) {
   const [dragging, setDragging] = useState(false)
   const [drop, setDrop] = useState({ x: position.x, y: position.y })
+  const [translate, setTranslate] = useState({
+    x: 0,
+    y: 0
+  })
   const dragRef = useRef()
 
   const handleDragMove = (e) => {
-    console.log('e.movementX', e.movementX)
-    const aspectBox = document.getElementById('aspectRatioBox')
-    dragRef.current.style.left = `${((dragRef.current.offsetLeft + e.movementX)/aspectBox.clientWidth)*100}%`
-    dragRef.current.style.top = `${((dragRef.current.offsetTop + e.movementY)/aspectBox.clientHeight)*100}%`
+    //const aspectBox = document.getElementById('aspectRatioBox')
+    //dragRef.current.style.transform = `translateX(${translate.x + e.movementX}px) translateY(${translate.y + e.movementY}px)`
+    //console.log('dragRef', dragRef.current.style.transform)
+    console.log(e.movementX)
+    setTranslate({
+      x: translate.x + e.movementX,
+      y: translate.y + e.movementY
+    })
+    //dragRef.current.style.left = `${((dragRef.current.offsetLeft + e.movementX)/aspectBox.clientWidth)*100}%`
+    //dragRef.current.style.top = `${((dragRef.current.offsetTop + e.movementY)/aspectBox.clientHeight)*100}%`
   };
 
   const handlePointerDown = (e) => {
@@ -43,12 +53,13 @@ function Draggable({ children, isSvg = false, position, updatePosition, deleteIc
     e.preventDefault();
   }
 
+
   useEffect(() => {
-    window.addEventListener('pointerup', handlePointerUp);
+    window.addEventListener('mouseup', handlePointerUp);
     window.addEventListener('touchmove', preventBehavior, {passive: false})
 
     return () => {
-      window.removeEventListener('pointerup', handlePointerUp)
+      window.removeEventListener('mouseup', handlePointerUp)
       window.removeEventListener('touchmove', preventBehavior, {passive: false})
     } 
 
@@ -68,10 +79,11 @@ function Draggable({ children, isSvg = false, position, updatePosition, deleteIc
   useEffect(() => { firstRender.current = false }, [])
   return (
     <div
-      onPointerDown={handlePointerDown}
-      onPointerMove={handlePointerMove}
-      handlePointerUp={handlePointerUp}
-      style={{top: position.y, left: position.x}}
+      onMouseDown={handlePointerDown}
+      onMouseMove={handlePointerMove}
+      style={{
+        transform: `translateX(${translate.x}px) translateY(${translate.y}px)`
+      }}
       className="draggableBox"
       ref={dragRef}
     >
