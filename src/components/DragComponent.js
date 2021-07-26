@@ -4,28 +4,23 @@ import iconServices from '../services/icon'
 function Draggable({ children, isSvg = false, position, updatePosition, deleteIcon, id }) {
   const [dragging, setDragging] = useState(false)
   const [drop, setDrop] = useState({ x: position.x, y: position.y })
-  const [translate, setTranslate] = useState({
-    x: 0,
-    y: 0
-  })
   const dragRef = useRef()
-
-  const handleDragMove = (e) => {
-    //const aspectBox = document.getElementById('aspectRatioBox')
-    //dragRef.current.style.transform = `translateX(${translate.x + e.movementX}px) translateY(${translate.y + e.movementY}px)`
-    //console.log('dragRef', dragRef.current.style.transform)
-    console.log(e.movementX)
-    setTranslate({
-      x: translate.x + e.movementX,
-      y: translate.y + e.movementY
-    })
-    //dragRef.current.style.left = `${((dragRef.current.offsetLeft + e.movementX)/aspectBox.clientWidth)*100}%`
-    //dragRef.current.style.top = `${((dragRef.current.offsetTop + e.movementY)/aspectBox.clientHeight)*100}%`
-  };
 
   const handlePointerDown = (e) => {
     setDragging(true);
+    window.addEventListener('mousemove', handleDragMove);
+    window.addEventListener('mouseup', handlePointerUp);
+  };
+
+  const handlePointerMove = (e) => {
+    if (dragging) handleDragMove(e) 
   }
+  
+  const handleDragMove = (e) => {
+    const aspectBox = document.getElementById('aspectRatioBox')
+    dragRef.current.style.left = `${((dragRef.current.offsetLeft + e.movementX)/aspectBox.clientWidth)*100}%`
+    dragRef.current.style.top = `${((dragRef.current.offsetTop + e.movementY)/aspectBox.clientHeight)*100}%`
+  };
 
   const handlePointerUp = (e) => {
     const bounding = dragRef.current.getBoundingClientRect();
@@ -43,24 +38,25 @@ function Draggable({ children, isSvg = false, position, updatePosition, deleteIc
         y: dragRef.current.style.top
       })
     }
+    window.removeEventListener('mousemove', handleDragMove);
+    window.removeEventListener('mouseup', handlePointerUp);
   }
 
-  const handlePointerMove = (e) => {
-    if (dragging) handleDragMove(e) 
-  }
+
 
   const preventBehavior =(e) => {
     e.preventDefault();
   }
 
-
   useEffect(() => {
-    window.addEventListener('mouseup', handlePointerUp);
+    //window.addEventListener('mouseup', handlePointerUp);
     window.addEventListener('touchmove', preventBehavior, {passive: false})
 
     return () => {
       window.removeEventListener('mouseup', handlePointerUp)
       window.removeEventListener('touchmove', preventBehavior, {passive: false})
+      window.removeEventListener('mousemove', handleDragMove);
+      window.removeEventListener('mouseup', handlePointerUp);
     } 
 
   }, [])
@@ -80,10 +76,7 @@ function Draggable({ children, isSvg = false, position, updatePosition, deleteIc
   return (
     <div
       onMouseDown={handlePointerDown}
-      onMouseMove={handlePointerMove}
-      style={{
-        transform: `translateX(${translate.x}px) translateY(${translate.y}px)`
-      }}
+      style={{top: position.y, left: position.x}}
       className="draggableBox"
       ref={dragRef}
     >
