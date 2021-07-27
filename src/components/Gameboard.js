@@ -1,8 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { useHistory } from "react-router-dom"
 import axios from 'axios'
-import imageService from '../services/image'
-import iconService from '../services/icon'
 import gameBoardService from '../services/gameboard'
 import imageUtility from '../utils/imageHelper'
 import LoadingSquare from './LoadingSquare'
