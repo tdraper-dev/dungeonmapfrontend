@@ -10,8 +10,6 @@ function Layout() {
 
   return (
     <>
-
-      <Switch>
       <Route path="/"
         render={() => (
           auth.userId 
@@ -20,10 +18,12 @@ function Layout() {
         )
       }
       />
+      <Switch>
+
         <Route path="/dashboard" component={Dashboard} />
         <Route path='/login' component={Login} />
         <Route path='/gameboard/:id' component={Gameboard} />
-        <Route render={() => <Redirect to="/" />} />
+
       </Switch>
     </>
   )
