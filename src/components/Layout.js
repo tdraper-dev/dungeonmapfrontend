@@ -10,7 +10,7 @@ function Layout() {
 
   return (
     <>      
-    <Route  path="/" render={() => (
+    <Route path="/" render={() => (
       auth.userId 
         ? <Redirect from='/' to='/dashboard' /> 
         : <Redirect from='/' to='/login' />
