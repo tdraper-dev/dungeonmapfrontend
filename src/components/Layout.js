@@ -10,24 +10,23 @@ function Layout() {
 
   return (
     <>
+      <Route path="/" render={() => (
+        auth.userId 
+          ? <Redirect to='/dashboard' /> 
+          : <Redirect to='/login' />
+        )}
+      /> 
       <Switch>
         <Route path="/dashboard" component={Dashboard} />
         <Route path='/login' component={Login} />
         <Route path='/gameboard/:id' component={Gameboard} />
-
       </Switch>
     </>
   )
 }
 
-/*
-<Route path="/" render={() => (
-  auth.userId 
-  ? <Redirect to='/dashboard' /> 
-  : <Redirect to='/login' />
-)
-}
-/> */
+
+
 
 
 export default Layout

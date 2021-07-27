@@ -342,11 +342,5 @@ function Dashboard() {
     </div>
   )
 }
-/*
 
-<div className="addContentButton" onClick={handleLinkClick}>
-              <AddContentCircle color={'rgb(187, 0, 0)'}/>
-            </div>
-
-*/
 export default Dashboard
