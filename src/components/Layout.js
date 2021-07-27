@@ -10,7 +10,8 @@ function Layout() {
 
   return (
     <>
-      <Route path="/"
+      <Switch>
+      <Route exact path="/"
         render={() => (
           auth.userId 
           ? <Redirect to='/dashboard' /> 
@@ -18,12 +19,10 @@ function Layout() {
         )
       }
       />
-      <Switch>
-
         <Route path="/dashboard" component={Dashboard} />
         <Route path='/login' component={Login} />
         <Route path='/gameboard/:id' component={Gameboard} />
-
+        <Route path='*' render={() => <Redirect to="/" />} />
       </Switch>
     </>
   )
