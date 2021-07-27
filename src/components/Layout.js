@@ -9,14 +9,15 @@ function Layout() {
   const auth = useAuth()
 
   return (
-    <>
+    <>      
+    <Route  path="/" render={() => (
+      auth.userId 
+        ? <Redirect from='/' to='/dashboard' /> 
+        : <Redirect from='/' to='/login' />
+      )}
+    /> 
       <Switch>
-      <Route exact path="/" render={() => (
-        auth.userId 
-          ? <Redirect from='/' to='/dashboard' /> 
-          : <Redirect from='/' to='/login' />
-        )}
-      /> 
+
         <Route path="/dashboard" component={Dashboard} />
         <Route path='/login' component={Login} />
         <Route path='/gameboard/:id' component={Gameboard} />
