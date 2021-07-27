@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import './App.css';
-import { browserHistory as Router } from 'react-router-dom'
+import { browserHistory, Router } from 'react-router-dom'
 import Layout from './components/Layout'
 import { ProvideAuth } from './services/use-auth'
 import { ProvideNotify } from './services/use-notification'
@@ -16,7 +16,7 @@ import { ProvideNotify } from './services/use-notification'
 function App() {
 
   return (
-    <Router>
+    <Router history={browserHistory}>
       <ProvideNotify>
         <ProvideAuth>
           <Layout />
