@@ -51,69 +51,6 @@ function MapTray({ mapSrc, loading, icons, setIcons }) {
   )
 }
 
-function BuildIcon({ createIcon, boardId }) {
-  const [content, setContent] = useState('')
-  const [color, setColor] = useState('')
-
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    createIcon({
-      content,
-      color,
-      boardId
-    })
-  }
- 
-  return (
-    <div className="buildIconFormBox d-flex">
-      <form onSubmit={handleSubmit}>
-        <label htmlFor='iconContentInput'>Content: </label>
-        <input
-          id="iconContentInput"
-          type='text'
-          value={content}
-          onChange={({ target }) => setContent(target.value) }
-          required
-        />
-        <label htmlFor='iconColorInput'>Color: </label>
-        <input
-          id="iconColorInput"
-          type='text'
-          value={color}
-          onChange={({ target }) => setColor(target.value) }
-        />
-        <button className="ms-2" type="submit">Create Icon</button>
-      </form>
-    </div>
-  )
-}
-
-function FileBase64({setLoading, boardId, setImage64, onDone }) {
-
-  const handleChange = async (e) => {
-    e.preventDefault()
-    setLoading(true)
-    let file = fileRef.current.files[0]
-    const buffer = await gameBoardService.updateGameBoardImage(file, boardId);
-    const mapImage = await imageUtility.convertBuffertoBlob(buffer.data)
-    await setImage64(mapImage)
-    setLoading(false)
-  }
-
-  const fileRef = useRef()
-  return (
-    <form id="uploadForm" className="d-flex col-2" encType='multipart/form-data' onSubmit={handleChange}>
-
-      <label htmlFor="fileUpload" className='fileUpload' >Upload Image</label>
-
-      <input ref={fileRef} type="file" id="fileUpload" name="file" />
-
-      <input type='submit' value='Upload' />
-
-    </form>
-  )
-}
-
 
 function Gameboard(props) {
   const [image64, setImage64] = useState('')
@@ -159,19 +96,6 @@ function Gameboard(props) {
     </>
   )
 }
-
-/*
-    <div className="navBox row">
-        <FileBase64 
-          setLoading={setLoading} 
-          boardId={boardId} 
-          setImage64={setImage64}
-          />
-       
-        <BuildIcon createIcon={createIcon} boardId={boardId} />
-    </div>
-    */
-
 
 
 export default Gameboard

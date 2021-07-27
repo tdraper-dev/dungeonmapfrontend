@@ -80,7 +80,7 @@ function BoardTile({ thisBoard, gameBoards, setBoards, setBoardId, loading, setL
         <div className="boardTitleText">{thisBoard.board}</div>
       </div>
       <div onClick={highlightClick} className="thumbnailBox col-6 py-2 ps-3">
-        <img className="thumbnailImage img-fluid" src={thumbnail} />
+        <img draggable="false" className="thumbnailImage img-fluid" src={thumbnail} />
       </div>
       <div className="buttonContainer ps-0 pe-0 col-2 row">
         <PopUpNotice label='Delete Gameboard'className="ps-0 deleteButton">
@@ -205,7 +205,7 @@ function MapImageView({ displayImage, boardId, icons }) {
               display={true}
               />
           })}
-          <img className="mapImage img-fluid" key={boardId} alt='' src={displayImage} />
+          <img draggable="false" className="mapImage img-fluid" key={boardId} alt='' src={displayImage} />
         </div>
       </div>
     </div> 

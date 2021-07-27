@@ -81,7 +81,7 @@ function MasterBuilder({
   setLoading,
   boardId
 }) {
-  const [option, setOption] = useState(true)
+  const [option, setOption] = useState('')
   const[navBarVis, setNavBarVis] = useState(true)
 
   const createIcon = async (iconInfo) => {
@@ -89,6 +89,18 @@ function MasterBuilder({
     setIcons(icons.concat(newIcon))
   }
 
+  let box = null;
+
+  if(option === 'changeMap') {
+    box = <FileBase64 setLoading={setLoading} boardId={boardId} setImage64={setImage64}/>
+  } else if (option === 'buildIcon') {
+    box = <BuildIcon createIcon={createIcon} boardId={boardId}/>
+  }
+
+  /*const handleFocusSwitch = (focus) => {
+
+  }*/
+  
   return (
     <div id="dungeonMasterSideBar" aria-label="sidebar" aria-hidden={navBarVis}className="sidebar row">
       <div onClick={() => setNavBarVis(!navBarVis)} className="buttonArmBox">
@@ -96,24 +108,14 @@ function MasterBuilder({
       </div>
       <div className="toolBarRow row">
         <div className="toolButtonBar col-12 ps-0 pe-0">
-          <button onClick={()=> setOption(true)} 
+          <button onClick={()=> setOption('changeMap')} 
             className="changeMap">Change Map</button>
-          <button onClick={()=> setOption(false)} 
+          <button onClick={()=> setOption('buildIcon')} 
             className="addIcon">Add Icon</button>
         </div>
         </div>
         <div className="row">
-          {option
-            ? <FileBase64 
-            setLoading={setLoading} 
-            boardId={boardId} 
-            setImage64={setImage64} 
-          />
-            :<BuildIcon 
-            createIcon={createIcon} 
-            boardId={boardId} 
-            />
-          }
+          {box}
         </div>
     </div>
   )

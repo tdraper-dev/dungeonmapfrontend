@@ -619,6 +619,7 @@ html {
   top: 20%;
   right: 0;
   transform: translateX(100%);
+  min-height: 300px;
   height: 40%;
   width: 300px;
   background-color:rgba(0, 0, 0, 0.8);
