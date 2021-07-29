@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react'
 import gameBoardService from '../services/gameboard'
 import imageUtility from '../utils/imageHelper'
 import iconService from '../services/icon'
-
+import socketServices from '../services/socketManager'
 
 function BuildIcon({ createIcon, boardId, visible }) {
   const [content, setContent] = useState('')

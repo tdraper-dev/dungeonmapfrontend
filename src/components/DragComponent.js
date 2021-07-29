@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import iconServices from '../services/icon'
+import socketServices from '../services/socketManager'
+
 
 function Draggable({ children, isSvg = false, position, updatePosition, deleteIcon, id }) {
   const [dragging, setDragging] = useState(false)
@@ -61,6 +63,7 @@ function Draggable({ children, isSvg = false, position, updatePosition, deleteIc
 
   }, [])
 
+
   const firstRender = useRef(true);
   useEffect(() => {
     if(!firstRender.current) {
@@ -71,6 +74,10 @@ function Draggable({ children, isSvg = false, position, updatePosition, deleteIc
       //THIS IS WHERE WE DO A SOCKET.IO EMISSION AND PUSH TO SERVER
     }
   }, [drop.x, drop.y] ) 
+
+  useEffect(() => {
+    socketServices.updateIcon()
+  }, [])
   
   useEffect(() => { firstRender.current = false }, [])
   return (
