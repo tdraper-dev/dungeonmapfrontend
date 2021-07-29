@@ -6,6 +6,7 @@ import imageUtility from '../utils/imageHelper'
 import LoadingSquare from './LoadingSquare'
 import Icon from './Icon'
 import MasterBuilderNav from './MasterBuilderBar.js'
+import socketServices from '../services/socketManager'
 
 function MapImageView(props) {
   
@@ -54,9 +55,15 @@ function Gameboard(props) {
   const [image64, setImage64] = useState('')
   const [icons, setIcons] = useState([])
   const [loading, setLoading] = useState(true)
+  //const [sessionLive, setSessionLive] = useState(false)
+
   const boardId = props.match.params.id
   let history = useHistory();
-  
+
+  /*const gameSocket = io.connect(server, {
+    'reconnect': false
+  })*/
+
   useEffect(() => {
     const source = axios.CancelToken.source()
     setLoading(true)
@@ -75,7 +82,21 @@ function Gameboard(props) {
     loadGameBoard()
     return () => {source.cancel()}
   }, [])
-  console.log('initial icons', icons)
+
+  useEffect(() => {
+    socketServices.initiateSocket(boardId)
+    return () => socketServices.disconnectSocket()
+  }, []) 
+
+/*useEffect(() => {
+    if(sessionLive) {
+      socketServices.initiateSocket(boardId);
+    }
+
+    return () => socketServices.disconnectSocket()
+}, [sessionLive])
+*/
+
   return (
     <>
     <div className="gameBoardRow row">

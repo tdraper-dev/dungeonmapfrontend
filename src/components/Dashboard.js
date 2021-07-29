@@ -309,7 +309,7 @@ function Dashboard() {
       <SideBar>
         <UserBlock />
         <DmButtons>
-          <VisibleButton label="Add Board" className="optionItems col-6 px-1 py-1 buttonFix">
+          <VisibleButton label="Create" className="optionItems col-6 px-1 py-1 buttonFix">
             <CreateBoard createNewBoard={createNewBoard} />
           </VisibleButton>
           <LogoutButton />

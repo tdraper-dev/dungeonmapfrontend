@@ -422,10 +422,6 @@ html {
 
 
 @media(max-width: 1300px) {
-  .buttonFix {
-    font-size: 10px;
-    padding-top: 10px;
-  }
   .dashTitle {
       font-size: 30px;
   }
@@ -440,9 +436,6 @@ html {
     top: 600px;
     left: 5%;
     animation: slideUp 300ms ease;
-  }
-  .buttonFix {
-    font-size: 16px;
   }
 }
 .newMapName {
