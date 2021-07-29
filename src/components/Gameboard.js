@@ -88,6 +88,26 @@ function Gameboard(props) {
     return () => socketServices.disconnectSocket()
   }, []) 
 
+  useEffect(() => {
+    socketServices.addIcon((iconObj) => {
+      setIcons(icons => [...icons, iconObj])
+    })
+
+    socketServices.updateIcon((position, id) => {
+      setIcons((icons) => icons.map(icon => {
+        if(icon.id === id) {
+          icon.position.x = position.x
+          icon.position.y = position.y
+        }
+        return icon
+      }))
+    })
+
+    socketServices.clearIcon((id) => {
+      setIcons((icons) => icons.filter(icon => icon.id !== id))
+    })
+  }, [])
+
 /*useEffect(() => {
     if(sessionLive) {
       socketServices.initiateSocket(boardId);
@@ -96,7 +116,7 @@ function Gameboard(props) {
     return () => socketServices.disconnectSocket()
 }, [sessionLive])
 */
-
+  
   return (
     <>
     <div className="gameBoardRow row">

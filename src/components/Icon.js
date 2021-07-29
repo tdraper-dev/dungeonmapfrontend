@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useEffect, useCallback } from 'react'
 import Draggable from './DragComponent'
 import iconService from '../services/icon'
 import socketServices from '../services/socketManager'
@@ -13,7 +13,14 @@ function debounce(func, timeout = 1000) {
 
 
 
-function Icon({ style, content, id, position, display=false }) {
+function Icon({ 
+  style, 
+  content, 
+  id, 
+  position, 
+  display=false, 
+  icons,
+  setIcons }) {
   
   const updateIcon = async(position) => {
     socketServices.moveIcon(position, id)
@@ -21,7 +28,6 @@ function Icon({ style, content, id, position, display=false }) {
   }
 /*
  const updateIcon = useCallback(
-
     debounce(async(position) => {
       socketServices.moveIcon(position, id)
       const updatedIcon = await iconService.updateIcon(position, id)
@@ -30,10 +36,10 @@ function Icon({ style, content, id, position, display=false }) {
   )
 */
 
-
   const deleteIcon = async(iconId) => {
     console.log('DELETE THIS ICON ID ', iconId)
     const response = await iconService.deleteIcon(iconId)
+    socketServices.deleteIcon(iconId)
   }
 
   return (

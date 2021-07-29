@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import gameBoardService from '../services/gameboard'
 import imageUtility from '../utils/imageHelper'
 import iconService from '../services/icon'
@@ -86,6 +86,7 @@ function MasterBuilder({
 
   const createIcon = async (iconInfo) => {
     const newIcon = await iconService.createIcon(iconInfo)
+    socketServices.createIcon(newIcon)
     setIcons(icons.concat(newIcon))
   }
 
@@ -100,7 +101,7 @@ function MasterBuilder({
   /*const handleFocusSwitch = (focus) => {
 
   }*/
-  
+
   return (
     <div id="dungeonMasterSideBar" aria-label="sidebar" aria-hidden={navBarVis}className="sidebar row">
       <div onClick={() => setNavBarVis(!navBarVis)} className="buttonArmBox">

@@ -3,7 +3,14 @@ import iconServices from '../services/icon'
 import socketServices from '../services/socketManager'
 
 
-function Draggable({ children, isSvg = false, position, updatePosition, deleteIcon, id }) {
+function Draggable({ 
+  children, 
+  isSvg = false, 
+  position, 
+  updatePosition, 
+  deleteIcon, 
+  id
+ }) {
   const [dragging, setDragging] = useState(false)
   const [drop, setDrop] = useState({ x: position.x, y: position.y })
   const dragRef = useRef()
@@ -19,12 +26,16 @@ function Draggable({ children, isSvg = false, position, updatePosition, deleteIc
   }
   
   const handleDragMove = (e) => {
-    const aspectBox = document.getElementById('aspectRatioBox')
-    dragRef.current.style.left = `${((dragRef.current.offsetLeft + e.movementX)/aspectBox.clientWidth)*100}%`
-    dragRef.current.style.top = `${((dragRef.current.offsetTop + e.movementY)/aspectBox.clientHeight)*100}%`
+
+    //const aspectBox = document.getElementById('aspectRatioBox')
+    dragRef.current.style.left = `${dragRef.current.offsetLeft + e.movementX}px`
+    dragRef.current.style.top = `${dragRef.current.offsetTop + e.movementY}px`
+    /*dragRef.current.style.left = `${((dragRef.current.offsetLeft + e.movementX)/aspectBox.clientWidth)*100}%`
+    dragRef.current.style.top = `${((dragRef.current.offsetTop + e.movementY)/aspectBox.clientHeight)*100}%`*/
   };
 
   const handlePointerUp = (e) => {
+    const aspectBox = document.getElementById('aspectRatioBox')
     const bounding = dragRef.current.getBoundingClientRect();
     setDragging(false);
     if(bounding.x < 100 && bounding.y < 100) {
@@ -36,8 +47,8 @@ function Draggable({ children, isSvg = false, position, updatePosition, deleteIc
       }
     } else if (drop.x !== dragRef.current.style.left && drop.y !== dragRef.current.style.top) {
       setDrop({
-        x: dragRef.current.style.left,
-        y: dragRef.current.style.top
+        x: `${dragRef.current.style.left.replace(/px/g, '')/aspectBox.clientWidth*100}%`,
+        y: `${dragRef.current.style.top.replace(/px/g, '')/aspectBox.clientHeight*100}%`
       })
     }
     window.removeEventListener('pointermove', handleDragMove);
@@ -71,14 +82,9 @@ function Draggable({ children, isSvg = false, position, updatePosition, deleteIc
         x: drop.x, 
         y: drop.y 
       })
-      //THIS IS WHERE WE DO A SOCKET.IO EMISSION AND PUSH TO SERVER
     }
   }, [drop.x, drop.y] ) 
 
-  useEffect(() => {
-    socketServices.updateIcon()
-  }, [])
-  
   useEffect(() => { firstRender.current = false }, [])
   return (
     <div
