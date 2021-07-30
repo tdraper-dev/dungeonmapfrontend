@@ -5,7 +5,7 @@ const server = `/gameroom`
 const initiateDMSocket = (boardId) => {
 
   console.log(`Dungeon Master connecting to socket...`, server);
-  socket = io(server)
+  socket = io()
   console.log('DMsocket', socket)
 
   socket.emit('join', boardId)
@@ -15,7 +15,7 @@ const initiateDMSocket = (boardId) => {
 
 const initiateGuestSocket = (boardId, history, callback) => {
   console.log('Guest connecting to socket...', server)
-  socket = io(server)
+  socket = io()
   socket.emit('guest', boardId)
 
   socket.on('guestCheck', (check) => {
