@@ -1,7 +1,7 @@
 import io from 'socket.io-client'
 let socket;
-const server = `${window.location.protocol}//${window.location.host}/gameroom`
-
+const server = `/gameroom`
+//${window.location.protocol}//${window.location.host}
 const initiateDMSocket = (boardId) => {
 
   console.log(`Dungeon Master connecting to socket...`, server);
