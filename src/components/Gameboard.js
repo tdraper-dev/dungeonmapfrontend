@@ -7,6 +7,7 @@ import LoadingSquare from './LoadingSquare'
 import Icon from './Icon'
 import MasterBuilderNav from './MasterBuilderBar.js'
 import socketServices from '../services/socketManager'
+import { useAuth } from '../services/use-auth'
 
 function MapImageView(props) {
   
@@ -56,7 +57,7 @@ function Gameboard(props) {
   const [icons, setIcons] = useState([])
   const [loading, setLoading] = useState(true)
   //const [sessionLive, setSessionLive] = useState(false)
-
+  const auth = useAuth()
   const boardId = props.match.params.id
   let history = useHistory();
 
@@ -84,6 +85,7 @@ function Gameboard(props) {
   }, [])
 
   useEffect(() => {
+    //SOCKET.IO SUBSCRIPTIONS
     socketServices.initiateSocket(boardId)
     return () => socketServices.disconnectSocket()
   }, []) 
@@ -105,6 +107,16 @@ function Gameboard(props) {
 
     socketServices.clearIcon((id) => {
       setIcons((icons) => icons.filter(icon => icon.id !== id))
+    })
+
+    socketServices.updateMap( async() => {
+      setLoading(true)
+      const gameBoard = await gameBoardService.getGameBoard(boardId)
+      const boardImage = await imageUtility.convertBuffertoBlob(gameBoard.image.data)
+      setImage64(boardImage)
+      if(boardImage) {
+        setLoading(false)
+      }
     })
   }, [])
 

@@ -13,7 +13,7 @@ const retrieveToken = () => {
   return token;
 }
 
-const getGameBoards = async (sourceToken) => {
+const getGameBoards = async (sourceToken = null) => {
   const config = {
     headers: { Authorization: token },
     cancelToken: sourceToken

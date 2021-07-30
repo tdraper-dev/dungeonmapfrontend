@@ -64,6 +64,19 @@ const clearIcon = (callback) => {
   }
 }
 
+const changeMap = () => {
+  if(socket) {
+    console.log('You want to change the map image')
+    socket.emit('change_map')
+  }
+}
+
+const updateMap = (callback) => {
+  if(socket) {
+    socket.on('update_map', () => callback())
+  }
+}
+
 const disconnectSocket = () => {
   if(socket) {
     console.log('Disconnecting socket...');
@@ -81,5 +94,7 @@ export default {
   moveIcon,
   updateIcon,
   deleteIcon,
-  clearIcon
+  clearIcon,
+  changeMap,
+  updateMap
 }

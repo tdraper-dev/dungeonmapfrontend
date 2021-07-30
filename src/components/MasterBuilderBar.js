@@ -52,7 +52,11 @@ function FileBase64({setLoading, boardId, setImage64, visible }) {
     let file = fileRef.current.files[0]
     const buffer = await gameBoardService.updateGameBoardImage(file, boardId);
     const mapImage = await imageUtility.convertBuffertoBlob(buffer.data)
+    if(mapImage) {
+      socketServices.changeMap()
+    }
     await setImage64(mapImage)
+
     setLoading(false)
   }
 
