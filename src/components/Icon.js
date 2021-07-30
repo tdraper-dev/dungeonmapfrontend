@@ -19,12 +19,9 @@ function Icon({
   id, 
   position, 
   display=false, 
-  deleteIcon }) {
+  deleteIcon,
+  updatePosition }) {
   
-  const updateIcon = async(position) => {
-    socketServices.moveIcon(position, id)
-    const updatedIcon = await iconService.updateIcon(position, id)
-  }
 /*
  const updateIcon = useCallback(
     debounce(async(position) => {
@@ -44,7 +41,7 @@ function Icon({
           </div>
         </div>
       : <Draggable 
-          updatePosition={updateIcon} 
+          updatePosition={updatePosition} 
           deleteIcon={deleteIcon} 
           position={position}
           id={id}

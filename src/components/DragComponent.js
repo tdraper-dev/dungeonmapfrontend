@@ -80,7 +80,7 @@ function Draggable({
       updatePosition({ 
         x: drop.x, 
         y: drop.y 
-      })
+      }, id)
     }
   }, [drop.x, drop.y] ) 
 

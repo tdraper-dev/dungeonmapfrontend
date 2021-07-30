@@ -2,14 +2,34 @@ import io from 'socket.io-client'
 let socket;
 const server = `${window.location.protocol}//${window.location.host}/gameroom`
 
-const initiateSocket = (boardId) => {
+const initiateDMSocket = (boardId) => {
 
-  console.log(`Connecting socket...`);
+  console.log(`Dungeon Master connecting to socket...`, server);
   socket = io(server)
+  console.log('DMsocket', socket)
 
   socket.emit('join', boardId)
   socket.on('user_joined', (data) => console.log(data) )
   socket.on('user_disconnect', (data) => console.log(data) )
+}
+
+const initiateGuestSocket = (boardId, history, callback) => {
+  console.log('Guest connecting to socket...', server)
+  socket = io(server)
+  socket.emit('guest', boardId)
+
+  socket.on('guestCheck', (check) => {
+    if(check) {
+      socket.emit('join', boardId)
+      socket.on('user_joined', (data) => console.log(data) )
+      socket.on('user_disconnect', (data) => console.log(data) )
+      return callback()
+    } else {
+      console.log('no access!')
+      socket.disconnect();
+      return history.goBack()
+    }
+  })
 }
 
 
@@ -93,7 +113,8 @@ const disconnectSocket = () => {
 
 
 export default {
-  initiateSocket,
+  initiateDMSocket,
+  initiateGuestSocket,
   disconnectSocket,
   createIcon,
   addIcon,

@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react'
+import { Redirect } from 'react-router-dom'
 import { useHistory } from "react-router-dom"
 import axios from 'axios'
 import gameBoardService from '../services/gameboard'
@@ -24,7 +25,7 @@ function MapImageView(props) {
   )
 }
 
-function MapTray({ mapSrc, loading, icons, setIcons, deleteIcon }) { 
+function MapTray({ mapSrc, loading, icons, setIcons, deleteIcon, updatePosition }) { 
   
   return (
     <div className="mapTrayContainer col-12   d-flex">
@@ -44,6 +45,7 @@ function MapTray({ mapSrc, loading, icons, setIcons, deleteIcon }) {
                   setIcons={setIcons}
                   icons={icons}
                   deleteIcon={deleteIcon}
+                  updatePosition={updatePosition}
                 /> 
             })}
             <img draggable="false" className="noselect mapImage img-fluid" alt='' src={mapSrc} />
@@ -57,19 +59,18 @@ function MapTray({ mapSrc, loading, icons, setIcons, deleteIcon }) {
 function Gameboard(props) {
   const [image64, setImage64] = useState('')
   const [icons, setIcons] = useState([])
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(false)
   const [sessionLive, setSessionLive] = useState(false)
   const auth = useAuth()
   const boardId = props.match.params.id
   let history = useHistory();
 
-
   useEffect(() => {
     const source = axios.CancelToken.source()
-    setLoading(true)
 
     const loadGameBoard = async() => {
       try {
+        setLoading(true)
         const gameBoard = await gameBoardService.getGameBoard(boardId, source.token)
         const boardImage = await imageUtility.convertBuffertoBlob(gameBoard.image.data)
         setImage64(boardImage)
@@ -79,9 +80,20 @@ function Gameboard(props) {
         console.log('loading mapImage failed', exception)
       }
     }
-    loadGameBoard()
+    const guestAuthorization = async() => {
+      console.log("Authorizing guest. . .")
+      socketServices.initiateGuestSocket(boardId, history, loadGameBoard)
+    }
+
+    if(auth.userId) {
+      loadGameBoard();
+    } else {
+      guestAuthorization();
+      connectToSocket();
+    }
     return () => {
       source.cancel()
+      console.log('ayyyyy!')
       socketServices.disconnectSocket()
     }
   }, [])
@@ -89,8 +101,10 @@ function Gameboard(props) {
 
   const connectToSocket = () => {
     if(sessionLive === false) {
-      socketServices.initiateSocket(boardId)
-
+      if(auth.userId) {
+        socketServices.initiateDMSocket(boardId)
+      }
+      
       socketServices.addIcon((iconObj) => {
         setIcons(icons => [...icons, iconObj])
       })
@@ -128,6 +142,18 @@ function Gameboard(props) {
 
   }
 
+  const updateIcon = async(position, id) => {
+    socketServices.moveIcon(position, id)
+    const updatedIcon = await iconService.updateIcon(position, id)
+    setIcons((icons) => icons.map(icon => {
+      if(icon.id === id) {
+        icon.position.x = position.x;
+        icon.position.y = position.y;
+      }
+      return icon
+    }))
+  }
+
   const deleteIcon = async (id) => {
     await iconService.deleteIcon(id)
     socketServices.deleteIcon(id)
@@ -138,22 +164,30 @@ function Gameboard(props) {
     <>
     <div className="gameBoardRow row">
       <div className="backBox d-flex">
-          <button className="buttons" onClick={() => history.goBack()}>Return to Dashboard</button>
+          <button className="buttons" onClick={() => history.goBack()}>
+            {auth.userId ? 'Return to Dashboard' : 'Return Home'}
+          </button>
       </div>
-      <div className="sessionButtonBox d-flex">
-          <button onClick={connectToSocket} className="buttons">
-            {sessionLive ? 'End Session' : 'Start Session'}
-            </button>
-      </div>
-      <MapTray deleteIcon={deleteIcon}  mapSrc={image64} loading={loading} icons={icons} setIcons={setIcons} />
+      {auth.userId 
+        ?  <div className="sessionButtonBox d-flex">
+              <button onClick={connectToSocket} className="buttons">
+                {sessionLive ? 'End Session' : 'Start Session'}
+              </button>
+            </div>
+        : null
+      }
+      <MapTray deleteIcon={deleteIcon}  mapSrc={image64} loading={loading} icons={icons} setIcons={setIcons} updatePosition={updateIcon} />
     </div>
-    <MasterBuilderNav
-      setLoading={setLoading}
-      boardId={boardId}
-      setImage64={setImage64}
-      icons={icons}
-      setIcons={setIcons}
-    />
+    {auth.userId
+      ?    <MasterBuilderNav
+              setLoading={setLoading}
+              boardId={boardId}
+              setImage64={setImage64}
+              icons={icons}
+              setIcons={setIcons}
+            />
+      : null
+    }
     </>
   )
 }
