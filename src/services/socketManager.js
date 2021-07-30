@@ -1,6 +1,6 @@
 import io from 'socket.io-client'
 let socket;
-const server = `/gameroom`
+const server = `${window.location.protocol}//${window.location.host}/gameroom`
 
 const initiateDMSocket = (boardId) => {
 
