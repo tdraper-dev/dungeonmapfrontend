@@ -7,6 +7,7 @@ import LoadingSquare from './LoadingSquare'
 import Icon from './Icon'
 import MasterBuilderNav from './MasterBuilderBar.js'
 import socketServices from '../services/socketManager'
+import iconService from '../services/icon'
 import { useAuth } from '../services/use-auth'
 
 function MapImageView(props) {
@@ -23,7 +24,7 @@ function MapImageView(props) {
   )
 }
 
-function MapTray({ mapSrc, loading, icons, setIcons }) { 
+function MapTray({ mapSrc, loading, icons, setIcons, deleteIcon }) { 
   
   return (
     <div className="mapTrayContainer col-12   d-flex">
@@ -42,6 +43,7 @@ function MapTray({ mapSrc, loading, icons, setIcons }) {
                   position={icon.position}
                   setIcons={setIcons}
                   icons={icons}
+                  deleteIcon={deleteIcon}
                 /> 
             })}
             <img draggable="false" className="noselect mapImage img-fluid" alt='' src={mapSrc} />
@@ -56,14 +58,11 @@ function Gameboard(props) {
   const [image64, setImage64] = useState('')
   const [icons, setIcons] = useState([])
   const [loading, setLoading] = useState(true)
-  //const [sessionLive, setSessionLive] = useState(false)
+  const [sessionLive, setSessionLive] = useState(false)
   const auth = useAuth()
   const boardId = props.match.params.id
   let history = useHistory();
 
-  /*const gameSocket = io.connect(server, {
-    'reconnect': false
-  })*/
 
   useEffect(() => {
     const source = axios.CancelToken.source()
@@ -81,61 +80,72 @@ function Gameboard(props) {
       }
     }
     loadGameBoard()
-    return () => {source.cancel()}
+    return () => {
+      source.cancel()
+      socketServices.disconnectSocket()
+    }
   }, [])
 
-  useEffect(() => {
-    //SOCKET.IO SUBSCRIPTIONS
-    socketServices.initiateSocket(boardId)
-    return () => socketServices.disconnectSocket()
-  }, []) 
 
-  useEffect(() => {
-    socketServices.addIcon((iconObj) => {
-      setIcons(icons => [...icons, iconObj])
-    })
+  const connectToSocket = () => {
+    if(sessionLive === false) {
+      socketServices.initiateSocket(boardId)
 
-    socketServices.updateIcon((position, id) => {
-      setIcons((icons) => icons.map(icon => {
-        if(icon.id === id) {
-          icon.position.x = position.x
-          icon.position.y = position.y
+      socketServices.addIcon((iconObj) => {
+        setIcons(icons => [...icons, iconObj])
+      })
+  
+      socketServices.updateIcon((position, id) => {
+        setIcons((icons) => icons.map(icon => {
+          if(icon.id === id) {
+            icon.position.x = position.x
+            icon.position.y = position.y
+          }
+          return icon
+        }))
+      })
+  
+      socketServices.clearIcon((id) => {
+        console.log('removing this id', id)
+        setIcons((icons) => icons.filter(icon => icon.id !== id))
+      })
+  
+      socketServices.updateMap( async() => {
+        setLoading(true)
+        const gameBoard = await gameBoardService.getGameBoard(boardId)
+        const boardImage = await imageUtility.convertBuffertoBlob(gameBoard.image.data)
+        setImage64(boardImage)
+        if(boardImage) {
+          setLoading(false)
         }
-        return icon
-      }))
-    })
+      })
 
-    socketServices.clearIcon((id) => {
-      setIcons((icons) => icons.filter(icon => icon.id !== id))
-    })
-
-    socketServices.updateMap( async() => {
-      setLoading(true)
-      const gameBoard = await gameBoardService.getGameBoard(boardId)
-      const boardImage = await imageUtility.convertBuffertoBlob(gameBoard.image.data)
-      setImage64(boardImage)
-      if(boardImage) {
-        setLoading(false)
-      }
-    })
-  }, [])
-
-/*useEffect(() => {
-    if(sessionLive) {
-      socketServices.initiateSocket(boardId);
+      setSessionLive(true)
+    } else {
+      socketServices.disconnectSocket()
+      setSessionLive(false)
     }
 
-    return () => socketServices.disconnectSocket()
-}, [sessionLive])
-*/
-  
+  }
+
+  const deleteIcon = async (id) => {
+    await iconService.deleteIcon(id)
+    socketServices.deleteIcon(id)
+    setIcons((icons) => icons.filter(icon => icon.id !== id))
+  }
+
   return (
     <>
     <div className="gameBoardRow row">
       <div className="backBox d-flex">
           <button className="buttons" onClick={() => history.goBack()}>Return to Dashboard</button>
       </div>
-      <MapTray mapSrc={image64} loading={loading} icons={icons} setIcons={setIcons} />
+      <div className="sessionButtonBox d-flex">
+          <button onClick={connectToSocket} className="buttons">
+            {sessionLive ? 'End Session' : 'Start Session'}
+            </button>
+      </div>
+      <MapTray deleteIcon={deleteIcon}  mapSrc={image64} loading={loading} icons={icons} setIcons={setIcons} />
     </div>
     <MasterBuilderNav
       setLoading={setLoading}

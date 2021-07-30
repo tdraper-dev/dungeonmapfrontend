@@ -88,7 +88,10 @@ body,
 html {
   height: 100%;
   width: 100%;
+  overflow-x: hidden;
 }
+
+
 
 @keyframes spinning {
   0% {
@@ -605,6 +608,11 @@ html {
   left: 43%;
   top: 15px;
   
+}
+.sessionButtonBox {
+  position: absolute;
+  top: 15px;
+  left: 60%;
 }
 
 #dungeonMasterSideBar {

@@ -19,8 +19,7 @@ function Icon({
   id, 
   position, 
   display=false, 
-  icons,
-  setIcons }) {
+  deleteIcon }) {
   
   const updateIcon = async(position) => {
     socketServices.moveIcon(position, id)
@@ -35,12 +34,6 @@ function Icon({
     []
   )
 */
-
-  const deleteIcon = async(iconId) => {
-    console.log('DELETE THIS ICON ID ', iconId)
-    const response = await iconService.deleteIcon(iconId)
-    socketServices.deleteIcon(iconId)
-  }
 
   return (
     <>
