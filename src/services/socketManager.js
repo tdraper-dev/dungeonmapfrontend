@@ -1,10 +1,9 @@
 import io from 'socket.io-client'
 let socket;
-const server = `/gameroom`
 //${window.location.protocol}//${window.location.host}
 const initiateDMSocket = (boardId) => {
 
-  console.log(`Dungeon Master connecting to socket...`, server);
+  console.log(`Dungeon Master connecting to socket...`);
   socket = io()
   console.log('DMsocket', socket)
 
@@ -14,7 +13,7 @@ const initiateDMSocket = (boardId) => {
 }
 
 const initiateGuestSocket = (boardId, history, callback) => {
-  console.log('Guest connecting to socket...', server)
+  console.log('Guest connecting to socket...')
   socket = io()
   socket.emit('guest', boardId)
 

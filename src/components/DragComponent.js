@@ -5,39 +5,33 @@ import socketServices from '../services/socketManager'
 
 function Draggable({ 
   children, 
-  isSvg = false, 
   position, 
   updatePosition, 
   deleteIcon, 
   id
  }) {
-  const [dragging, setDragging] = useState(false)
   const [drop, setDrop] = useState({ x: position.x, y: position.y })
   const dragRef = useRef()
 
   const handlePointerDown = (e) => {
-    setDragging(true);
     window.addEventListener('pointermove', handleDragMove);
     window.addEventListener('pointerup', handlePointerUp);
   };
 
-  const handlePointerMove = (e) => {
+  /*const handlePointerMove = (e) => {
     if (dragging) handleDragMove(e) 
-  }
+  } */
   
   const handleDragMove = (e) => {
-
-    //const aspectBox = document.getElementById('aspectRatioBox')
-    dragRef.current.style.left = `${dragRef.current.offsetLeft + e.movementX}px`
-    dragRef.current.style.top = `${dragRef.current.offsetTop + e.movementY}px`
-    /*dragRef.current.style.left = `${((dragRef.current.offsetLeft + e.movementX)/aspectBox.clientWidth)*100}%`
-    dragRef.current.style.top = `${((dragRef.current.offsetTop + e.movementY)/aspectBox.clientHeight)*100}%`*/
+      dragRef.current.style.left = `${dragRef.current.offsetLeft + e.movementX}px`
+      dragRef.current.style.top = `${dragRef.current.offsetTop + e.movementY}px`
   };
 
   const handlePointerUp = (e) => {
+
     const aspectBox = document.getElementById('aspectRatioBox')
     const bounding = dragRef.current.getBoundingClientRect();
-    setDragging(false);
+
     if(bounding.x < 100 && bounding.y < 100) {
       try {
         deleteIcon(id)
@@ -61,7 +55,6 @@ function Draggable({
   }
 
   useEffect(() => {
-    //window.addEventListener('mouseup', handlePointerUp);
     window.addEventListener('touchmove', preventBehavior, {passive: false})
 
     return () => {
@@ -88,6 +81,7 @@ function Draggable({
   return (
     <div
       onPointerDown={handlePointerDown}
+      onPointerOut={null}
       style={{top: position.y, left: position.x}}
       className="draggableBox"
       ref={dragRef}
