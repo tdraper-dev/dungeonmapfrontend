@@ -1,6 +1,4 @@
 import React, { useState, useEffect, useRef } from 'react';
-import iconServices from '../services/icon'
-import socketServices from '../services/socketManager'
 
 
 function Draggable({ 
@@ -11,11 +9,15 @@ function Draggable({
   id
  }) {
   const [drop, setDrop] = useState({ x: position.x, y: position.y })
+  const [dragging, setDragging] = useState(false)
   const dragRef = useRef()
 
   const handlePointerDown = (e) => {
     window.addEventListener('pointermove', handleDragMove);
     window.addEventListener('pointerup', handlePointerUp);
+
+    e.stopPropagation();
+    e.preventDefault();
   };
 
   /*const handlePointerMove = (e) => {
@@ -25,6 +27,9 @@ function Draggable({
   const handleDragMove = (e) => {
       dragRef.current.style.left = `${dragRef.current.offsetLeft + e.movementX}px`
       dragRef.current.style.top = `${dragRef.current.offsetTop + e.movementY}px`
+
+      e.stopPropagation();
+      e.preventDefault();
   };
 
   const handlePointerUp = (e) => {
@@ -46,6 +51,9 @@ function Draggable({
     }
     window.removeEventListener('pointermove', handleDragMove);
     window.removeEventListener('pointerup', handlePointerUp);
+
+    e.stopPropagation();
+    e.preventDefault();
   }
 
 
