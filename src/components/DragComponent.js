@@ -9,32 +9,38 @@ function Draggable({
  }) {
   const [drop, setDrop] = useState({ x: position.x, y: position.y })
   const dragRef = useRef()
+  const posRef = useRef({
+    x: 0,
+    y: 0
+  })
 
   const handlePointerDown = (e) => {
+
+    const { left, top }  = dragRef.current.getBoundingClientRect()
+    posRef.current = {
+      x: left - e.clientX,
+      y: top - e.clientY
+    }
+
+    //console.log('difference', e.clientX - left)
     window.addEventListener('pointermove', handleDragMove);
     window.addEventListener('pointerup', handlePointerUp);
 
     e.stopPropagation();
     e.preventDefault();
   };
-
-  /*const handlePointerMove = (e) => {
-    if (dragging) handleDragMove(e) 
-  } */
   
   const handleDragMove = (e) => {
+    const aspectBox = document.getElementById('aspectRatioBox').getBoundingClientRect()
 
-      dragRef.current.style.left = `${dragRef.current.offsetLeft + e.movementX}px`
-      dragRef.current.style.top = `${dragRef.current.offsetTop + e.movementY}px`
-     // x: `${dragRef.current.style.left.replace(/px/g, '')/aspectBox.clientWidth*100}%`,
-      //y: `${dragRef.current.style.top.replace(/px/g, '')/aspectBox.clientHeight*100}%`
-      e.stopPropagation();
-      e.preventDefault();
+    dragRef.current.style.left = `${(e.clientX + posRef.current.x - aspectBox.left)/aspectBox.width*100}%`
+    dragRef.current.style.top = `${(e.clientY + posRef.current.y - aspectBox.top)/aspectBox.height*100}%`
+ 
+    e.stopPropagation();
+    e.preventDefault();
   };
 
   const handlePointerUp = (e) => {
-    console.log('hi!')
-    const aspectBox = document.getElementById('aspectRatioBox')
     const bounding = dragRef.current.getBoundingClientRect();
 
     if(bounding.x < 100 && bounding.y < 100) {
@@ -45,10 +51,15 @@ function Draggable({
       }
     } else if (drop.x !== dragRef.current.style.left && drop.y !== dragRef.current.style.top) {
       setDrop({
-        x: `${dragRef.current.style.left.replace(/px/g, '')/aspectBox.clientWidth*100}%`,
-        y: `${dragRef.current.style.top.replace(/px/g, '')/aspectBox.clientHeight*100}%`
+        x: dragRef.current.style.left,
+        y: dragRef.current.style.top
       })
     }
+    posRef.current = {
+      x: 0,
+      y: 0
+    }
+    
     window.removeEventListener('pointermove', handleDragMove);
     window.removeEventListener('pointerup', handlePointerUp);
 
