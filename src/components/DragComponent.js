@@ -22,7 +22,6 @@ function Draggable({
       y: top - e.clientY
     }
 
-    //console.log('difference', e.clientX - left)
     window.addEventListener('pointermove', handleDragMove);
     window.addEventListener('pointerup', handlePointerUp);
 
@@ -59,7 +58,7 @@ function Draggable({
       x: 0,
       y: 0
     }
-    
+
     window.removeEventListener('pointermove', handleDragMove);
     window.removeEventListener('pointerup', handlePointerUp);
 

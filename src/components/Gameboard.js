@@ -93,7 +93,6 @@ function Gameboard(props) {
     }
     return () => {
       source.cancel()
-      console.log('ayyyyy!')
       socketServices.disconnectSocket()
     }
   }, [])
