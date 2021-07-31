@@ -105,6 +105,7 @@ const disconnectSocket = () => {
   if(socket) {
     console.log('Disconnecting socket...');
     socket.disconnect()
+    socket = null;
     console.log('THE SOCKET', socket)
   }
 }

@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 
-
 function Draggable({ 
   children, 
   position, 
@@ -9,7 +8,6 @@ function Draggable({
   id
  }) {
   const [drop, setDrop] = useState({ x: position.x, y: position.y })
-  const [dragging, setDragging] = useState(false)
   const dragRef = useRef()
 
   const handlePointerDown = (e) => {
@@ -25,15 +23,17 @@ function Draggable({
   } */
   
   const handleDragMove = (e) => {
+
       dragRef.current.style.left = `${dragRef.current.offsetLeft + e.movementX}px`
       dragRef.current.style.top = `${dragRef.current.offsetTop + e.movementY}px`
-
+     // x: `${dragRef.current.style.left.replace(/px/g, '')/aspectBox.clientWidth*100}%`,
+      //y: `${dragRef.current.style.top.replace(/px/g, '')/aspectBox.clientHeight*100}%`
       e.stopPropagation();
       e.preventDefault();
   };
 
   const handlePointerUp = (e) => {
-
+    console.log('hi!')
     const aspectBox = document.getElementById('aspectRatioBox')
     const bounding = dragRef.current.getBoundingClientRect();
 
@@ -89,7 +89,6 @@ function Draggable({
   return (
     <div
       onPointerDown={handlePointerDown}
-      onPointerOut={null}
       style={{top: position.y, left: position.x}}
       className="draggableBox"
       ref={dragRef}
