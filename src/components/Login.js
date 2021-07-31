@@ -7,6 +7,7 @@ import VisibleButton from './VisibleButton'
 
 function JoinSession({ setVisible }) {
   const [sessionID, setSessionID] = useState('')
+  const [username, setUsername] = useState('')
   const history = useHistory()
 
   const checkForClick = (event) => {
@@ -25,7 +26,14 @@ function JoinSession({ setVisible }) {
     e.preventDefault()
     setVisible(false);
     return (
-      history.push(`/gameboard/${sessionID}`, {from: '/'})
+      history.push({
+        pathname: `/gameboard/${sessionID}`,
+        from: '/',
+        state: {
+          username: username,
+          id: Math.random()
+        }
+      })
     )
   }
 
@@ -33,6 +41,13 @@ function JoinSession({ setVisible }) {
   return (
     <div className="joinSessionBox popUpBoxes">
     <form ref={boxRef} className="signUpForm row pt-3" onSubmit={handleSubmit}>
+      <label className="label col-lg-7 col-md-6 col-8 mb-2">Player Name</label>
+      <input
+        type="text"
+        value={username}
+        onChange={({ target }) => setUsername(target.value)}
+        className="submitButtons col-lg-6 col-md-6 col-8 mb-2 inputs"
+        />
       <label className="label col-lg-7 col-md-6 col-8 mb-2">Session ID</label>
       <input
         type="text"

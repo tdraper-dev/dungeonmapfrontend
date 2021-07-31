@@ -1,12 +1,13 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { Redirect } from 'react-router-dom'
-import { useHistory } from "react-router-dom"
+import { useHistory, useLocation } from "react-router-dom"
 import axios from 'axios'
 import gameBoardService from '../services/gameboard'
 import imageUtility from '../utils/imageHelper'
 import LoadingSquare from './LoadingSquare'
 import Icon from './Icon'
 import MasterBuilderNav from './MasterBuilderBar.js'
+import MessengerBar from './MessengerBar'
 import socketServices from '../services/socketManager'
 import iconService from '../services/icon'
 import { useAuth } from '../services/use-auth'
@@ -64,6 +65,16 @@ function Gameboard(props) {
   const auth = useAuth()
   const boardId = props.match.params.id
   let history = useHistory();
+  const location = useLocation();
+  let guest = { id: '', username: ''}
+
+  if (location.state) {
+    guest = {
+      id: location.state.id,
+      username: location.state.username
+    }
+  }
+
 
   useEffect(() => {
     const source = axios.CancelToken.source()
@@ -187,6 +198,10 @@ function Gameboard(props) {
             />
       : null
     }
+    <MessengerBar
+        id={guest.id || auth.userId}
+        username={guest.username || auth.username}
+     />
     </>
   )
 }

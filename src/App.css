@@ -6,13 +6,15 @@ input::-webkit-inner-spin-button {
 
 /* Hide scrollbar for Chrome, Safari and Opera */
 .boardsDisplay::-webkit-scrollbar,
-.sideBarColumn::-webkit-scrollbar {
+.sideBarColumn::-webkit-scrollbar,
+.messageBox::-webkit-scrollbar {
   display: none; 
 }
 
 /* Hide scrollbar for IE, Edge and Firefox */
 .boardsDisplay,
-.sideBarColumn {
+.sideBarColumn,
+.messageBox{
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;  /* Firefox */
 }
@@ -133,6 +135,15 @@ html {
   57%  { transform: scale(1,1)      translateY(-7px); }
   64%  { transform: scale(1,1)      translateY(0); }
   100% { transform: scale(1,1)      translateY(0); }
+}
+
+@keyframes toRest {
+  0%{
+    transform: translateX(-40%)
+  }
+  100% {
+    transform: translateX(-26%)
+  }
 }
 
 /*--------------------------------- */
@@ -615,36 +626,25 @@ html {
   left: 60%;
 }
 
-#dungeonMasterSideBar {
+/* ---------------- GAMEBOARD SIDEBARS ---------------- */
+.sidebar {
   position: fixed;
-  top: 20%;
   right: 0;
   transform: translateX(100%);
-  min-height: 300px;
-  height: 40%;
-  width: 300px;
-  background-color:rgba(0, 0, 0, 0.8);
-  border: 2px groove black;
   box-shadow: 5px 10px 8px rgb(0 0 0 / 50%);
   border-top-left-radius: 10px;
   border-bottom-left-radius: 10px;
   transition: 300ms;
-  justify-content: center;
-  align-content: flex-start;
 }
-#dungeonMasterSideBar[aria-hidden="false"] {
+.sidebar[aria-hidden="false"] {
   transform: translateX(0%);
   transition: 300ms;
 }
-
-@keyframes toRest {
-  0%{
-    transform: translateX(-40%)
-  }
-  100% {
-    transform: translateX(-26%)
-  }
+.sidebar[aria-hidden="false"] .toggleClickBox {
+  transform: translateX(-100%);
+  transition: 600ms;
 }
+
 .buttonArmBox {
   position: absolute;
   animation: toRest;
@@ -653,12 +653,15 @@ html {
   animation-direction:alternate-reverse;
   animation-timing-function:cubic-bezier(0.645, 0.045, 0.355, 1);
   animation-iteration-count: 4;
-  /*transform: translateX(-19%); */
   width: 100%;
   height: 50px;
   border-top-left-radius: 100px;
   border-bottom-left-radius: 100px;
   transition: 600ms;
+}
+.msgArmBox {
+  top: 30%;
+  right: -26px;
 }
 
 .toggleClickBox {
@@ -666,22 +669,60 @@ html {
   height: 100%;
   width: 50px;
   justify-self: flex-start;
-  background-color: rgba(255, 58, 58, 0.692);
   border-radius: 100%;
   transition: 600ms;
   justify-content: center;
   align-items:center;
   display: flex;
   font-family: dungeonFont;
-  font-size: 25px;
   font-weight: 600;
-}
-#dungeonMasterSideBar[aria-hidden="false"] .toggleClickBox {
-  transform: translateX(-100%);
-  background-color: rgb(189, 8, 8);
-  transition: 600ms;
+  font-size: 25px;
 }
 
+#dungeonMasterSideBar {
+  top: 15%;
+  min-height: 300px;
+  height: 40%;
+  width: 300px;
+  background-color:rgba(0, 0, 0, 0.8);
+  border: 2px groove black;
+  justify-content: center;
+  align-content: flex-start;
+}
+#dungeonMasterSideBar[aria-hidden='false'] {
+  z-index: 100000;
+}
+
+#messengerSideBar {
+  top: 0;
+  min-height: 300px;
+  height: 100%;
+  width: 400px;
+  background-color: rgba(250,250,250,1);
+  border: 2px groove black;
+  justify-content: center;
+  align-content: flex-start;
+}
+#messengerSideBar[aria-hidden='false'] {
+  z-index: 100000;
+}
+
+.dmClickBox {
+  background-color: rgba(255, 58, 58, 0.692);
+}
+.sidebar[aria-hidden="false"] .dmClickBox {
+  background-color: rgb(189, 8, 8);
+}
+
+.msgClickBox {
+  background-color: rgba(64, 210, 255, 0.692);
+  font-size: 25px;
+}
+.sidebar[aria-hidden="false"] .msgClickBox {
+  background-color: rgb(40, 241, 255);
+}
+
+/* ------ DUNGEONMASTER SPECIFIC SIDEBAR ------------ */
 .toolBarRow {
   padding: 0 !important;
   position: relative;
@@ -705,6 +746,93 @@ html {
 
 .buildIconFormBox {
   justify-content: center;
+}
+
+@keyframes appearDown {
+  0%{
+    opacity: 0%;
+    transform: translateY(0%);
+  }
+  100%{
+    opacity: 100%;
+    transform: translateY(10%);
+  }
+}
+
+.visibleTool {
+  position: absolute;
+  animation: appearDown; 
+  animation-duration: 300ms;
+  animation-fill-mode: forwards;
+}
+
+.changeMapRow {
+  flex-direction: column;
+  align-items: center;
+  color: white;
+  text-align: center;
+}
+
+.submitButtonFix {
+  text-align: center;
+}
+/* -----------------MESSAGE SIDEBAR SPECIFIC -------------- */
+.msgRow {
+  flex-direction: column;
+}
+
+.messageBox {
+  background-color: rgba(73, 213, 238, 0.63);
+  height: 80%;
+  overflow-y: scroll;
+  padding: 20px;
+}
+.msg {
+  background-color: white;
+  width: fit-content;
+  padding: 5px;
+  margin: 5px;
+  border-radius: 10px;
+}
+.msgInitial {
+  width: fit-content;
+  border-radius: 10px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin-left: 5px;
+  background-color: rgb(35, 206, 35);
+  font-weight: 600;
+  font-size: 10px;
+}
+.otherMsg {
+  border-bottom-right-radius: 0;
+}
+.meMsgPacket {
+  width: fit-content;
+  margin-left: auto;
+}
+.meMsg {
+  border-bottom-left-radius: 0;
+}
+.meMsgInitial {
+  margin-left: auto;
+}
+.sendMessageBox {
+  background-color: rgba(255, 255, 255, 0.37);
+  border-top: 2px solid black;
+  height: 20%;
+  padding: 5px;
+  margin-top: auto;
+}
+.messageTextBox {
+  width: 100%;
+  height: 100%;
+  text-align: start;
+}
+.textAreaBox {
+  width: 100%;
+  height: 100%;
+  resize: none;
 }
 
 /* --------------------------- */
@@ -820,31 +948,4 @@ a.hidden {
   width: 200px;
 }
 
-@keyframes appearDown {
-  0%{
-    opacity: 0%;
-    transform: translateY(0%);
-  }
-  100%{
-    opacity: 100%;
-    transform: translateY(10%);
-  }
-}
 
-.visibleTool {
-  position: absolute;
-  animation: appearDown; 
-  animation-duration: 300ms;
-  animation-fill-mode: forwards;
-}
-
-.changeMapRow {
-  flex-direction: column;
-  align-items: center;
-  color: white;
-  text-align: center;
-}
-
-.submitButtonFix {
-  text-align: center;
-}

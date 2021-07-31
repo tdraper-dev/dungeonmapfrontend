@@ -102,14 +102,11 @@ function MasterBuilder({
     box = <BuildIcon createIcon={createIcon} boardId={boardId}/>
   }
 
-  /*const handleFocusSwitch = (focus) => {
-
-  }*/
 
   return (
     <div id="dungeonMasterSideBar" aria-label="sidebar" aria-hidden={navBarVis}className="sidebar row">
       <div onClick={() => setNavBarVis(!navBarVis)} className="buttonArmBox">
-        <div className="noselect toggleClickBox">Tools</div>
+        <div className="noselect toggleClickBox dmClickBox">Tools</div>
       </div>
       <div className="toolBarRow row">
         <div className="toolButtonBar col-12 ps-0 pe-0">

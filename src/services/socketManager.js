@@ -95,9 +95,27 @@ const changeMap = () => {
 }
 
 const updateMap = (callback) => {
-
   if(socket) {
     socket.on('update_map', () => callback())
+  }
+}
+
+
+const sendMessage = (message) => {
+  if(socket) {
+    console.log('You want to send a message')
+    socket.emit('send_message', message)
+  }
+}
+
+const receiveMessage = (callback) => {
+  console.log('no')
+  if(socket) {
+    console.log('yes!')
+    socket.on('receive_message', (data) => {
+      console.log('receiving new message!')
+      return callback(data)
+    })
   }
 }
 
@@ -123,5 +141,7 @@ export default {
   deleteIcon,
   clearIcon,
   changeMap,
-  updateMap
+  updateMap,
+  sendMessage,
+  receiveMessage
 }
