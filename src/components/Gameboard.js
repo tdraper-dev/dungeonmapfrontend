@@ -67,6 +67,7 @@ function Gameboard(props) {
   let history = useHistory();
   const location = useLocation();
   let guest = { id: '', username: ''}
+  const messageRef = useRef();
 
   if (location.state) {
     guest = {
@@ -100,6 +101,7 @@ function Gameboard(props) {
       loadGameBoard();
     } else {
       guestAuthorization();
+      console.log('I AM A GUEST')
       connectToSocket();
     }
     return () => {
@@ -143,7 +145,7 @@ function Gameboard(props) {
           setLoading(false)
         }
       })
-
+      console.log('YO I AM HERE!!!')
       setSessionLive(true)
     } else {
       socketServices.disconnectSocket()
@@ -201,6 +203,7 @@ function Gameboard(props) {
     <MessengerBar
         id={guest.id || auth.userId}
         username={guest.username || auth.username}
+        session={sessionLive}
      />
     </>
   )

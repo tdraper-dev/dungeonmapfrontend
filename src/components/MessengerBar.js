@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, useImperativeHandle } from 'react'
 import socketServices from '../services/socketManager'
 
 
@@ -23,7 +23,7 @@ const ThemMessage = ({ sender, content }) => {
 }
 
 
-function MessengerBar({id, username}) {
+function MessengerBar({id, username, session}) {
   const [navBarVis, setNavBarVis] = useState(true)
   const [messageText, setMessageText] = useState('')
   const [messages, setMessages] = useState([])
@@ -51,15 +51,16 @@ function MessengerBar({id, username}) {
     }
   }
 
-  const registerMessages = (message) => {
-    setMessages(messages => messages.concat(message))
-  }
 
   useEffect(() => {
-    socketServices.receiveMessage((message) => {
-      setMessages(messages => messages.concat(message))
-    })
-  }, [])
+    if(!session) {
+      return
+    } else {
+      socketServices.receiveMessage((message) => {
+        setMessages(messages => messages.concat(message))
+      })
+    }
+  }, [session])
 
   useEffect(() => {
     bottomRef.current.scrollIntoView({ behavior: 'smooth' })

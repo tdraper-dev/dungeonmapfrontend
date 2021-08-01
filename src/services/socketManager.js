@@ -109,7 +109,6 @@ const sendMessage = (message) => {
 }
 
 const receiveMessage = (callback) => {
-  console.log('no')
   if(socket) {
     console.log('yes!')
     socket.on('receive_message', (data) => {
