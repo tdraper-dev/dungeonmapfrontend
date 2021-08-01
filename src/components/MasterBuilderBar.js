@@ -105,7 +105,7 @@ function MasterBuilder({
 
   return (
     <div id="dungeonMasterSideBar" aria-label="sidebar" aria-hidden={navBarVis}className="sidebar row">
-      <div onClick={() => setNavBarVis(!navBarVis)} className="buttonArmBox">
+      <div onClick={() => setNavBarVis(!navBarVis)} className=" dmArmBox buttonArmBox">
         <div className="noselect toggleClickBox dmClickBox">Tools</div>
       </div>
       <div className="toolBarRow row">

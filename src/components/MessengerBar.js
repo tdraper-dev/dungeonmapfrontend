@@ -1,5 +1,6 @@
-import React, { useState, useEffect, useRef, useImperativeHandle } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import socketServices from '../services/socketManager'
+import { BsChat } from 'react-icons/bs'
 
 
 
@@ -16,7 +17,7 @@ const ThemMessage = ({ sender, content }) => {
 
   return (
     <div className="otherMsgPacket my-4" >
-      <div className="msgInitial">{sender}</div>
+      <div className="otherMsgInitial msgInitial">{sender}</div>
       <div className="msg otherMsg">{content}</div>
   </div>
   )
@@ -97,6 +98,7 @@ function MessengerBar({id, username, session}) {
             onChange={({ target })=> setMessageText(target.value)}
             onKeyDown={textAreaSubmit}
           />
+          <button type="submit" className="submitMessageButton"><BsChat size="50%" /></button>
         </form>
       </div>
     </div>
