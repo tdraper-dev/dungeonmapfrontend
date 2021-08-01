@@ -7,14 +7,16 @@ input::-webkit-inner-spin-button {
 /* Hide scrollbar for Chrome, Safari and Opera */
 .boardsDisplay::-webkit-scrollbar,
 .sideBarColumn::-webkit-scrollbar,
-.messageBox::-webkit-scrollbar {
+.messageBox::-webkit-scrollbar,
+#root::-webkit-scrollbar {
   display: none; 
 }
 
 /* Hide scrollbar for IE, Edge and Firefox */
 .boardsDisplay,
 .sideBarColumn,
-.messageBox{
+.messageBox,
+#root{
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;  /* Firefox */
 }
@@ -246,7 +248,7 @@ html {
 }
 @media(max-width: 570px) {
   .loginTitle {
-    font-size: 40px;
+    font-size: 75px;
   }
 }
 
@@ -284,6 +286,11 @@ html {
   align-content: center;
   width: 80%;
   box-shadow: 5px 10px 8px rgb(0 0 0 / 50%);
+}
+@media(max-height: 899px) {
+  .loginForm {
+    margin-bottom: 15px;
+  }
 }
 
 .otherOptions {
@@ -383,10 +390,13 @@ html {
   font-size: 40px;
   padding: 0 !important;
 }
-.dashUsername {
-  font-family: dungeonFont;
-  font-size: 40px;
-  padding: 0 !important;
+.titleName {
+  margin: 0;
+}
+@media(max-width: 991px) {
+  .titleName {
+    display: inline;
+  }
 }
 
 .userBlock {
@@ -447,8 +457,8 @@ html {
 
 @media(max-width: 991px) {
   .newBoardFormBox {
-    top: 600px;
-    left: 5%;
+    top: 40%;
+    left: 10%;
     animation: slideUp 300ms ease;
   }
 }
@@ -544,10 +554,11 @@ html {
 
 .mapTrayContainer {
   background-image: url('./images/woodenBoards.jpeg');
-  background-repeat: no-repeat;
-  background-position:left;
+  background-attachment:fixed;
+  background-position:center;
   justify-content: center;
-  flex: 1 1 auto;
+  max-height: 100%;
+  overflow: hidden;
 }
 
 @media(max-width: 991px) {
@@ -562,24 +573,29 @@ html {
 
 .mapImageView {
   text-align: center;
-  max-height: 100%;
-  max-width: 100%;
   align-items:center;
   justify-content: center;
   animation: fadeIn 300ms ease
 }
 
 .imageBox {
-  background-image: url('./images/redFelt.jpg');
-  background-repeat: no-repeat;
-  background-position:left;
-  border: 20px groove rgb(121, 91, 70);
+  transition: 300ms;
   position: relative;
+  justify-content: center;
 }
 
-.mapImage {
-  border: 2px solid black;
+#aspectRatioBoxTray {
+  display: flex;
+  justify-content: center;
+  position: relative;
+  max-width: 80%;
+  max-height: 80%;
 }
+
+.dashMapImage {
+  border: 20px groove rgb(121, 91, 70);
+}
+
 
 
 /* ------------------------------------- */
@@ -592,10 +608,32 @@ html {
   height: fit-content;
 }
 
+.mapTrayGameBoard,
+.gameboardImageBox {
+  transition: 300ms;
+}
+.mapTrayGameBoard {
+  background-image: url('./images/woodenBoards.jpeg');
+  background-attachment:fixed;
+  background-position:center;
+  justify-content: center;
+
+}
+
+.gameboardMapImage {
+  border: 20px groove rgb(121, 91, 70);
+  position: relative;
+  transition: 300ms;
+}
+
+.gameboardMapImageView {
+  margin-top: 50px;
+}
 .fileUpload {
   color: grey;
   background-color: white;
   border: 2px groove black;
+  width: fit-content;
 }
 
 #fileUpload {
@@ -614,16 +652,28 @@ html {
   text-align: center;
 }
 
-.backBox {
-  position: absolute;
-  left: 43%;
+.navButtonBox {
+  justify-content:flex-end;
+  padding: 0;
+  margin: 0;
+  position: fixed;
+  z-index: 100000;
+  right: 0;
   top: 15px;
-  
+}
+.backBox,
+.sessionButtonBox{
+  display: flex;
+  justify-content: flex-end;
 }
 .sessionButtonBox {
-  position: absolute;
-  top: 15px;
-  left: 60%;
+  width: fit-content;
+}
+@media(max-width: 575px) {
+  .backBox,
+  .sessionButtonBox {
+    font-size: 12px;
+  }
 }
 
 /* ---------------- GAMEBOARD SIDEBARS ---------------- */
@@ -696,7 +746,10 @@ html {
   }
   .msgArmBox {
     top: 30%;
-    right: -26px;
+    right: -25px;
+  }
+  .dmArmBox {
+    right: 2px;
   }
 
   #dungeonMasterSideBar {
@@ -716,13 +769,24 @@ html {
     width: 400px;
   }
 }
+
+@media(max-width: 991px) {
+  .mapTrayGameBoard  {
+    height: 100%;
+  }
+}
 @media(max-width: 575px) {
+
+  .floating {
+    transform: translateY(-68%);
+    transition: 300ms;
+  }
   .sidebar {
     bottom: 0;
     transform: translateY(100%);
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
-    top: 50px;
+    top: 450px;
     padding-left: 10px;
     padding-right: 10px;
     left: 0;
@@ -749,6 +813,15 @@ html {
     right: 20%;
   }
 
+}
+@media(max-width: 450px) {
+  /*.floating {
+    transform: translateY(-100%);
+    transition: 300ms;
+  }*/
+  .sidebar {
+    top: 450px;
+  }
 }
 
 #messengerSideBar[aria-hidden='false'] {
@@ -978,7 +1051,7 @@ a.hidden {
   z-index: 100000;
 }
 
-#aspectRatioBox {
+#aspectRatioBoxBoard {
   display: flex;
   justify-content: center;
   position: relative;
@@ -992,9 +1065,30 @@ a.hidden {
   font-family: dungeonFont;
   font-weight: 600;
 }
+@media(min-width: 992px) {
+  .playerIcon {
+    font-size: 18px;
+  }
+}
+@media(max-width: 991px) {
+  .playerIcon {
+   font-size: 15px; 
+  }
+}
+@media(max-width: 767px) {
+  .playerIcon {
+    font-size: 12px;
+  }
+}
+@media(max-width: 575px) {
+  .playerIcon {
+   font-size: 7px; 
+  }
+}
 
 #dropZoneDelete {
   position: fixed;
+  z-index: 10000;
   font-family: dungeonFont;
   font-size: 25px;
   font-weight: 600;
@@ -1010,11 +1104,6 @@ a.hidden {
   border-radius: 100%;
   border-top-left-radius: 0;
 }
-#dropZoneDelete:hover {
-  font-size: 100px;
-  transition: 300ms;
-  height: 200px;
-  width: 200px;
-}
+
 
 

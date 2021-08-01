@@ -24,7 +24,7 @@ const ThemMessage = ({ sender, content }) => {
 }
 
 
-function MessengerBar({id, username, session}) {
+function MessengerBar({id, username, session, float, setFloat}) {
   const [navBarVis, setNavBarVis] = useState(true)
   const [messageText, setMessageText] = useState('')
   const [messages, setMessages] = useState([])
@@ -52,6 +52,11 @@ function MessengerBar({id, username, session}) {
     }
   }
 
+  const toggleMovement = () => {
+    setNavBarVis(!navBarVis)
+    setFloat(!float)
+  }
+
 
   useEffect(() => {
     if(!session) {
@@ -70,7 +75,7 @@ function MessengerBar({id, username, session}) {
   return (
     <div id="messengerSideBar" aria-label='sidebar' aria-hidden={navBarVis} className="sidebar row msgRow">
       <div className="buttonArmBox msgArmBox">
-        <div onClick={() => setNavBarVis(!navBarVis)} className="noselect toggleClickBox msgClickBox">Chat</div>
+        <div onClick={toggleMovement} className="noselect toggleClickBox msgClickBox">Chat</div>
       </div>
       <div className="messageBox">
           {messages.map(message => {
@@ -98,7 +103,7 @@ function MessengerBar({id, username, session}) {
             onChange={({ target })=> setMessageText(target.value)}
             onKeyDown={textAreaSubmit}
           />
-          <button type="submit" className="submitMessageButton"><BsChat size="50%" /></button>
+          <button type="submit" className="pb-1 submitMessageButton"><BsChat size="50%" /></button>
         </form>
       </div>
     </div>

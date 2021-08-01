@@ -7,7 +7,7 @@ import { BsFillSquareFill } from 'react-icons/bs'
 
 function BuildIcon({ createIcon, boardId, visible }) {
   const [content, setContent] = useState('')
-  const [color, setColor] = useState('rgba(250,250,250,1)')
+  const [color, setColor] = useState('rgba(250,235,215,1)')
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -18,7 +18,7 @@ function BuildIcon({ createIcon, boardId, visible }) {
     })
     setContent('')
   }
-  console.log('color', color)
+ 
   return (
     <div className={`${visible ? 'visibleTool ' : ''}buildIconFormBox`}>
       <form onSubmit={handleSubmit} className="changeMapRow row mt-5">
@@ -61,15 +61,7 @@ function BuildIcon({ createIcon, boardId, visible }) {
     </div>
   )
 }
-/*
-<input
-          id="iconColorInput"
-          type='text'
-          value={color}
-          onChange={({ target }) => setColor(target.value) }
-          className="col-8"
-        />
-        */
+
 function FileBase64({setLoading, boardId, setImage64, visible }) {
 
   const handleChange = async (e) => {
@@ -109,7 +101,9 @@ function MasterBuilder({
   setIcons,
   setImage64,
   setLoading,
-  boardId
+  boardId,
+  float,
+  setFloat
 }) {
   const [option, setOption] = useState('')
   const[navBarVis, setNavBarVis] = useState(true)
@@ -118,6 +112,11 @@ function MasterBuilder({
     const newIcon = await iconService.createIcon(iconInfo)
     socketServices.createIcon(newIcon)
     setIcons(icons.concat(newIcon))
+  }
+
+  const toggleMovement = () => {
+    setNavBarVis(!navBarVis)
+    setFloat(!float)
   }
 
   let box = null;
@@ -131,7 +130,7 @@ function MasterBuilder({
 
   return (
     <div id="dungeonMasterSideBar" aria-label="sidebar" aria-hidden={navBarVis}className="sidebar row">
-      <div onClick={() => setNavBarVis(!navBarVis)} className=" dmArmBox buttonArmBox">
+      <div onClick={toggleMovement} className=" dmArmBox buttonArmBox">
         <div className="noselect toggleClickBox dmClickBox">Tools</div>
       </div>
       <div className="toolBarRow row">

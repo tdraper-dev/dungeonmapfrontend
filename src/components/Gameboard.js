@@ -13,11 +13,11 @@ import iconService from '../services/icon'
 import { useAuth } from '../services/use-auth'
 
 function MapImageView(props) {
-  
+  const  { float } = props
   return (
-    <div className="mapImageView col-8 my-4 d-flex">
-      <div className="imageBox py-1 px-1 py-md-5 px-md-5 d-flex">
-        <div id="aspectRatioBox">
+    <div className="gameboardMapImageView mapImageView col-11 d-flex">
+      <div className={`${float? 'floating' : ''} gameboardImageBox d-flex`}>
+        <div id="aspectRatioBoxBoard">
           {props.children}
         </div>
       </div>
@@ -26,16 +26,16 @@ function MapImageView(props) {
   )
 }
 
-function MapTray({ mapSrc, loading, icons, setIcons, deleteIcon, updatePosition }) { 
+function MapTray({ mapSrc, loading, icons, setIcons, deleteIcon, updatePosition, float }) { 
   
   return (
-    <div className="mapTrayContainer col-12   d-flex">
+    <div  className="mapTrayGameBoard col-12 d-flex">
       <div id="dropZoneDelete" className="d-flex">
         <p className="pt-3">Delete</p>
       </div>
       {loading
         ? <LoadingSquare />
-        : <MapImageView>
+        : <MapImageView float={float}>
             {icons.map(icon => {
               return <Icon  
                   style={{backgroundColor: icon.color}}
@@ -49,7 +49,7 @@ function MapTray({ mapSrc, loading, icons, setIcons, deleteIcon, updatePosition 
                   updatePosition={updatePosition}
                 /> 
             })}
-            <img draggable="false" className="noselect mapImage img-fluid" alt='' src={mapSrc} />
+            <img draggable="false" id='gameBoardMap' className="noselect gameboardMapImage mapImage img-fluid" alt='' src={mapSrc} />
           </MapImageView>
       }
     </div>
@@ -62,6 +62,7 @@ function Gameboard(props) {
   const [icons, setIcons] = useState([])
   const [loading, setLoading] = useState(false)
   const [sessionLive, setSessionLive] = useState(false)
+  const [float, setFloat] = useState(false)
   const auth = useAuth()
   const boardId = props.match.params.id
   let history = useHistory();
@@ -75,40 +76,6 @@ function Gameboard(props) {
       username: location.state.username
     }
   }
-
-
-  useEffect(() => {
-    const source = axios.CancelToken.source()
-
-    const loadGameBoard = async() => {
-      try {
-        setLoading(true)
-        const gameBoard = await gameBoardService.getGameBoard(boardId, source.token)
-        const boardImage = await imageUtility.convertBuffertoBlob(gameBoard.image.data)
-        setImage64(boardImage)
-        setIcons(gameBoard.icons)
-        setLoading(false)
-      } catch (exception) {
-        console.log('loading mapImage failed', exception)
-      }
-    }
-    const guestAuthorization = async() => {
-      console.log("Authorizing guest. . .")
-      socketServices.initiateGuestSocket(boardId, history, loadGameBoard)
-    }
-
-    if(auth.userId) {
-      loadGameBoard();
-    } else {
-      guestAuthorization();
-      console.log('I AM A GUEST')
-      connectToSocket();
-    }
-    return () => {
-      source.cancel()
-      socketServices.disconnectSocket()
-    }
-  }, [])
 
 
   const connectToSocket = () => {
@@ -172,23 +139,71 @@ function Gameboard(props) {
     setIcons((icons) => icons.filter(icon => icon.id !== id))
   }
 
+  useEffect(() => {
+    const source = axios.CancelToken.source()
+
+    const loadGameBoard = async() => {
+      try {
+        setLoading(true)
+        const gameBoard = await gameBoardService.getGameBoard(boardId, source.token)
+        const boardImage = await imageUtility.convertBuffertoBlob(gameBoard.image.data)
+        setImage64(boardImage)
+        setIcons(gameBoard.icons)
+        setLoading(false)
+      } catch (exception) {
+        console.log('loading mapImage failed', exception)
+      }
+    }
+    const guestAuthorization = async() => {
+      console.log("Authorizing guest. . .")
+      socketServices.initiateGuestSocket(boardId, history, loadGameBoard)
+    }
+
+    if(auth.userId) {
+      loadGameBoard();
+    } else {
+      guestAuthorization();
+      console.log('I AM A GUEST')
+      connectToSocket();
+    }
+    return () => {
+      source.cancel()
+      socketServices.disconnectSocket()
+    }
+  }, [])
+
+  useEffect(() => {
+    const mapImage = document.getElementById('gameBoardMap')
+    console.log(mapImage)
+  }, [image64])
+
   return (
     <>
     <div className="gameBoardRow row">
-      <div className="backBox d-flex">
+      <div className="navButtonBox row">
+        <div className="backBox col-3">
           <button className="buttons" onClick={() => history.goBack()}>
             {auth.userId ? 'Return to Dashboard' : 'Return Home'}
           </button>
-      </div>
-      {auth.userId 
-        ?  <div className="sessionButtonBox d-flex">
+        </div>
+        {auth.userId 
+        ?  <div className="sessionButtonBox col-3 me-2">
               <button onClick={connectToSocket} className="buttons">
                 {sessionLive ? 'End Session' : 'Start Session'}
               </button>
             </div>
         : null
-      }
-      <MapTray deleteIcon={deleteIcon}  mapSrc={image64} loading={loading} icons={icons} setIcons={setIcons} updatePosition={updateIcon} />
+        }
+      </div>
+      <MapTray 
+        deleteIcon={deleteIcon} 
+        mapSrc={image64} 
+        loading={loading} 
+        icons={icons} 
+        setIcons={setIcons} 
+        updatePosition={updateIcon}
+        float={float}
+      />
     </div>
     {auth.userId
       ?    <MasterBuilderNav
@@ -197,6 +212,8 @@ function Gameboard(props) {
               setImage64={setImage64}
               icons={icons}
               setIcons={setIcons}
+              float={float}
+              setFloat={setFloat}
             />
       : null
     }
@@ -204,6 +221,8 @@ function Gameboard(props) {
         id={guest.id || auth.userId}
         username={guest.username || auth.username}
         session={sessionLive}
+        float={float}
+        setFloat={setFloat}
      />
     </>
   )

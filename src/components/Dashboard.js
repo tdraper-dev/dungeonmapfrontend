@@ -174,7 +174,10 @@ function UserBlock() {
 
   return (
     <div className="userBlock pt-1 pb-1 pt-lg-3 pb-lg-3 row">
-      <div className="dashTitle col-12">Dungeon Master: <br />{auth.username}</div>
+      <div className="dashTitle col-12">
+        <p className="titleName">Dungeon Master:</p>
+        <p className="titleName ms-2 ms-lg-0">{auth.username}</p>
+        </div>
     </div>
   )
 }
@@ -191,9 +194,9 @@ function SideBar(props) {
 function MapImageView({ displayImage, boardId, icons }) {
   
   return (
-    <div className="mapImageView col-8 my-4 d-flex">
-      <div className="imageBox py-1 px-1 py-md-5 px-md-5 d-flex">
-        <div id="aspectRatioBox">
+    <div className="mapImageView col-9 col-md-8 d-flex">
+      <div className="imageBox d-flex">
+        <div id="aspectRatioBoxTray">
           {icons.map(icon => {
             return <Icon
               key={icon.id} 
@@ -204,7 +207,7 @@ function MapImageView({ displayImage, boardId, icons }) {
               display={true}
               />
           })}
-          <img draggable="false" className="mapImage img-fluid" key={boardId} alt='' src={displayImage} />
+          <img draggable="false" className="dashMapImage mapImage img-fluid" key={boardId} alt='' src={displayImage} />
         </div>
       </div>
     </div> 

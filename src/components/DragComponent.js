@@ -30,7 +30,7 @@ function Draggable({
   };
   
   const handleDragMove = (e) => {
-    const aspectBox = document.getElementById('aspectRatioBox').getBoundingClientRect()
+    const aspectBox = document.getElementById('aspectRatioBoxBoard').getBoundingClientRect()
 
     dragRef.current.style.left = `${(e.clientX + posRef.current.x - aspectBox.left)/aspectBox.width*100}%`
     dragRef.current.style.top = `${(e.clientY + posRef.current.y - aspectBox.top)/aspectBox.height*100}%`
@@ -42,7 +42,7 @@ function Draggable({
   const handlePointerUp = (e) => {
     const bounding = dragRef.current.getBoundingClientRect();
 
-    if(bounding.x < 100 && bounding.y < 100) {
+    if(bounding.x < 85 && bounding.y < 85) {
       try {
         deleteIcon(id)
         dragRef.current.style.display = 'none';
