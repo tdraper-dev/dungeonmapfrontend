@@ -3,10 +3,11 @@ import gameBoardService from '../services/gameboard'
 import imageUtility from '../utils/imageHelper'
 import iconService from '../services/icon'
 import socketServices from '../services/socketManager'
+import { BsFillSquareFill } from 'react-icons/bs'
 
 function BuildIcon({ createIcon, boardId, visible }) {
   const [content, setContent] = useState('')
-  const [color, setColor] = useState('')
+  const [color, setColor] = useState('rgba(250,250,250,1)')
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -15,8 +16,9 @@ function BuildIcon({ createIcon, boardId, visible }) {
       color,
       boardId
     })
+    setContent('')
   }
- 
+  console.log('color', color)
   return (
     <div className={`${visible ? 'visibleTool ' : ''}buildIconFormBox`}>
       <form onSubmit={handleSubmit} className="changeMapRow row mt-5">
@@ -31,19 +33,43 @@ function BuildIcon({ createIcon, boardId, visible }) {
           className="col-8"
         />
         <label className="col-4 my-1" htmlFor='iconColorInput'>Color: </label>
-        <input
+        <select 
+          className="col-4" 
+          name="colors" 
+          id="iconColorInput" 
+          onChange={({ target }) => setColor(target.value)} 
+        >
+          <option 
+            value="rgba(250,235,215,1)"
+            selected
+            >White</option>
+          <option 
+            style={{backgroundColor: 'rgba(191, 63, 63, 1)'}} 
+            value="rgba(191, 63, 63, 1)"
+            >Red</option>
+          <option 
+            style={{backgroundColor: 'rgba(63,127,191,1'}} 
+            value="rgba(63,127,191,1)"
+            >Blue</option>
+          <option 
+            style={{backgroundColor: 'rgba(63,191,63,1)'}} 
+            value="rgba(63,191,63,1)"
+            >Green</option>
+        </select>
+        <button className="ms-2 mt-3 col-6 submitButtonFix" type="submit">Create Icon</button>
+      </form>
+    </div>
+  )
+}
+/*
+<input
           id="iconColorInput"
           type='text'
           value={color}
           onChange={({ target }) => setColor(target.value) }
           className="col-8"
         />
-        <button className="ms-2 mt-3 col-6 submitButtonFix" type="submit">Create Icon</button>
-      </form>
-    </div>
-  )
-}
-
+        */
 function FileBase64({setLoading, boardId, setImage64, visible }) {
 
   const handleChange = async (e) => {

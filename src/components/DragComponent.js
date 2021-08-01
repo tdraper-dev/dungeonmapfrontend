@@ -45,6 +45,7 @@ function Draggable({
     if(bounding.x < 100 && bounding.y < 100) {
       try {
         deleteIcon(id)
+        dragRef.current.style.display = 'none';
       } catch(exception) {
         console.log('Unable to delete icon', exception)
       }
