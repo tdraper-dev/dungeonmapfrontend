@@ -77,11 +77,13 @@ function MessengerBar({id, username, session, float, setFloat}) {
   const raiseTheBar = ({ target }) => {
     if(window.innerWidth < 420) {
       target.style.transform = 'translateY(-930%)'
+      target.setAttribute('z-index', '1000000')
     }
   }
 
   const lowerTheBar = ({ target }) => {
     target.style.transform = 'translateY(0%)'
+    target.setAttribute('z-index', '0')
   }
 
   return (
