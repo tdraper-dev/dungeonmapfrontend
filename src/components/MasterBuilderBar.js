@@ -17,6 +17,14 @@ function BuildIcon({ createIcon, boardId, visible }) {
     })
     setContent('')
   }
+
+  const raiseTheBar = ({ target }) => {
+    target.style.transform = "translateY(-460%)"
+    target.setAttribute('autocomplete', 'off');
+  } 
+  const lowerTheBar = ({ target }) => {
+    target.style.transform = 'translateY(0%)'
+  }
  
   return (
     <div className={`${visible ? 'visibleTool ' : ''}buildIconFormBox`}>
@@ -28,9 +36,11 @@ function BuildIcon({ createIcon, boardId, visible }) {
           type='text'
           value={content}
           onChange={({ target }) => setContent(target.value) }
+          onFocus={raiseTheBar}
+          onBlur={lowerTheBar}
           required
           className="col-8"
-          autoComplete="nope"
+          autoComplete="new-password"
         />
         <label className="col-4 my-1" htmlFor='iconColorInput'>Color: </label>
         <select 
@@ -41,7 +51,7 @@ function BuildIcon({ createIcon, boardId, visible }) {
         >
           <option 
             value="rgba(250,235,215,1)"
-            selected
+            defaultValue
             >White</option>
           <option 
             style={{backgroundColor: 'rgba(191, 63, 63, 1)'}} 

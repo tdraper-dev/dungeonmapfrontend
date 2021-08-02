@@ -28,6 +28,7 @@ function MessengerBar({id, username, session, float, setFloat}) {
   const [navBarVis, setNavBarVis] = useState(true)
   const [messageText, setMessageText] = useState('')
   const [messages, setMessages] = useState([])
+  const [messageFloat, setMessageFloat] = useState(false)
   const bottomRef = useRef(null)
 
   const textAreaSubmit = (e) => {
@@ -49,6 +50,7 @@ function MessengerBar({id, username, session, float, setFloat}) {
       setMessages(messages.concat(newMessage))
       socketServices.sendMessage(newMessage)
       setMessageText('')
+      setMessageFloat(false)
     }
   }
 
@@ -71,6 +73,7 @@ function MessengerBar({id, username, session, float, setFloat}) {
   useEffect(() => {
     bottomRef.current.scrollIntoView({ behavior: 'smooth' })
   })
+
 
   return (
     <div id="messengerSideBar" aria-label='sidebar' aria-hidden={navBarVis} className="sidebar row msgRow">
@@ -98,11 +101,12 @@ function MessengerBar({id, username, session, float, setFloat}) {
       <div className="sendMessageBox">
         <form className="messageTextBox" onSubmit={handleSubmit} id="textMsgForm">
           <textarea
-            className="textAreaBox"
+            className={` ${messageFloat ? 'floatChat' : ''} textAreaBox`}
             value={messageText}
             onChange={({ target })=> setMessageText(target.value)}
             onKeyDown={textAreaSubmit}
-            autoComplete="nope"
+            onFocus={() => setMessageFloat(true)}
+            onBlur={() => setMessageFloat(false)}
           />
           <button type="submit" className="pb-1 submitMessageButton"><BsChat size="50%" /></button>
         </form>

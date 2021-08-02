@@ -962,7 +962,7 @@ html {
 }
 .textAreaBox {
   width: 80%;
-  height: 100%;
+  max-height: 100%;
   resize: none;
 }
 .submitMessageButton {
@@ -1186,4 +1186,9 @@ a.hidden {
 .tweak {
   border-bottom-left-radius: 0px !important;
   border-bottom-right-radius: 0px !important;
+}
+
+.floatChat {
+  position: absolute;
+  top: -70px;
 }
