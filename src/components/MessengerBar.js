@@ -102,6 +102,7 @@ function MessengerBar({id, username, session, float, setFloat}) {
             value={messageText}
             onChange={({ target })=> setMessageText(target.value)}
             onKeyDown={textAreaSubmit}
+            autoComplete="nope"
           />
           <button type="submit" className="pb-1 submitMessageButton"><BsChat size="50%" /></button>
         </form>

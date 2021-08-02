@@ -79,7 +79,7 @@ function BoardTile({ thisBoard, gameBoards, setBoards, setBoardId, loading, setL
         <div className="boardTitleText">{thisBoard.board}</div>
       </div>
       <div onClick={highlightClick} className="thumbnailBox col-6 py-2 ps-3">
-        <img draggable="false" className="thumbnailImage img-fluid" src={thumbnail} />
+        <img alt="Gameboard Map minified view" draggable="false" className="thumbnailImage img-fluid" src={thumbnail} />
       </div>
       <div className="buttonContainer ps-0 pe-0 col-2 row">
         <PopUpNotice label='Delete Gameboard'className="ps-0 deleteButton">
@@ -107,13 +107,19 @@ function CreateBoard({setVisible, createNewBoard}) {
   const [boardName, setBoardName] = useState('')
   const boxRef = useRef();
   const fileRef = useRef();
-
+  const regTest = /image\/(png|jpeg)/
   const handleSubmit = async (e) => {
+    
     e.preventDefault()
     try {
       let file = fileRef.current.files[0]
-      setVisible(false)
-      await createNewBoard(boardName, file)
+      if(regTest.test(file.type)) {
+        console.log('success!')
+        setVisible(false)
+        await createNewBoard(boardName, file)
+      } else {
+        throw new Error({ message: 'wrong file type!' })
+      }
     } catch (exception) {
       console.log(exception)
     }

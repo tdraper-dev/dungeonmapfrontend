@@ -210,14 +210,14 @@ html {
 /*--------------------------------- */
 
 #background {
-  position:fixed;
-  top: 0;
-  bottom: -80px;
-  left: 0;
-  right: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 100vh;
   background-image: url('./images/woodenBoards.jpeg');
   background-repeat: no-repeat;
   background-position:left;
+  overflow: scroll;
 }
 @media(max-width: 1199px) {
   #background {
@@ -234,7 +234,7 @@ html {
   color: white;
   font-family: dungeonFont;
   font-size: 150px;
-  padding-top: 5vh;
+  /*padding-top: 5vh;*/
   text-align: center;
   justify-content: center;
 }

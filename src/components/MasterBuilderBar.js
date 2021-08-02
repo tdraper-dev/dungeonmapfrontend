@@ -30,6 +30,7 @@ function BuildIcon({ createIcon, boardId, visible }) {
           onChange={({ target }) => setContent(target.value) }
           required
           className="col-8"
+          autoComplete="nope"
         />
         <label className="col-4 my-1" htmlFor='iconColorInput'>Color: </label>
         <select 
