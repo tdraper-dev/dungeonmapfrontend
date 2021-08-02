@@ -16,12 +16,16 @@ function BuildIcon({ createIcon, boardId, visible }) {
       boardId
     })
     setContent('')
+    document.getElementById('iconContentInput').blur()
   }
 
   const raiseTheBar = ({ target }) => {
-    target.style.transform = "translateY(-460%)"
-    target.setAttribute('autocomplete', 'off');
+    if(window.innerWidth < 420) {
+      target.style.transform = "translateY(-460%)"
+      target.setAttribute('autocomplete', 'off');
+    }
   } 
+
   const lowerTheBar = ({ target }) => {
     target.style.transform = 'translateY(0%)'
   }
