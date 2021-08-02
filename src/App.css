@@ -1154,7 +1154,8 @@ a.hidden {
   top: 34px;
   border-bottom-left-radius: 15px;
   border-bottom-right-radius: 15px;
-  animation: slideDown 300ms;
+  animation: slideDown;
+  /*animation-duration: 300ms;*/
 }
 
 .dropTile {
