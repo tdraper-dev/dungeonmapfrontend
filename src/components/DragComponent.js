@@ -74,11 +74,12 @@ function Draggable({
   }
 
   useEffect(() => {
-    window.addEventListener('touchmove', preventBehavior, {passive: false})
+    const icon = dragRef.current
+    icon.addEventListener('touchmove', preventBehavior, {passive: false})
 
     return () => {
       window.removeEventListener('pointerup', handlePointerUp)
-      window.removeEventListener('touchmove', preventBehavior, {passive: false})
+      icon.removeEventListener('touchmove', preventBehavior, {passive: false})
       window.removeEventListener('pointermove', handleDragMove);
       window.removeEventListener('pointerup', handlePointerUp);
     } 
