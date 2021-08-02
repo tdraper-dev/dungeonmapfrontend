@@ -36,16 +36,6 @@ input::-webkit-inner-spin-button {
   src: url('./fonts/DUNGRG__.TTF')
 }
 
-@keyframes accordionDown {
-  0%{
-    height: 0;
-    opacity: 0%;
-  }
-  100% {
-    height: 170px;
-    opacity: 100%;
-  }
-}
 
 @keyframes slideDown {
   0% {
@@ -1164,9 +1154,7 @@ a.hidden {
   top: 34px;
   border-bottom-left-radius: 15px;
   border-bottom-right-radius: 15px;
-  animation: slideDown;
-  animation-duration: 300ms;
-  animation-fill-mode: forwards;
+  animation: slideDown 300ms;
 }
 
 .dropTile {
@@ -1183,6 +1171,7 @@ a.hidden {
   width: 100%;
   background-color: transparent;
   border: none;
+  text-align: center;
 }
 .sessionButtonTile {
   border-bottom-left-radius: 15px;

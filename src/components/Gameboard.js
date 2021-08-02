@@ -61,13 +61,13 @@ function DropMenu({ userId, sessionLive, connectToSocket, history, boardId }) {
 
   return (
     <div className="dropMenuContainer row">
-      <div className="noselect dropTile col-12">
-        <button className="noselect dropButton" onClick={() => history.goBack()}>
-          {userId ? 'Return to Dashboard' : 'Return Home'}
+      <div className=" dropTile col-12">
+        <button className=" dropButton" onClick={() => history.goBack()}>
+          {userId ? 'Dashboard' : 'Home'}
         </button>
       </div>
       {userId 
-        ? <div className={`noselect col-12 dropTile sessionButtonTile ${sessionLive && userId ? 'tweak' : ''}`}>
+        ? <div className={` col-12 dropTile sessionButtonTile ${sessionLive && userId ? 'tweak' : ''}`}>
             <button onClick={connectToSocket} className={`${sessionLive && userId ? 'tweak' : ''} dropButtonSession`}>
               {sessionLive ? 'End Session' : 'Start Session'}
             </button>
@@ -76,7 +76,7 @@ function DropMenu({ userId, sessionLive, connectToSocket, history, boardId }) {
       }
       {sessionLive && userId
 
-      ? <div id="sessionIdBox"><span className="noselect ms-5 ps-2">Session ID: </span>{boardId}</div>
+      ? <div id="sessionIdBox"><span className=" ms-5 ps-2">Session ID: </span>{boardId}</div>
       : null
       }
     </div>
