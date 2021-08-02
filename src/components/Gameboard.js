@@ -57,6 +57,66 @@ function MapTray({ mapSrc, loading, icons, setIcons, deleteIcon, updatePosition,
   )
 }
 
+function DropMenu({ userId, sessionLive, connectToSocket, history, boardId }) {
+
+  return (
+    <div className="dropMenuContainer row">
+      <div className="noselect dropTile col-12">
+        <button className="noselect dropButton" onClick={() => history.goBack()}>
+          {userId ? 'Return to Dashboard' : 'Return Home'}
+        </button>
+      </div>
+      {userId 
+        ? <div className={`noselect col-12 dropTile sessionButtonTile ${sessionLive && userId ? 'tweak' : ''}`}>
+            <button onClick={connectToSocket} className={`${sessionLive && userId ? 'tweak' : ''} dropButtonSession`}>
+              {sessionLive ? 'End Session' : 'Start Session'}
+            </button>
+          </div>
+        : null
+      }
+      {sessionLive && userId
+
+      ? <div id="sessionIdBox"><span className="noselect ms-5 ps-2">Session ID: </span>{boardId}</div>
+      : null
+      }
+    </div>
+  )
+
+}
+
+function DropDownNav({ sessionLive, history, connectToSocket, boardId }) {
+  const [visibility, setVisibility] = useState(false)
+  const boxRef = useRef();
+  const auth = useAuth();
+  const authCheck = auth.userId ? auth.userId : null;
+
+  const checkForClick = (event) => {
+    if(event.target === boxRef.current) {
+      setVisibility(!visibility)
+    }
+    if(!boxRef.current || !boxRef.current.contains(event.target)) {
+        setVisibility(false)
+    }
+  }
+
+  useEffect(() => {
+    document.addEventListener('click', checkForClick)
+    return () => {
+      document.removeEventListener('click', checkForClick)
+    }
+  })
+
+  return (
+    <div ref={boxRef} onClick={checkForClick} className={`${sessionLive ? 'activeBurger' : ''} ${visibility ? 'openMenu' : ''}`} id="hamburger">
+      <BsThreeDotsVertical className="hide" size="20px" />
+      {visibility
+        ? <DropMenu userId={authCheck} sessionLive={sessionLive} history={history} connectToSocket={connectToSocket} boardId={boardId} />
+        : null
+      }
+    </div>
+  )
+}
+
 
 function Gameboard(props) {
   const [image64, setImage64] = useState('')
@@ -120,62 +180,6 @@ function Gameboard(props) {
     }
 
   }
-  function DropMenu({ userId, sessionLive }) {
-
-    return (
-      <div className="dropMenuContainer">
-        <div className="dropTile my-2">
-          <button className="noselect buttons" onClick={() => history.goBack()}>
-            {auth.userId ? 'Return to Dashboard' : 'Return Home'}
-          </button>
-        </div>
-        {auth.userId 
-          ? <div className="noselect my-2 dropTile">
-              <button onClick={connectToSocket} className="buttons">
-                {sessionLive ? 'End Session' : 'Start Session'}
-              </button>
-            </div>
-          : null
-        }
-        {sessionLive && auth.userId
-
-        ? <div id="sessionIdBox"><span className="noselect">Session ID: </span>{boardId}</div>
-        : null
-        }
-      </div>
-    )
-
-  }
-  function DropDownNav({ sessionLive }) {
-    const [visibility, setVisibility] = useState(false)
-    const boxRef = useRef();
-    const auth = useAuth();
-    const authCheck = auth.userId ? auth.userId : null;
-
-    const checkForClick = (event) => {
-      if(!boxRef.current || !boxRef.current.contains(event.target)) {
-          setVisibility(false)
-      }
-    }
-
-    useEffect(() => {
-      document.addEventListener('click', checkForClick)
-      return () => {
-        document.removeEventListener('click', checkForClick)
-      }
-    })
-
-    return (
-      <div ref={boxRef} onClick={() => setVisibility(true)} className={`${sessionLive ? 'activeBurger' : ''} ${visibility ? 'openMenu' : ''}`} id="hamburger">
-        <BsThreeDotsVertical className="hide" size="20px" />
-        {visibility
-          ? <DropMenu userId={authCheck} sessionLive={sessionLive} />
-          : null
-        }
-      </div>
-    )
-  }
-
 
   const updateIcon = async(position, id) => {
     socketServices.moveIcon(position, id)
@@ -232,7 +236,7 @@ function Gameboard(props) {
   return (
     <>
     <div className="gameBoardRow row">
-      <DropDownNav sessionLive={sessionLive} />
+      <DropDownNav sessionLive={sessionLive} history={history} connectToSocket={connectToSocket} boardId={boardId} />
       <MapTray 
         deleteIcon={deleteIcon} 
         mapSrc={image64} 
