@@ -17,7 +17,7 @@ function MapImageView(props) {
   const  { float } = props
   return (
     <div className="gameboardMapImageView mapImageView col-11 d-flex">
-      <div className={`${float? 'floating' : ''} gameboardImageBox d-flex`}>
+      <div className={`${float? 'floating' : ''} gameboardImageBox mt-3 mb-5 d-flex`}>
         <div id="aspectRatioBoxBoard">
           {props.children}
         </div>
