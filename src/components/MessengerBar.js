@@ -50,7 +50,6 @@ function MessengerBar({id, username, session, float, setFloat}) {
       setMessages(messages.concat(newMessage))
       socketServices.sendMessage(newMessage)
       setMessageText('')
-      document.getElementById('chatMessageBox').blur()
     }
   }
 
@@ -73,18 +72,6 @@ function MessengerBar({id, username, session, float, setFloat}) {
   useEffect(() => {
     bottomRef.current.scrollIntoView({ behavior: 'smooth' })
   })
-
-  const raiseTheBar = ({ target }) => {
-    if(window.innerWidth < 420) {
-      target.style.transform = 'translateY(-930%)'
-      target.setAttribute('z-index', '1000000')
-    }
-  }
-
-  const lowerTheBar = ({ target }) => {
-    target.style.transform = 'translateY(0%)'
-    target.setAttribute('z-index', '0')
-  }
 
   return (
     <div id="messengerSideBar" aria-label='sidebar' aria-hidden={navBarVis} className="sidebar row msgRow">
@@ -117,8 +104,6 @@ function MessengerBar({id, username, session, float, setFloat}) {
             value={messageText}
             onChange={({ target })=> setMessageText(target.value)}
             onKeyDown={textAreaSubmit}
-            onFocus={raiseTheBar}
-            onBlur={lowerTheBar}
           />
           <button type="submit" className="pb-1 submitMessageButton"><BsChat size="50%" /></button>
         </form>
