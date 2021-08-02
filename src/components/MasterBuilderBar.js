@@ -3,7 +3,6 @@ import gameBoardService from '../services/gameboard'
 import imageUtility from '../utils/imageHelper'
 import iconService from '../services/icon'
 import socketServices from '../services/socketManager'
-import { BsFillSquareFill } from 'react-icons/bs'
 
 function BuildIcon({ createIcon, boardId, visible }) {
   const [content, setContent] = useState('')

@@ -11,6 +11,7 @@ import MessengerBar from './MessengerBar'
 import socketServices from '../services/socketManager'
 import iconService from '../services/icon'
 import { useAuth } from '../services/use-auth'
+import { BsThreeDotsVertical } from 'react-icons/bs'
 
 function MapImageView(props) {
   const  { float } = props
@@ -31,7 +32,7 @@ function MapTray({ mapSrc, loading, icons, setIcons, deleteIcon, updatePosition,
   return (
     <div  className="mapTrayGameBoard col-12 d-flex">
       <div id="dropZoneDelete" className="d-flex">
-        <p className="pt-3">Delete</p>
+        <p className="noselect pt-3">Delete</p>
       </div>
       {loading
         ? <LoadingSquare />
@@ -68,7 +69,6 @@ function Gameboard(props) {
   let history = useHistory();
   const location = useLocation();
   let guest = { id: '', username: ''}
-  const messageRef = useRef();
 
   if (location.state) {
     guest = {
@@ -120,6 +120,62 @@ function Gameboard(props) {
     }
 
   }
+  function DropMenu({ userId, sessionLive }) {
+
+    return (
+      <div className="dropMenuContainer">
+        <div className="dropTile my-2">
+          <button className="noselect buttons" onClick={() => history.goBack()}>
+            {auth.userId ? 'Return to Dashboard' : 'Return Home'}
+          </button>
+        </div>
+        {auth.userId 
+          ? <div className="noselect my-2 dropTile">
+              <button onClick={connectToSocket} className="buttons">
+                {sessionLive ? 'End Session' : 'Start Session'}
+              </button>
+            </div>
+          : null
+        }
+        {sessionLive && auth.userId
+
+        ? <div id="sessionIdBox"><span className="noselect">Session ID: </span>{boardId}</div>
+        : null
+        }
+      </div>
+    )
+
+  }
+  function DropDownNav({ sessionLive }) {
+    const [visibility, setVisibility] = useState(false)
+    const boxRef = useRef();
+    const auth = useAuth();
+    const authCheck = auth.userId ? auth.userId : null;
+
+    const checkForClick = (event) => {
+      if(!boxRef.current || !boxRef.current.contains(event.target)) {
+          setVisibility(false)
+      }
+    }
+
+    useEffect(() => {
+      document.addEventListener('click', checkForClick)
+      return () => {
+        document.removeEventListener('click', checkForClick)
+      }
+    })
+
+    return (
+      <div ref={boxRef} onClick={() => setVisibility(true)} className={`${sessionLive ? 'activeBurger' : ''} ${visibility ? 'openMenu' : ''}`} id="hamburger">
+        <BsThreeDotsVertical className="hide" size="20px" />
+        {visibility
+          ? <DropMenu userId={authCheck} sessionLive={sessionLive} />
+          : null
+        }
+      </div>
+    )
+  }
+
 
   const updateIcon = async(position, id) => {
     socketServices.moveIcon(position, id)
@@ -172,29 +228,11 @@ function Gameboard(props) {
     }
   }, [])
 
-  useEffect(() => {
-    const mapImage = document.getElementById('gameBoardMap')
-    console.log(mapImage)
-  }, [image64])
 
   return (
     <>
     <div className="gameBoardRow row">
-      <div className="navButtonBox row">
-        <div className="backBox col-3">
-          <button className="buttons" onClick={() => history.goBack()}>
-            {auth.userId ? 'Return to Dashboard' : 'Return Home'}
-          </button>
-        </div>
-        {auth.userId 
-        ?  <div className="sessionButtonBox col-3 me-2">
-              <button onClick={connectToSocket} className="buttons">
-                {sessionLive ? 'End Session' : 'Start Session'}
-              </button>
-            </div>
-        : null
-        }
-      </div>
+      <DropDownNav sessionLive={sessionLive} />
       <MapTray 
         deleteIcon={deleteIcon} 
         mapSrc={image64} 

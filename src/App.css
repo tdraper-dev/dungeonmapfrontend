@@ -36,6 +36,17 @@ input::-webkit-inner-spin-button {
   src: url('./fonts/DUNGRG__.TTF')
 }
 
+@keyframes accordionDown {
+  0%{
+    height: 0;
+    opacity: 0%;
+  }
+  100% {
+    height: 170px;
+    opacity: 100%;
+  }
+}
+
 @keyframes slideDown {
   0% {
     transform: translateY(-25px);
@@ -651,7 +662,7 @@ html {
   height: 20px;
   text-align: center;
 }
-
+/*
 .navButtonBox {
   justify-content:flex-end;
   padding: 0;
@@ -661,6 +672,8 @@ html {
   right: 0;
   top: 15px;
 }
+*/
+/*
 .backBox,
 .sessionButtonBox{
   display: flex;
@@ -675,7 +688,7 @@ html {
     font-size: 12px;
   }
 }
-
+*/
 /* ---------------- GAMEBOARD SIDEBARS ---------------- */
 .sidebar {
   position: fixed;
@@ -772,7 +785,7 @@ html {
 
 @media(max-width: 991px) {
   .mapTrayGameBoard  {
-    height: 100%;
+    min-height: 100%;
   }
 }
 @media(max-width: 575px) {
@@ -1105,5 +1118,60 @@ a.hidden {
   border-top-left-radius: 0;
 }
 
+#sessionIdBox {
+  width: fit-content;
+  background-color: rgba(82, 219, 82, 0.5);
+  border-radius: 15px;
+  padding: 5px;
+  color: white;
+}
+
+#hamburger {
+  position: fixed;
+  color: white;
+  background-color:rgba(0,0,0,0.8);
+  z-index: 10000;
+  width: fit-content;
+  padding: 5px;
+  top: 15px;
+  right: 15px;
+  transition: 300ms;
+}
+.hide {
+  position: relative;
+  z-index: -2;
+}
 
 
+.openMenu {
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  transition: 300ms;
+}
+
+.activeBurger {
+  color: red !important;
+  transition: 300ms;
+}
+
+.dropMenuContainer {
+  background-color: rgba(0,0,0,0.8);
+  width: fit-content;
+  position: absolute;
+  padding: 10px;
+  right: 0;
+  top: 34px;
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
+  animation: accordionDown;
+  animation-duration: 300ms;
+  animation-fill-mode: forwards;
+}
+
+.dropTile {
+
+}
+.buttons:hover {
+  outline: none;
+  background-color: yellow;
+}

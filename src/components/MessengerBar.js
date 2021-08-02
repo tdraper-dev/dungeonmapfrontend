@@ -7,7 +7,7 @@ import { BsChat } from 'react-icons/bs'
 const MeMessage = ({ sender, content }) => {
 
   return (
-    <div className="meMsgPacket my-4" >
+    <div className="meMsgPacket mb-4" >
       <div className="meMsgInitial msgInitial">{sender}</div>
       <div className="msg meMsg">{content}</div>
   </div>
@@ -16,7 +16,7 @@ const MeMessage = ({ sender, content }) => {
 const ThemMessage = ({ sender, content }) => {
 
   return (
-    <div className="otherMsgPacket my-4" >
+    <div className="otherMsgPacket mb-4" >
       <div className="otherMsgInitial msgInitial">{sender}</div>
       <div className="msg otherMsg">{content}</div>
   </div>
