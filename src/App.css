@@ -778,7 +778,7 @@ html {
 @media(max-width: 575px) {
 
   .floating {
-    transform: translateY(-68%);
+    transform: translateY(-42%);
     transition: 300ms;
   }
   .sidebar {
