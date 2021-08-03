@@ -140,6 +140,26 @@ html {
   100% { transform: scale(1,1)      translateY(0); }
 }
 
+@keyframes bounce-8 {
+  0%   { transform: scale(1,1)      translateY(-50%); }
+  10%  { transform: scale(1.1,.9)   translateY(-50%); }
+  30%  { transform: scale(.9,1.1)   translateY(-100px); }
+  50%  { transform: scale(1.05,.95) translateY(-50%); }
+  57%  { transform: scale(1,1)      translateY(-65%); }
+  64%  { transform: scale(1,1)      translateY(-50%); }
+  100% { transform: scale(1,1)      translateY(-50%); }
+}
+
+@keyframes bounce-9 {
+  0%   { transform: scale(1,1)      translateX(0); }
+  10%  { transform: scale(1.1,.9)   translateX(0); }
+  30%  { transform: scale(.9,1.1)   translateX(-60px); }
+  50%  { transform: scale(1.05,.95) translateX(0); }
+  57%  { transform: scale(1,1)      translateX(-7px); }
+  64%  { transform: scale(1,1)      translateX(0); }
+  100% { transform: scale(1,1)      translateX(0); }
+}
+
 @keyframes toRest {
   0%{
     transform: translateX(-40%)
@@ -814,13 +834,9 @@ html {
   }
 
 }
-@media(max-width: 450px) {
-  /*.floating {
-    transform: translateY(-100%);
-    transition: 300ms;
-  }*/
-  .sidebar {
-    top: 450px;
+@media(max-width: 575px) {
+  #messengerSideBar {
+    top: 105px;
   }
 }
 
@@ -1095,14 +1111,19 @@ a.hidden {
   text-align: center;
   top: 0;
   left: 0;
-  width: 100px;
-  height: 100px;
+  width: 50px;
+  height: 50px;
   background-color: rgba(255, 58, 58, 0.692);
   transition: 300ms;
   justify-content: center;
   align-items: center;
   border-radius: 100%;
   border-top-left-radius: 0;
+}
+@media(max-width: 575px) {
+  #dropZoneDelete {
+    font-size: 15px;
+  }
 }
 
 #sessionIdBox {
@@ -1191,4 +1212,42 @@ a.hidden {
 .floatChat {
   position: absolute;
   top: -70px;
+}
+@media(max-width: 575px) {
+  #blueCircleBounce {
+    animation: bounce-8;
+    animation-duration: 1s;
+    animation-timing-function: cubic-bezier(0.280, 0.840, 0.420, 1);
+    animation-iteration-count: 1;
+  }
+}
+@media(min-width: 576px) {
+  #blueCircleBounce {
+    animation: bounce-9;
+    animation-duration: 1s;
+    animation-timing-function: cubic-bezier(0.280, 0.840, 0.420, 1);
+    animation-iteration-count: 1;
+  }
+}
+
+.specialNotify {
+  position: fixed !important;
+  z-index: 1000000;
+  top: 15px !important;
+  left: 40% !important;
+  height: 50px !important;
+}
+
+.specialNotify.errorMessage {
+  padding: 5px;
+  font-weight: 600;
+  font-size: 25px;
+  width:fit-content;
+  text-align: center;
+  flex-wrap: wrap;
+  background-color: rgba(255, 58, 58, 0.692);
+  border-radius: 10px;
+  box-shadow: 5px 10px 8px rgb(0 0 0 / 50%);
+  border: 1px solid rgba(82, 219, 82, 0.2);
+  animation: slideDown 300ms;
 }

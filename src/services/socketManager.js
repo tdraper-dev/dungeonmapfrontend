@@ -1,4 +1,5 @@
 import io from 'socket.io-client'
+
 let socket;
 //${window.location.protocol}//${window.location.host}
 const initiateDMSocket = (boardId) => {
@@ -13,6 +14,7 @@ const initiateDMSocket = (boardId) => {
 }
 
 const initiateGuestSocket = (boardId, history, callback) => {
+
   console.log('Guest connecting to socket...')
   socket = io()
   socket.emit('guest', boardId)
@@ -28,6 +30,15 @@ const initiateGuestSocket = (boardId, history, callback) => {
       socket.disconnect();
       return history.goBack()
     }
+  })
+}
+
+const userEntryExit = (callback) => {
+  socket.on('user_joined', (data) => {
+    callback(data)
+  })
+  socket.on('user_disconnect', (data) => {
+    callback(data)
   })
 }
 
@@ -110,7 +121,6 @@ const sendMessage = (message) => {
 
 const receiveMessage = (callback) => {
   if(socket) {
-    console.log('yes!')
     socket.on('receive_message', (data) => {
       console.log('receiving new message!')
       return callback(data)
@@ -132,6 +142,7 @@ const disconnectSocket = () => {
 export default {
   initiateDMSocket,
   initiateGuestSocket,
+  userEntryExit,
   disconnectSocket,
   createIcon,
   addIcon,

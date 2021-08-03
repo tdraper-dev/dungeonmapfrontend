@@ -28,7 +28,7 @@ function MessengerBar({id, username, session, float, setFloat}) {
   const [navBarVis, setNavBarVis] = useState(true)
   const [messageText, setMessageText] = useState('')
   const [messages, setMessages] = useState([])
-  const [messageFloat, setMessageFloat] = useState(false)
+  const blueCircleRef = useRef(null)
   const bottomRef = useRef(null)
 
   const textAreaSubmit = (e) => {
@@ -65,6 +65,11 @@ function MessengerBar({id, username, session, float, setFloat}) {
     } else {
       socketServices.receiveMessage((message) => {
         setMessages(messages => messages.concat(message))
+        
+        blueCircleRef.current.id = 'blueCircleBounce'
+        setTimeout(() => {
+          blueCircleRef.current.id = ''
+        }, 1000)
       })
     }
   }, [session])
@@ -76,7 +81,7 @@ function MessengerBar({id, username, session, float, setFloat}) {
   return (
     <div id="messengerSideBar" aria-label='sidebar' aria-hidden={navBarVis} className="sidebar row msgRow">
       <div className="buttonArmBox msgArmBox">
-        <div onClick={toggleMovement} className="noselect toggleClickBox msgClickBox">Chat</div>
+        <div ref={blueCircleRef} onClick={toggleMovement} className="noselect toggleClickBox msgClickBox">Chat</div>
       </div>
       <div className="messageBox">
           {messages.map(message => {
@@ -100,7 +105,7 @@ function MessengerBar({id, username, session, float, setFloat}) {
         <form className="messageTextBox" onSubmit={handleSubmit} id="textMsgForm">
           <textarea
             id="chatMessageBox"
-            className={` ${messageFloat ? 'floatChat' : ''} textAreaBox`}
+            className='textAreaBox'
             value={messageText}
             onChange={({ target })=> setMessageText(target.value)}
             onKeyDown={textAreaSubmit}

@@ -18,7 +18,6 @@ function useProvideNotify() {
   const[successType, setSuccessType] = useState('')
 
   const notify = ({notification, errorType, successType }) => {
-    console.log(notification)
     setMessage(notification)
     setErrorType(errorType || '')
     setSuccessType(successType || '')
@@ -39,7 +38,9 @@ function useProvideNotify() {
     )
   }
 
-
+  console.log('notification message: ', message)
+  console.log('errorType: ', errorType)
+  console.log('successType: ', successType)
   return {
     message,
     errorType,

@@ -6,7 +6,10 @@ function NotificationError({errorType}) {
 
   return (
     notify.message && notify.errorType === errorType
-    ? <Notification type="errorMessage" notification={notify.message} />
+    ? <Notification 
+        type={`errorMessage ${notify.message === 'User has left the game!' ? 'specialNotify' : ''}`}
+        notification={notify.message} 
+      />
     : null
   )
 }
@@ -16,7 +19,10 @@ function NotificationSuccess({successType}) {
 
   return (
     notify.message && notify.successType === successType
-    ? <Notification type="successMessage" notification={notify.message} />
+    ? <Notification 
+        type={`successMessage ${notify.message === 'New user has joined the game!' ? 'specialNotify' : ''} `} 
+        notification={notify.message} 
+      />
     : null
   )
 }
@@ -25,7 +31,8 @@ function NotificationSuccess({successType}) {
 function Notification({ notification, type }) {
 
   return (
-    <div className={`noselect ${type}`}>
+    <div 
+    className={type}>
       {notification}
     </div>
   )

@@ -42,7 +42,7 @@ function Draggable({
   const handlePointerUp = (e) => {
     const bounding = dragRef.current.getBoundingClientRect();
 
-    if(bounding.x < 85 && bounding.y < 85) {
+    if(bounding.x < 50 && bounding.y < 50) {
       try {
         deleteIcon(id)
         dragRef.current.style.display = 'none';

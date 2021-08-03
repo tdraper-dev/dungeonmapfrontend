@@ -11,7 +11,10 @@ import MessengerBar from './MessengerBar'
 import socketServices from '../services/socketManager'
 import iconService from '../services/icon'
 import { useAuth } from '../services/use-auth'
+import { useNotify } from '../services/use-notification'
 import { BsThreeDotsVertical } from 'react-icons/bs'
+import { NotificationSuccess, NotificationError } from './Notification'
+
 
 function MapImageView(props) {
   const  { float } = props
@@ -125,6 +128,7 @@ function Gameboard(props) {
   const [sessionLive, setSessionLive] = useState(false)
   const [float, setFloat] = useState(false)
   const auth = useAuth()
+  const notify = useNotify()
   const boardId = props.match.params.id
   let history = useHistory();
   const location = useLocation();
@@ -143,6 +147,23 @@ function Gameboard(props) {
       if(auth.userId) {
         socketServices.initiateDMSocket(boardId)
       }
+
+      socketServices.userEntryExit((statusType) => {
+        if(statusType === 'userConnect') {
+          notify.notify({
+            notification: 'New user has joined the game!',
+            errorType: null,
+            successType: 'newUserJoined'
+          })
+        }
+        if(statusType === "userDisconnect") {
+          notify.notify({
+            notification: 'User has left the game!',
+            errorType: 'userExit',
+            successType: null
+          })
+        }
+      })
       
       socketServices.addIcon((iconObj) => {
         setIcons(icons => [...icons, iconObj])
@@ -172,7 +193,6 @@ function Gameboard(props) {
           setLoading(false)
         }
       })
-      console.log('YO I AM HERE!!!')
       setSessionLive(true)
     } else {
       socketServices.disconnectSocket()
@@ -223,7 +243,6 @@ function Gameboard(props) {
       loadGameBoard();
     } else {
       guestAuthorization();
-      console.log('I AM A GUEST')
       connectToSocket();
     }
     return () => {
@@ -232,10 +251,11 @@ function Gameboard(props) {
     }
   }, [])
 
-
   return (
     <>
     <div className="gameBoardRow row">
+      <NotificationSuccess successType='newUserJoined' />
+      <NotificationError errorType='userExit' />
       <DropDownNav sessionLive={sessionLive} history={history} connectToSocket={connectToSocket} boardId={boardId} />
       <MapTray 
         deleteIcon={deleteIcon} 
