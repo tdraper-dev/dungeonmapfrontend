@@ -22,8 +22,8 @@ function BuildIcon({ createIcon, boardId, visible }) {
   const raiseTheBar = ({ target }) => {
     if(window.innerWidth < 420) {
       target.style.transform = "translateY(-460%)"
-      target.setAttribute('autocomplete', 'off');
     }
+    target.setAttribute('autocomplete', 'off');
   } 
 
   const lowerTheBar = ({ target }) => {
