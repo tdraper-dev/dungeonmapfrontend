@@ -8,7 +8,8 @@ input::-webkit-inner-spin-button {
 .boardsDisplay::-webkit-scrollbar,
 .sideBarColumn::-webkit-scrollbar,
 .messageBox::-webkit-scrollbar,
-#root::-webkit-scrollbar {
+#root::-webkit-scrollbar,
+#background::-webkit-scrollbar {
   display: none; 
 }
 
@@ -960,6 +961,13 @@ html {
 }
 .otherMsgInitial {
   background-color: rgba(255, 58, 58, 0.692);
+}
+
+.systemMessage {
+  width: fit-content;
+  background-color: rgba(128, 128, 128, 0.507);
+  border-radius: 15px;
+  color: white;
 }
 
 .sendMessageBox {

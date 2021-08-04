@@ -3,6 +3,14 @@ import socketServices from '../services/socketManager'
 import { BsChat } from 'react-icons/bs'
 
 
+const SystemMessage = ({ content }) => {
+
+  return (
+    <div className="systemMessage px-2 mb-2" >
+      <div className="">{content}</div>
+    </div>
+  )
+}
 
 const MeMessage = ({ sender, content }) => {
 
@@ -10,7 +18,7 @@ const MeMessage = ({ sender, content }) => {
     <div className="meMsgPacket mb-4" >
       <div className="meMsgInitial msgInitial">{sender}</div>
       <div className="msg meMsg">{content}</div>
-  </div>
+    </div>
   )
 }
 const ThemMessage = ({ sender, content }) => {
@@ -46,6 +54,7 @@ function MessengerBar({id, username, session, float, setFloat}) {
         userId: id,
         username: username,
         content: messageText,
+        systemMsg: false
       }
       setMessages(messages.concat(newMessage))
       socketServices.sendMessage(newMessage)
@@ -85,6 +94,12 @@ function MessengerBar({id, username, session, float, setFloat}) {
       </div>
       <div className="messageBox">
           {messages.map(message => {
+            if(message.systemMsg) {
+              return <SystemMessage
+                key={message.id}
+                content={message.content}
+                />
+            }
             if(id === message.userId) {
               return <MeMessage 
                 key={message.id} 

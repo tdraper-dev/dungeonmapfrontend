@@ -38,9 +38,6 @@ function useProvideNotify() {
     )
   }
 
-  console.log('notification message: ', message)
-  console.log('errorType: ', errorType)
-  console.log('successType: ', successType)
   return {
     message,
     errorType,

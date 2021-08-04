@@ -8,12 +8,12 @@ const initiateDMSocket = (boardId) => {
   socket = io()
   console.log('DMsocket', socket)
 
-  socket.emit('join', boardId)
-  socket.on('user_joined', (data) => console.log(data) )
-  socket.on('user_disconnect', (data) => console.log(data) )
+  socket.emit('join', {boardId, username: "DungeonMaster"})
+  socket.on('user_joined')
+  socket.on('user_disconnect')
 }
 
-const initiateGuestSocket = (boardId, history, callback) => {
+const initiateGuestSocket = (boardId, history, username, callback) => {
 
   console.log('Guest connecting to socket...')
   socket = io()
@@ -21,9 +21,13 @@ const initiateGuestSocket = (boardId, history, callback) => {
 
   socket.on('guestCheck', (check) => {
     if(check) {
-      socket.emit('join', boardId)
-      socket.on('user_joined', (data) => console.log(data) )
-      socket.on('user_disconnect', (data) => console.log(data) )
+      socket.emit('join', { boardId, username })
+      socket.on('user_joined')
+      socket.on('user_disconnect')
+      socket.on('dm_disconnect', () => {
+        disconnectSocket();
+        return history.goBack()
+      })
       return callback()
     } else {
       console.log('no access!')
@@ -34,12 +38,14 @@ const initiateGuestSocket = (boardId, history, callback) => {
 }
 
 const userEntryExit = (callback) => {
-  socket.on('user_joined', (data) => {
-    callback(data)
-  })
-  socket.on('user_disconnect', (data) => {
-    callback(data)
-  })
+  if(socket) {
+    socket.on('user_joined', (data) => {
+      callback(data)
+    })
+    socket.on('user_disconnect', (data) => {
+      callback(data)
+    })
+  }
 }
 
 
@@ -128,6 +134,12 @@ const receiveMessage = (callback) => {
   }
 }
 
+const dmDisconnecting = () => {
+  if(socket) {
+    socket.emit('dm_disconnecting', null)
+  }
+}
+
 const disconnectSocket = () => {
   if(socket) {
     console.log('Disconnecting socket...');
@@ -144,6 +156,7 @@ export default {
   initiateGuestSocket,
   userEntryExit,
   disconnectSocket,
+  dmDisconnecting,
   createIcon,
   addIcon,
   moveIcon,

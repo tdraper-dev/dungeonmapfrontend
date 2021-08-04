@@ -190,7 +190,7 @@ function SignUpForm ({ setVisible }) {
       }
     } catch (exception) {
       notify.notify({
-        notification: 'Please ensure username is at least 5 characters in length',
+        notification: 'Username taken or under 5 character mininmum length',
         errorType: 'usernameLength'
       })
       console.log(exception)

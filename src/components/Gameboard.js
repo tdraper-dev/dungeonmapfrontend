@@ -33,7 +33,7 @@ function MapImageView(props) {
 function MapTray({ mapSrc, loading, icons, setIcons, deleteIcon, updatePosition, float }) { 
   
   return (
-    <div  className="mapTrayGameBoard col-12 d-flex">
+    <div  className="mapTrayGameBoard col-12 py-5 px-5 d-flex">
       <div id="dropZoneDelete" className="d-flex">
         <p className="noselect pt-3">Delete</p>
       </div>
@@ -195,8 +195,9 @@ function Gameboard(props) {
       })
       setSessionLive(true)
     } else {
-      socketServices.disconnectSocket()
-      setSessionLive(false)
+      socketServices.dmDisconnecting();
+      socketServices.disconnectSocket();
+      setSessionLive(false);
     }
 
   }
@@ -236,7 +237,7 @@ function Gameboard(props) {
     }
     const guestAuthorization = async() => {
       console.log("Authorizing guest. . .")
-      socketServices.initiateGuestSocket(boardId, history, loadGameBoard)
+      socketServices.initiateGuestSocket(boardId, history, guest.username, loadGameBoard)
     }
 
     if(auth.userId) {
@@ -254,8 +255,6 @@ function Gameboard(props) {
   return (
     <>
     <div className="gameBoardRow row">
-      <NotificationSuccess successType='newUserJoined' />
-      <NotificationError errorType='userExit' />
       <DropDownNav sessionLive={sessionLive} history={history} connectToSocket={connectToSocket} boardId={boardId} />
       <MapTray 
         deleteIcon={deleteIcon} 
