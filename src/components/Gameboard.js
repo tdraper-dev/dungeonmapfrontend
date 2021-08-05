@@ -197,7 +197,7 @@ function Gameboard(props) {
     } else {
    
       socketServices.dmDisconnecting();
-      socketServices.disconnectSocket();
+      //socketServices.disconnectSocket();
       setSessionLive(false);
     }
 

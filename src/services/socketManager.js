@@ -22,8 +22,8 @@ const initiateGuestSocket = (boardId, history, username, callback) => {
   socket.on('guestCheck', (check) => {
     if(check) {
       socket.emit('join', { boardId, username })
-      socket.on('user_joined')
-      socket.on('user_disconnect')
+      //socket.on('user_joined')
+      //socket.on('user_disconnect')
       socket.on('dm_disconnect', () => {
         console.log('The Dungeon Master has disconnected, we should go')
         disconnectSocket();
@@ -139,6 +139,7 @@ const dmDisconnecting = () => {
   if(socket) {
     console.log('I Am the DM and I am closing the session')
     socket.emit('dm_disconnecting')
+    socket.disconnect()
   }
 }
 
