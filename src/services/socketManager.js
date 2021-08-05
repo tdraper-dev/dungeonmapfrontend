@@ -28,7 +28,6 @@ const initiateGuestSocket = (boardId, history, username, callback) => {
       socket.on('dm_disconnect', () => {
         console.log('The guests have received notice from the Server, the DM is gone')
         socket.emit('guest_exit')
-        disconnectSocket();
         return history.goBack()
       })
       return callback()
