@@ -136,11 +136,11 @@ const receiveMessage = (callback) => {
   }
 }
 
-const dmDisconnecting = () => {
+const dmDisconnecting = async () => {
   if(socket) {
     console.log('The DM is sending "dm_disconnecting" to the Server')
-    socket.emit('dm_disconnecting')
-    //socket.disconnect()
+    await socket.emit('dm_disconnecting')
+    socket.disconnect()
   }
 }
 

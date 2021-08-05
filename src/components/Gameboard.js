@@ -142,7 +142,7 @@ function Gameboard(props) {
   }
 
 
-  const connectToSocket = () => {
+  const connectToSocket = async () => {
     if(sessionLive === false) {
       if(auth.userId) {
         socketServices.initiateDMSocket(boardId)
