@@ -141,7 +141,8 @@ const dmDisconnecting = () => {
     console.log('The DM is sending "dm_disconnecting" to the Server')
     socket.emit('dm_disconnecting')
     socket.on('guests_removed', () => {
-      socket.disconnect()
+      console.log('THE DM IS EXITING YALL')
+      disconnectSocket();
     })
   }
 }
