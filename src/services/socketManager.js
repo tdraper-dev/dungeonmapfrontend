@@ -21,6 +21,7 @@ const initiateGuestSocket = (boardId, history, username, callback) => {
 
   socket.on('guestCheck', (check) => {
     if(check) {
+      console.log('guestRegistration')
       socket.emit('join', { boardId, username })
       //socket.on('user_joined')
       //socket.on('user_disconnect')
@@ -139,7 +140,7 @@ const dmDisconnecting = () => {
   if(socket) {
     console.log('The DM is sending "dm_disconnecting" to the Server')
     socket.emit('dm_disconnecting')
-    socket.disconnect()
+    //socket.disconnect()
   }
 }
 
