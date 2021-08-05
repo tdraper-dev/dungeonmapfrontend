@@ -27,6 +27,7 @@ const initiateGuestSocket = (boardId, history, username, callback) => {
       //socket.on('user_disconnect')
       socket.on('dm_disconnect', () => {
         console.log('The guests have received notice from the Server, the DM is gone')
+        socket.emit('guest_exit')
         disconnectSocket();
         return history.goBack()
       })
@@ -136,11 +137,13 @@ const receiveMessage = (callback) => {
   }
 }
 
-const dmDisconnecting = async () => {
+const dmDisconnecting = () => {
   if(socket) {
     console.log('The DM is sending "dm_disconnecting" to the Server')
-    await socket.emit('dm_disconnecting')
-    socket.disconnect()
+    socket.emit('dm_disconnecting')
+    socket.on('guests_removed', () => {
+      socket.disconnect()
+    })
   }
 }
 
