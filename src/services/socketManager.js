@@ -21,13 +21,10 @@ const initiateGuestSocket = (boardId, history, username, callback) => {
 
   socket.on('guestCheck', (check) => {
     if(check) {
-      console.log('guestRegistration')
+      console.log('Guest registering to Room')
       socket.emit('join', { boardId, username })
-      //socket.on('user_joined')
-      //socket.on('user_disconnect')
       socket.on('dm_disconnect', () => {
         console.log('The guests have received notice from the Server, the DM is gone')
-        //socket.emit('guest_exit')
         disconnectSocket()
         return history.goBack()
       })

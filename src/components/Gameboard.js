@@ -195,9 +195,7 @@ function Gameboard(props) {
       })
       setSessionLive(true)
     } else {
-      console.log('The DM is firing up Socket Manager to leave')
       socketServices.dmDisconnecting();
-      //socketServices.disconnectSocket();
       setSessionLive(false);
     }
 
