@@ -137,7 +137,8 @@ const receiveMessage = (callback) => {
 
 const dmDisconnecting = () => {
   if(socket) {
-    socket.emit('dm_disconnecting', null)
+    console.log('I Am the DM and I am closing the session')
+    socket.emit('dm_disconnecting')
   }
 }
 

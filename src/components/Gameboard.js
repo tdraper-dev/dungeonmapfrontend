@@ -195,7 +195,7 @@ function Gameboard(props) {
       })
       setSessionLive(true)
     } else {
-      console.log('I Am the DM and I am closing the session')
+   
       socketServices.dmDisconnecting();
       socketServices.disconnectSocket();
       setSessionLive(false);
