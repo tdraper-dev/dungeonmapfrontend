@@ -25,7 +25,7 @@ const initiateGuestSocket = (boardId, history, username, callback) => {
       //socket.on('user_joined')
       //socket.on('user_disconnect')
       socket.on('dm_disconnect', () => {
-        console.log('The Dungeon Master has disconnected, we should go')
+        console.log('The guests have received notice from the Server, the DM is gone')
         disconnectSocket();
         return history.goBack()
       })
@@ -137,7 +137,7 @@ const receiveMessage = (callback) => {
 
 const dmDisconnecting = () => {
   if(socket) {
-    console.log('I Am the DM and I am closing the session')
+    console.log('The DM is sending "dm_disconnecting" to the Server')
     socket.emit('dm_disconnecting')
     socket.disconnect()
   }
