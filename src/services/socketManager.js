@@ -25,6 +25,7 @@ const initiateGuestSocket = (boardId, history, username, callback) => {
       socket.on('user_joined')
       socket.on('user_disconnect')
       socket.on('dm_disconnect', () => {
+        console.log('The Dungeon Master has disconnected, we should go')
         disconnectSocket();
         return history.goBack()
       })
