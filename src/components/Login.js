@@ -3,28 +3,14 @@ import { useHistory } from 'react-router-dom'
 import { useAuth } from '../services/use-auth'
 import { useNotify } from '../services/use-notification'
 import { NotificationError, NotificationSuccess } from './Notification'
-import VisibleButton from './VisibleButton'
 
-function JoinSession({ setVisible }) {
+function JoinSession() {
   const [sessionID, setSessionID] = useState('')
   const [username, setUsername] = useState('')
   const history = useHistory()
 
-  const checkForClick = (event) => {
-    if(!boxRef.current || !boxRef.current.contains(event.target)) {
-      setVisible(false)
-    }
-  }
-  useEffect(() => {
-    document.addEventListener('click', checkForClick)
-    return () => {
-      document.removeEventListener('click', checkForClick)
-    }
-  })
-
   const handleSubmit = (e) => {
     e.preventDefault()
-    setVisible(false);
     return (
       history.push({
         pathname: `/gameboard/${sessionID}`,
@@ -37,10 +23,8 @@ function JoinSession({ setVisible }) {
     )
   }
 
-  const boxRef = useRef()
   return (
-    <div className="joinSessionBox popUpBoxes">
-    <form ref={boxRef} className="signUpForm row pt-3" onSubmit={handleSubmit}>
+    <form className="formContainer row" onSubmit={handleSubmit}>
       <label className="label col-lg-7 col-md-6 col-8 mb-2">Player Name</label>
       <input
         type="text"
@@ -57,12 +41,11 @@ function JoinSession({ setVisible }) {
         />
         <button className="col-lg-4 col-md-6 col-8 mb-2 submitButtons buttons" type="submit">Join!</button>
     </form>
-  </div>
   )
 }
 
 
-function LoginForm({ setUser }) {
+function LoginForm() {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const auth = useAuth()
@@ -83,7 +66,7 @@ function LoginForm({ setUser }) {
   }
 
   return (
-    <form className="loginForm row py-5" onSubmit={handleSubmit}>
+    <form className="formContainer row" onSubmit={handleSubmit}>
       <label className="label col-lg-6 col-md-6 col-8">Username</label>
       <input
           type='text'
@@ -108,11 +91,10 @@ function LoginForm({ setUser }) {
   )
 }
 
-function SignUp({ setVisible, handleSignUp }) {
+function SignUp({ handleSignUp }) {
   const[username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [passwordConfirm, setPasswordConfirm] = useState('')
-  const boxRef = useRef()
   const notify = useNotify();
 
   const handleSubmit = (e) => {
@@ -127,22 +109,9 @@ function SignUp({ setVisible, handleSignUp }) {
       })
     }
   }
-
-  const checkForClick = (event) => {
-    if(!boxRef.current || !boxRef.current.contains(event.target)) {
-        setVisible(false)
-    }
-  }
-
-  useEffect(() => {
-    document.addEventListener('click', checkForClick)
-    return () => {
-      document.removeEventListener('click', checkForClick)
-    }
-  })
  
   return (
-    <form ref={boxRef} className="signUpForm row pt-3" onSubmit={handleSubmit}>
+    <form className="formContainer row" onSubmit={handleSubmit}>
       <label className="label col-lg-6 col-md-8 col-8 mb-2" >Username</label>
       <input
         type='text'
@@ -173,7 +142,7 @@ function SignUp({ setVisible, handleSignUp }) {
   )
 }
 
-function SignUpForm ({ setVisible }) {
+function SignUpForm () {
   const notify = useNotify();
   const auth = useAuth()
 
@@ -182,7 +151,6 @@ function SignUpForm ({ setVisible }) {
       const newUser = { username, password }
       const response = await auth.signUp(newUser)
       if(response) {
-        setVisible(false);
         notify.notify({
           notification: `New user ${username} created!`,
           successType: 'userCreated'
@@ -197,14 +165,51 @@ function SignUpForm ({ setVisible }) {
     }
   }
   return (
-    <div className="signUpBox popUpBoxes">
-      <SignUp setVisible={setVisible} handleSignUp={handleSignUp} />
-    </div>
+      <SignUp handleSignUp={handleSignUp} />
+  )
+}
+
+const OptionButton = ({ handleClick, value }) => {
+
+  return (
+    <button value={value} onClick={handleClick} className="optionItems px-2 py-1 buttons">
+      {value}
+    </button>
+  )
+}
+
+const DemoButton = () => {
+  const auth = useAuth()
+
+  const handleClick = () => {
+    try {
+      const user = {
+        username: 'Travis Draper',
+        password: 'travis'
+      }
+      auth.logIn(user)
+    } catch (exception) {
+      console.log(exception)
+      
+    }
+  }
+
+  return (
+    <button className="optionItems px-1 py-1 mb-2 buttons" onClick={handleClick}>
+      Demo
+    </button>
   )
 }
 
 function Login() {
+  const [field, setField] = useState('Login')
 
+  const handleClick = ({ target }) => {
+    console.log(target)
+    setField(target.value)
+  }
+
+  console.log(field)
   return (
     <div id="background">
     <h1 className="noselect loginTitle">
@@ -213,21 +218,38 @@ function Login() {
     <div className='loginContainer row mx-3'>
       <div className='loginBox notifyBoxes d-flex'>
         <h2 className="noselect titles formTitle">Login</h2>
-          <LoginForm />
-          <div className=" otherOptions d-flex mx-2">
-          <VisibleButton label="Sign Up" className="optionItems px-1 py-1">
-            <SignUpForm />
-          </VisibleButton>
-          <VisibleButton label="Join Game" className="optionItems px-1 py-1">
-            <JoinSession />
-          </VisibleButton>
-          </div>
-          <NotificationSuccess successType="userCreated" />
+        <div className="formBoxContainer py-5">
+
+        {field === 'Login' ? <LoginForm /> : null}
+        {field === 'Join Session' ? <JoinSession /> : null}
+        {field === 'Sign Up' ? <SignUpForm /> : null}
+
+        </div>
+        <div className=" otherOptions d-flex mt-4 mx-2">
+          <OptionButton value="Login" handleClick={handleClick} />
+          <OptionButton value="Sign Up" handleClick={handleClick} />
+          <OptionButton value="Join Session" handleClick={handleClick} />
+        </div>
+        <DemoButton />
+          
       </div>
 
   </div>
   </div>
   )
 }
+
+/*
+<div className=" otherOptions d-flex mx-2">
+          <VisibleButton label="Sign Up" className="optionItems px-1 py-1">
+            <SignUpForm />
+          </VisibleButton>
+          <DemoButton />
+          <VisibleButton label="Join Game" className="optionItems px-1 py-1">
+            <JoinSession />
+          </VisibleButton>
+          </div>
+          <NotificationSuccess successType="userCreated" />
+*/
 
 export default Login

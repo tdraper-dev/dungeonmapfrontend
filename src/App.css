@@ -300,14 +300,21 @@ html {
   max-width: 500px;
 }
 
-.loginForm {
+.formBoxContainer {
   background-color:burlywood;
   border: 4px groove rgb(156, 89, 0);
+  align-self: center;
+  align-content: center;
+  align-items: center;
+  width: 80%;
+
+  box-shadow: 5px 10px 8px rgb(0 0 0 / 50%);
+}
+
+.formContainer {
   flex-direction: column;
   align-self: center;
   align-content: center;
-  width: 80%;
-  box-shadow: 5px 10px 8px rgb(0 0 0 / 50%);
 }
 @media(max-height: 899px) {
   .loginForm {
@@ -316,7 +323,7 @@ html {
 }
 
 .otherOptions {
-  justify-content: space-between;
+  justify-content: space-around;
   margin-top: auto;
   margin-bottom: 20px;
 }
@@ -331,7 +338,7 @@ html {
   position: absolute;
   z-index: 1000;
   min-width: 20vw;
-  animation: slideDown 300ms;
+
   border: 2px groove black;
   box-shadow: 5px 10px 8px rgb(0 0 0 / 50%);
   border-radius: 10px;
@@ -372,10 +379,6 @@ html {
 
 .buttons {
   background-color: antiquewhite;
-}
-
-.buttons:hover {
-  background-color: rgba(0, 0, 0, 0.2);
 }
 
 .label {
