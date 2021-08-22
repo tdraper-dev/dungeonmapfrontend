@@ -8,23 +8,35 @@ function JoinSession() {
   const [sessionID, setSessionID] = useState('')
   const [username, setUsername] = useState('')
   const history = useHistory()
+  const notify = useNotify();
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    return (
-      history.push({
-        pathname: `/gameboard/${sessionID}`,
-        from: '/',
-        state: {
-          username: username,
-          id: Math.random()
-        }
+    const checkName = /(\$|{|}|\/|\\|\*|\(|\)\`)+/g.test(username)
+    const checkSession = /(\$|{|}|\/|\\|\*|\(|\)\`)+/g.test(username)
+
+    if(!checkName && !checkSession) {
+      return (
+        history.push({
+          pathname: `/gameboard/${sessionID}`,
+          from: '/',
+          state: {
+            username: username,
+            id: Math.random()
+          }
+        })
+      )
+    } else {
+      notify.notify({
+        notification: 'Please ensure no special characters in name and valid sessionID',
+        errorType: 'guestJoin'
       })
-    )
+    }
   }
 
   return (
     <form className="formContainer row" onSubmit={handleSubmit}>
+      <NotificationError errorType='guestJoin' />
       <label className="label col-lg-7 col-md-6 col-8 mb-2">Player Name</label>
       <input
         type="text"
@@ -205,11 +217,9 @@ function Login() {
   const [field, setField] = useState('Login')
 
   const handleClick = ({ target }) => {
-    console.log(target)
     setField(target.value)
   }
 
-  console.log(field)
   return (
     <div id="background">
     <h1 className="noselect loginTitle">

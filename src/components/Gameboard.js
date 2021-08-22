@@ -235,7 +235,6 @@ function Gameboard(props) {
       }
     }
     const guestAuthorization = async() => {
-      console.log("Authorizing guest. . .")
       socketServices.initiateGuestSocket(boardId, history, guest.username, loadGameBoard)
     }
 

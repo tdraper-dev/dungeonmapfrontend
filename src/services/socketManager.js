@@ -15,7 +15,6 @@ const initiateDMSocket = (boardId) => {
 
 const initiateGuestSocket = (boardId, history, username, callback) => {
 
-  console.log('Guest connecting to socket...')
   socket = io()
   socket.emit('guest', boardId)
 
@@ -143,10 +142,8 @@ const dmDisconnecting = () => {
 
 const disconnectSocket = () => {
   if(socket) {
-    console.log('Disconnecting socket...');
     socket.disconnect()
     socket = null;
-    console.log('THE SOCKET', socket)
   }
 }
 

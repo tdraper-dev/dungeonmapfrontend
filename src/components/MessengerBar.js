@@ -39,6 +39,21 @@ function MessengerBar({id, username, session, float, setFloat}) {
   const blueCircleRef = useRef(null)
   const bottomRef = useRef(null)
 
+  const textSanitizer = (messageText) => {
+    const map = {
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#x27;',
+      "/": '&#x2F;',
+      "`": '&grave;',
+      "$": '&#36;'
+    };
+    const reg = /[&<>"'/`$]/ig;
+    return messageText.replace(reg, (match)=>(map[match]));
+  }
+
   const textAreaSubmit = (e) => {
     if(e.key === 'Enter') {
       e.preventDefault()
@@ -48,12 +63,15 @@ function MessengerBar({id, username, session, float, setFloat}) {
 
   const handleSubmit = (e) => {
     e.preventDefault()
+
+    const freshText = textSanitizer(messageText)
+
     if(messageText) {
       const newMessage = {
         id: Math.random(),
         userId: id,
         username: username,
-        content: messageText,
+        content: freshText,
         systemMsg: false
       }
       setMessages(messages.concat(newMessage))
