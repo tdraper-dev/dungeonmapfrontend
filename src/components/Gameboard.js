@@ -261,7 +261,7 @@ function Gameboard(props) {
       }
     }
 
-    if(auth.userId) {
+    if(auth.userId || window.localStorage.getItem('loggedDungeonMaster')) {
       loadGameBoard();
     } else {
       guestAuthorization();
