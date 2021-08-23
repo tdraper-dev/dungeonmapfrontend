@@ -67,11 +67,11 @@ function DropMenu({ userId, sessionLive, connectToSocket, history, boardId }) {
       {sessionLive && userId
 
         ? <div id="sessionIdBox">
-            <div className="noselect ms-5 ps-2">
+            <div className="noselect">
               Share Session Link:
             </div>  
             <div className="col-12">
-              https://thedungeonmap.herokuapp.com/gameboard/{boardId}
+              {`${window.location.host}/gameboard/${boardId}`}
             </div>
             
           </div>
@@ -81,9 +81,13 @@ function DropMenu({ userId, sessionLive, connectToSocket, history, boardId }) {
         <button className="noselect tile dropButton" onClick={() => history.goBack()}>
           {userId ? 'Dashboard' : 'Home'}
         </button>
-        <button onClick={connectToSocket} className={` noselect tile dropButtonSession`}>
-          {sessionLive ? 'End Session' : 'Start Session'}
-        </button>    
+        {userId
+          ? <button onClick={connectToSocket} className={` noselect tile dropButtonSession`}>
+              {sessionLive ? 'End Session' : 'Start Session'}
+            </button> 
+          : null
+        }
+   
       </div>
 
 
@@ -132,19 +136,17 @@ function Gameboard(props) {
   const [loading, setLoading] = useState(false)
   const [sessionLive, setSessionLive] = useState(false)
   const [float, setFloat] = useState(false)
+  const [guest, setGuest] = useState({
+    id: '',
+    username: ''
+  })
   const auth = useAuth()
   const notify = useNotify()
   const boardId = props.match.params.id
   let history = useHistory();
   const location = useLocation();
-  let guest = { id: '', username: ''}
 
-  if (location.state) {
-    guest = {
-      id: location.state.id,
-      username: location.state.username || 'User'
-    }
-  }
+
 
 
   const connectToSocket = async () => {
@@ -208,7 +210,7 @@ function Gameboard(props) {
 
   const updateIcon = async(position, id) => {
     socketServices.moveIcon(position, id)
-    const updatedIcon = await iconService.updateIcon(position, id)
+    await iconService.updateIcon(position, id)
     setIcons((icons) => icons.map(icon => {
       if(icon.id === id) {
         icon.position.x = position.x;
@@ -223,6 +225,15 @@ function Gameboard(props) {
     socketServices.deleteIcon(id)
     setIcons((icons) => icons.filter(icon => icon.id !== id))
   }
+
+  useEffect(() => {
+    if (location.state) {
+      setGuest({
+        id: location.state.id,
+        username: location.state.username
+      })
+    }
+  }, [])
 
   useEffect(() => {
     const source = axios.CancelToken.source()
@@ -240,7 +251,14 @@ function Gameboard(props) {
       }
     }
     const guestAuthorization = async() => {
-      socketServices.initiateGuestSocket(boardId, history, guest.username, loadGameBoard)
+      console.log('GUEST', guest)
+      if(!location.state) {
+        let guestName = window.prompt('Name?')
+        setGuest({...guest, username: guestName })
+        socketServices.initiateGuestSocket(boardId, history, guestName, loadGameBoard)
+      } else {
+        socketServices.initiateGuestSocket(boardId, history, location.state.username, loadGameBoard)
+      }
     }
 
     if(auth.userId) {

@@ -44,13 +44,11 @@ function MessengerBar({id, username, session, float, setFloat}) {
       '&': '&amp;',
       '<': '&lt;',
       '>': '&gt;',
-      '"': '&quot;',
-      "'": '&#x27;',
       "/": '&#x2F;',
       "`": '&grave;',
       "$": '&#36;'
     };
-    const reg = /[&<>"'/`$]/ig;
+    const reg = /[&<>/`$]/ig;
     return messageText.replace(reg, (match)=>(map[match]));
   }
 
