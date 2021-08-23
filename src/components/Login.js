@@ -15,7 +15,7 @@ function JoinSession() {
     const checkName = /(\$|{|}|\/|\\|\*|\(|\)\`)+/g.test(username)
     const checkSession = /(\$|{|}|\/|\\|\*|\(|\)\`)+/g.test(username)
 
-    if(!checkName && !checkSession) {
+    if(!checkName && !checkSession && sessionID && username) {
       return (
         history.push({
           pathname: `/gameboard/${sessionID}`,
@@ -36,7 +36,7 @@ function JoinSession() {
 
   return (
     <form className="formContainer row" onSubmit={handleSubmit}>
-      <NotificationError errorType='guestJoin' />
+      
       <label className="label col-lg-7 col-md-6 col-8 mb-2">Player Name</label>
       <input
         type="text"
@@ -51,7 +51,10 @@ function JoinSession() {
         onChange={({ target }) => setSessionID(target.value)}
         className="submitButtons col-lg-6 col-md-6 col-8 mb-2 inputs"
         />
-        <button className="col-lg-4 col-md-6 col-8 mb-2 submitButtons buttons" type="submit">Join!</button>
+      <div className="notifyBoxes col-lg-6 col-md-6 col-8 mb-2">
+        <button className="buttons" type="submit">Join</button>
+        <NotificationError errorType='guestJoin' />
+      </div>
     </form>
   )
 }
@@ -131,7 +134,6 @@ function SignUp({ handleSignUp }) {
         value={username}
         onChange={({ target }) => setUsername(target.value)}
       />
-        <NotificationError errorType='usernameLength' />
       <label className="label col-lg-6 col-md-8 col-8 mb-2">Password</label>
       <input
         type='password'
@@ -149,6 +151,7 @@ function SignUp({ handleSignUp }) {
       <div className="notifyBoxes col-lg-6 col-md-8 col-8 mb-2 pt-2">
         <button className="buttons" type="submit">Sign Up</button>
         <NotificationError errorType='passwordMatch' />
+        <NotificationError errorType='usernameLength' />
       </div>
     </form> 
   )
@@ -248,18 +251,5 @@ function Login() {
   </div>
   )
 }
-
-/*
-<div className=" otherOptions d-flex mx-2">
-          <VisibleButton label="Sign Up" className="optionItems px-1 py-1">
-            <SignUpForm />
-          </VisibleButton>
-          <DemoButton />
-          <VisibleButton label="Join Game" className="optionItems px-1 py-1">
-            <JoinSession />
-          </VisibleButton>
-          </div>
-          <NotificationSuccess successType="userCreated" />
-*/
 
 export default Login
