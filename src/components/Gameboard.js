@@ -34,7 +34,7 @@ function MapTray({ mapSrc, loading, icons, setIcons, deleteIcon, updatePosition,
   
   return (
     <div  className="mapTrayGameBoard col-12 py-5 px-5 d-flex">
-      <div id="dropZoneDelete" className="d-flex">
+      <div title="Drag items here to delete" id="dropZoneDelete" className="d-flex">
         <p className="noselect pt-3">Delete</p>
       </div>
       {loading
@@ -64,24 +64,29 @@ function DropMenu({ userId, sessionLive, connectToSocket, history, boardId }) {
 
   return (
     <div className="dropMenuContainer row">
-      <div className=" dropTile col-12">
-        <button className=" dropButton" onClick={() => history.goBack()}>
-          {userId ? 'Dashboard' : 'Home'}
-        </button>
-      </div>
-      {userId 
-        ? <div className={` col-12 dropTile sessionButtonTile ${sessionLive && userId ? 'tweak' : ''}`}>
-            <button onClick={connectToSocket} className={`${sessionLive && userId ? 'tweak' : ''} dropButtonSession`}>
-              {sessionLive ? 'End Session' : 'Start Session'}
-            </button>
+      {sessionLive && userId
+
+        ? <div id="sessionIdBox">
+            <div className="noselect ms-5 ps-2">
+              Share Session Link:
+            </div>  
+            <div className="col-12">
+              https://thedungeonmap.herokuapp.com/gameboard/{boardId}
+            </div>
+            
           </div>
         : null
       }
-      {sessionLive && userId
+      <div className="dropTile rightSide col-12">
+        <button className="noselect tile dropButton" onClick={() => history.goBack()}>
+          {userId ? 'Dashboard' : 'Home'}
+        </button>
+        <button onClick={connectToSocket} className={` noselect tile dropButtonSession`}>
+          {sessionLive ? 'End Session' : 'Start Session'}
+        </button>    
+      </div>
 
-      ? <div id="sessionIdBox"><span className=" ms-5 ps-2">Session ID: </span>{boardId}</div>
-      : null
-      }
+
     </div>
   )
 
