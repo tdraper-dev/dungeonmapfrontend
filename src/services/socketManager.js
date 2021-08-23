@@ -1,6 +1,7 @@
 import io from 'socket.io-client'
 
 let socket;
+let verified = false;
 //${window.location.protocol}//${window.location.host}
 const initiateDMSocket = (boardId) => {
 
@@ -21,6 +22,7 @@ const guestQuickCheck = (boardId, notify, callback) => {
 
   socket.on('guestCheckQuick', (check) => {
     if(check) {
+      verified = true;
       callback(boardId)
     } else {
       disconnectSocket();
@@ -34,7 +36,6 @@ const guestQuickCheck = (boardId, notify, callback) => {
 
 const initiateGuestSocket = (boardId, history, username, callback) => {
   if(!socket) {
-    console.log('yo!')
     socket = io()
 
     socket.emit('guest', boardId)
@@ -44,6 +45,8 @@ const initiateGuestSocket = (boardId, history, username, callback) => {
         console.log('no access!')
         disconnectSocket()
         return history.goBack()
+      } else {
+        return callback()
       }
     })
   }
@@ -54,7 +57,10 @@ const initiateGuestSocket = (boardId, history, username, callback) => {
         disconnectSocket()
         return history.goBack()
       })
-      return callback()
+
+      if(verified) {
+        return callback()
+      }
 }
 
 const userEntryExit = (callback) => {
@@ -72,7 +78,6 @@ const userEntryExit = (callback) => {
 const createIcon = (newIcon) => {
 
   if(socket) {
-    console.log('you want to create this icon', newIcon)
     socket.emit('create_icon', newIcon)
   }
 }
@@ -81,7 +86,6 @@ const addIcon = (callback) => {
 
   if(socket){
       socket.on('add_icon', (iconObj) => {
-      console.log('Creating this icon', iconObj)
       return callback(iconObj)
     })
   }
@@ -90,7 +94,7 @@ const addIcon = (callback) => {
 const moveIcon = (iconPosition, iconId) => {
 
   if(socket) {
-    console.log('You want to move this icon', iconId)
+
     socket.emit('move_icon', { iconPosition, iconId })
   }
 }
@@ -99,7 +103,7 @@ const updateIcon = (callback) => {
 
   if(socket) {
     socket.on('icon_updated', ({ iconPosition, iconId }) => {
-      console.log('Moving this icon', iconId)
+
       return callback(iconPosition, iconId)
     })
   }
@@ -108,7 +112,7 @@ const updateIcon = (callback) => {
 const deleteIcon = (id) => {
 
   if(socket) {
-    console.log('You want to delete this icon', id)
+
     socket.emit('delete_icon', id)
   }
 }
@@ -117,7 +121,7 @@ const clearIcon = (callback) => {
 
   if(socket) {
     socket.on('clear_icon', (id) => {
-      console.log('Removing this icon: ', id)
+
       callback(id)
     })
   }
@@ -126,7 +130,7 @@ const clearIcon = (callback) => {
 const changeMap = () => {
 
   if(socket) {
-    console.log('You want to change the map image')
+
     socket.emit('change_map')
   }
 }
@@ -140,7 +144,7 @@ const updateMap = (callback) => {
 
 const sendMessage = (message) => {
   if(socket) {
-    console.log('You want to send a message')
+
     socket.emit('send_message', message)
   }
 }
@@ -148,7 +152,7 @@ const sendMessage = (message) => {
 const receiveMessage = (callback) => {
   if(socket) {
     socket.on('receive_message', (data) => {
-      console.log('receiving new message!')
+
       return callback(data)
     })
   }
@@ -156,7 +160,7 @@ const receiveMessage = (callback) => {
 
 const dmDisconnecting = () => {
   if(socket) {
-    console.log('The DM is sending "dm_disconnecting" to the Server')
+
     socket.emit('dm_disconnecting')
   }
 }
