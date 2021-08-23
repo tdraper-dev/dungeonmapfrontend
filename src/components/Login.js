@@ -3,6 +3,7 @@ import { useHistory } from 'react-router-dom'
 import { useAuth } from '../services/use-auth'
 import { useNotify } from '../services/use-notification'
 import { NotificationError, NotificationSuccess } from './Notification'
+import socketServices from '../services/socketManager'
 
 function JoinSession() {
   const [sessionID, setSessionID] = useState('')
@@ -10,22 +11,27 @@ function JoinSession() {
   const history = useHistory()
   const notify = useNotify();
 
+  const quickCheck = (sessionID) => {
+    return (
+      history.push({
+        pathname: `/gameboard/${sessionID}`,
+        from: '/',
+        state: {
+          username: username,
+          id: Math.random()
+        }
+      })
+    )
+  }
+
+
   const handleSubmit = (e) => {
     e.preventDefault()
     const checkName = /(\$|{|}|\/|\\|\*|\(|\)\`)+/g.test(username)
     const checkSession = /(\$|{|}|\/|\\|\*|\(|\)\`)+/g.test(username)
 
     if(!checkName && !checkSession && sessionID && username) {
-      return (
-        history.push({
-          pathname: `/gameboard/${sessionID}`,
-          from: '/',
-          state: {
-            username: username,
-            id: Math.random()
-          }
-        })
-      )
+      socketServices.guestQuickCheck(sessionID, notify, quickCheck);
     } else {
       notify.notify({
         notification: 'Please ensure no special characters in name and valid sessionID',
@@ -60,7 +66,7 @@ function JoinSession() {
 }
 
 
-function LoginForm() {
+function LoginForm () {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const auth = useAuth()

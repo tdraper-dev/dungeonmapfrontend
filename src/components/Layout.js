@@ -7,21 +7,22 @@ import Gameboard from './Gameboard'
 
 function Layout() {
   const auth = useAuth()
-
+  
   return (
-    <>      
-    <Route path="/" render={() => (
-      auth.userId 
-        ? <Redirect from='/' to='/dashboard' /> 
-        : <Redirect from='/' to='/login' />
-      )}
-    /> 
-      <Switch>
+    <>
+    <Switch>
+      <Route path='/gameboard/:id' component={Gameboard} />      
+      <Route path="/" render={() => (
+        auth.userId 
+          ? <Redirect from='/' to='/dashboard' /> 
+          : <Redirect from='/' to='/login' />
+        )}
+      /> 
+    </Switch>
 
+      <Switch>
         <Route path="/dashboard" component={Dashboard} />
         <Route path='/login' component={Login} />
-        <Route path='/gameboard/:id' component={Gameboard} />
-
       </Switch>
     </>
   )

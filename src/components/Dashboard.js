@@ -41,7 +41,7 @@ function BoardTile({ thisBoard, gameBoards, setBoards, setBoardId, loading, setL
     try {
       if (window.confirm('Do you want to delete this board?')) {
         setLoading(true)
-        await gameBoardService.deleteGameBoard(thisBoard.id)
+        await gameBoardService.deleteGameBoard(thisBoard.boardPath)
         const newGameBoards = gameBoards.filter(board => board.id !== thisBoard.id)
         setBoards(newGameBoards)
         setLoading(false)
@@ -86,7 +86,7 @@ function BoardTile({ thisBoard, gameBoards, setBoards, setBoardId, loading, setL
           <BsXCircle className="deleteIcon" onClick={deleteGameboard}/>
         </PopUpNotice>
         <PopUpNotice label='Host Gameboard' className="ps-0  enterButton">
-          <Link className="toGameboardLink" to={`/gameboard/${thisBoard.id}`}>
+          <Link className="toGameboardLink" to={`/gameboard/${thisBoard.boardPath}`}>
             <BsCheckCircle className="enterIcon"/>
           </Link>
         </PopUpNotice>

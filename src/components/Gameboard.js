@@ -137,7 +137,7 @@ function Gameboard(props) {
   if (location.state) {
     guest = {
       id: location.state.id,
-      username: location.state.username
+      username: location.state.username || 'User'
     }
   }
 

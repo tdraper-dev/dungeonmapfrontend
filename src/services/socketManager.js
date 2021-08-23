@@ -13,13 +13,40 @@ const initiateDMSocket = (boardId) => {
   socket.on('user_disconnect')
 }
 
-const initiateGuestSocket = (boardId, history, username, callback) => {
+const guestQuickCheck = (boardId, notify, callback) => {
 
   socket = io()
-  socket.emit('guest', boardId)
 
-  socket.on('guestCheck', (check) => {
+  socket.emit('guestQuick', boardId)
+
+  socket.on('guestCheckQuick', (check) => {
     if(check) {
+      callback(boardId)
+    } else {
+      disconnectSocket();
+      notify.notify({
+        notification: 'Session not live or ID incorrect',
+        errorType: 'guestJoin'
+      })
+    } 
+  })
+}
+
+const initiateGuestSocket = (boardId, history, username, callback) => {
+  if(!socket) {
+    console.log('yo!')
+    socket = io()
+
+    socket.emit('guest', boardId)
+    
+    socket.on('guestCheck', (check) => {
+      if(!check) {
+        console.log('no access!')
+        disconnectSocket()
+        return history.goBack()
+      }
+    })
+  }
       console.log('Guest registering to Room')
       socket.emit('join', { boardId, username })
       socket.on('dm_disconnect', () => {
@@ -28,12 +55,6 @@ const initiateGuestSocket = (boardId, history, username, callback) => {
         return history.goBack()
       })
       return callback()
-    } else {
-      console.log('no access!')
-      socket.disconnect();
-      return history.goBack()
-    }
-  })
 }
 
 const userEntryExit = (callback) => {
@@ -152,6 +173,7 @@ const disconnectSocket = () => {
 export default {
   initiateDMSocket,
   initiateGuestSocket,
+  guestQuickCheck,
   userEntryExit,
   disconnectSocket,
   dmDisconnecting,

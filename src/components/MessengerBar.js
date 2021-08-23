@@ -3,11 +3,11 @@ import socketServices from '../services/socketManager'
 import { BsChat } from 'react-icons/bs'
 
 
-const SystemMessage = ({ content }) => {
+const SystemMessage = ({ sender, content }) => {
 
   return (
     <div className="systemMessage px-2 mb-2" >
-      <div className="">{content}</div>
+      <div className="">{sender} {content}</div>
     </div>
   )
 }
@@ -115,6 +115,7 @@ function MessengerBar({id, username, session, float, setFloat}) {
             if(message.systemMsg) {
               return <SystemMessage
                 key={message.id}
+                sender={message.username} 
                 content={message.content}
                 />
             }
