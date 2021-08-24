@@ -113,7 +113,7 @@ function CreateBoard({setVisible, createNewBoard}) {
     e.preventDefault()
     try {
       let file = fileRef.current.files[0]
-      if(regTest.test(file.type)) {
+      if(!file || regTest.test(file.type)) {
         console.log('success!')
         setVisible(false)
         await createNewBoard(boardName, file)
@@ -139,6 +139,7 @@ function CreateBoard({setVisible, createNewBoard}) {
     }
   })
 
+
   return(
     <div ref={boxRef} className="newBoardFormBox popUpBoxes py-2 px-2">
       <form id="uploadFormDash" className="row py-3 px-3" encType='multipart/form-data' onSubmit={handleSubmit}>
@@ -158,7 +159,6 @@ function CreateBoard({setVisible, createNewBoard}) {
           ref={fileRef}
           id="fileUploadDash"
           name="file"
-          required
         />
         <button className="col-6 mt-4 submitButtons buttons" type='submit'>Create</button>
       </form>

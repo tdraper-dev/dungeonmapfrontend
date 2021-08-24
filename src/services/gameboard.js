@@ -1,7 +1,17 @@
 import axios from 'axios'
+import { default64 } from '../images/default64.js'
 const baseUrl = '/api/gameboards'
 
 let token = null
+
+let defaultImage;
+fetch(default64)
+.then((res) => res.blob())
+.then((blob) => {
+  console.log(blob);
+  defaultImage=blob
+});
+
 
 const setToken = (newToken) => {
   !newToken
@@ -40,7 +50,7 @@ const createGameBoard = async (newBoard) => {
   }
 
   const formData = new FormData();
-  formData.append('myImage', newBoard.mapImage)
+  formData.append('myImage', newBoard.mapImage || defaultImage)
   formData.append('title', newBoard.name)
 
   const response = await axios.post(baseUrl, formData, config)
