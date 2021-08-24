@@ -22,15 +22,7 @@ function Icon({
   deleteIcon,
   updatePosition }) {
   
-/*
- const updateIcon = useCallback(
-    debounce(async(position) => {
-      socketServices.moveIcon(position, id)
-      const updatedIcon = await iconService.updateIcon(position, id)
-    }, 1000),
-    []
-  )
-*/
+
 
   return (
     <>

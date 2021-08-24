@@ -3,7 +3,6 @@ const baseUrl = '/api/icons'
 
 const getIcons = async(boardId) => {
   const response = await axios.get(`${baseUrl}/${boardId}`)
-  console.log('ICONS ', response.data)
   return response.data
 }
 
@@ -18,7 +17,6 @@ const updateIcon = async(iconInfo, id) => {
 }
 
 const deleteIcon = async(id) => {
-  console.log(id)
   const response = await axios.delete(`${baseUrl}/${id}`)
   return response.data
 }

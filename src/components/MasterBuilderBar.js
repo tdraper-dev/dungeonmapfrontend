@@ -78,7 +78,7 @@ function BuildIcon({ createIcon, boardId, visible }) {
             </div>
           : null
         }
-        <button className={`cake ms-2 mt-3 col-6 submitButtonFix ${content ? 'glide' : ''}`} type="submit">Create Icon</button>
+        <button className='cake ms-2 mt-3 col-6 submitButtonFix' type="submit">Create Icon</button>
       </form>
     </div>
   )

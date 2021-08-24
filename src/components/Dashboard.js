@@ -116,7 +116,6 @@ function CreateBoard({setVisible, createNewBoard}) {
     try {
       let file = fileRef.current.files[0]
       if(!file || regTest.test(file.type)) {
-        console.log('success!')
         setVisible(false)
         await createNewBoard(boardName, file)
       } else {

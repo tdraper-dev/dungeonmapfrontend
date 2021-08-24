@@ -163,7 +163,7 @@ function SignUp({ handleSignUp }) {
   )
 }
 
-function SignUpForm () {
+function SignUpForm ({ setField }) {
   const notify = useNotify();
   const auth = useAuth()
 
@@ -176,6 +176,7 @@ function SignUpForm () {
           notification: `New user ${username} created!`,
           successType: 'userCreated'
         })
+        setField('Login')
       }
     } catch (exception) {
       notify.notify({
@@ -231,6 +232,7 @@ function Login() {
 
   return (
     <div id="background">
+    <NotificationSuccess successType='userCreated' />
     <h1 className="noselect loginTitle">
         Dungeon Map!
     </h1>
@@ -241,7 +243,7 @@ function Login() {
 
         {field === 'Login' ? <LoginForm /> : null}
         {field === 'Join Session' ? <JoinSession /> : null}
-        {field === 'Sign Up' ? <SignUpForm /> : null}
+        {field === 'Sign Up' ? <SignUpForm setField={setField} /> : null}
 
         </div>
         <div className=" otherOptions d-flex mt-4 mx-2">
@@ -252,8 +254,7 @@ function Login() {
         <DemoButton />
           
       </div>
-
-  </div>
+    </div>
   </div>
   )
 }
