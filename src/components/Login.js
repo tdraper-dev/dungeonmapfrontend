@@ -217,7 +217,7 @@ const DemoButton = () => {
 
   return (
     <button className="optionItems px-1 py-1 mb-2 buttons" onClick={handleClick}>
-      Demo
+      Demo as Dungeon Master
     </button>
   )
 }

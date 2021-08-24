@@ -253,7 +253,7 @@ function Gameboard(props) {
     const guestAuthorization = async() => {
       console.log('GUEST', guest)
       if(!location.state) {
-        let guestName = window.prompt('Name?')
+        let guestName = window.prompt('Name?') || 'User'
         setGuest({...guest, username: guestName })
         socketServices.initiateGuestSocket(boardId, history, guestName, loadGameBoard)
       } else {
