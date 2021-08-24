@@ -70,13 +70,21 @@ function BuildIcon({ createIcon, boardId, visible }) {
             value="rgba(63,191,63,1)"
             >Green</option>
         </select>
+        {content && color
+          ?
+            <div 
+              style={{ backgroundColor: color }}className=" playerIcon playerIconPreview my-3">
+              {content}
+            </div>
+          : null
+        }
         <button className="ms-2 mt-3 col-6 submitButtonFix" type="submit">Create Icon</button>
       </form>
     </div>
   )
 }
 
-function FileBase64({setLoading, boardId, setImage64, visible }) {
+function BuildMap({setLoading, boardId, setImage64, visible }) {
   const [imagePreview, setImagePreview] = useState('')
 
   const thumbnailPreview = async () => {
@@ -156,7 +164,7 @@ function MasterBuilder({
   let box = null;
 
   if(option === 'changeMap') {
-    box = <FileBase64 setLoading={setLoading} boardId={boardId} setImage64={setImage64}/>
+    box = <BuildMap setLoading={setLoading} boardId={boardId} setImage64={setImage64}/>
   } else if (option === 'buildIcon') {
     box = <BuildIcon createIcon={createIcon} boardId={boardId}/>
   }

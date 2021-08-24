@@ -1148,6 +1148,15 @@ a.hidden {
   }
 }
 
+.playerIconPreview {
+  color: black;
+  border-radius: 5px;
+  padding: 5px;
+  font-family: dungeonFont;
+  font-weight: 600;
+  width: fit-content;
+}
+
 #dropZoneDelete {
   position: fixed;
   z-index: 10000;
