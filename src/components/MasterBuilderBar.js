@@ -77,8 +77,15 @@ function BuildIcon({ createIcon, boardId, visible }) {
 }
 
 function FileBase64({setLoading, boardId, setImage64, visible }) {
+  const [imagePreview, setImagePreview] = useState('')
 
-  const handleChange = async (e) => {
+  const thumbnailPreview = async () => {
+    const fileBuffer = await imageUtility.getAsByteArray(fileRef.current.files[0])
+    const newImage = await imageUtility.convertBuffertoBlob(fileBuffer)
+    setImagePreview(newImage)
+  }
+
+  const handleSubmit = async (e) => {
     e.preventDefault()
     setLoading(true)
     let file = fileRef.current.files[0]
@@ -88,19 +95,32 @@ function FileBase64({setLoading, boardId, setImage64, visible }) {
       socketServices.changeMap()
     }
     await setImage64(mapImage)
-
+    setImagePreview('')
     setLoading(false)
   }
 
   const fileRef = useRef()
   return (
-    <form id="uploadForm" className={`mt-5 ${visible ? 'visibleTool ' : ''}`} encType='multipart/form-data' onSubmit={handleChange}>
-
+    <form id="uploadForm" className={`mt-5 ${visible ? 'visibleTool ' : ''}`} encType='multipart/form-data' onSubmit={handleSubmit}>
+      <div className="mapFormButtons">
       <label htmlFor="fileUpload" className='fileUpload px-2 mx-2' >Select Image</label>
 
-      <input ref={fileRef} type="file" id="fileUpload" name="file" required />
+      <input 
+        ref={fileRef} 
+        type="file" 
+        id="fileUpload" 
+        name="file"
+        onChange={thumbnailPreview} 
+        required />
 
       <input type='submit' value='Upload' />
+      </div>
+      <div className="imagePreviewBox mt-5">
+        {imagePreview
+          ? <img alt="Thumbnail preview of map" src={imagePreview} className="imagePreview toolBar" />
+          : null
+        }
+      </div>
 
     </form>
   )

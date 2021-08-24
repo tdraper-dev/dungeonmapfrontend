@@ -485,6 +485,19 @@ html {
   display: none;
 }
 
+.imagePreview {
+  width: 100px;
+  height: 100px;
+  padding: 0;
+}
+.imagePreview.toolBar {
+  width: 200px;
+  height: 200px;
+}
+.imagePreviewBox {
+  display: flex;
+  justify-content: center;
+}
 
 @media(max-width: 1300px) {
   .dashTitle {
@@ -931,9 +944,15 @@ html {
   text-align: center;
 }
 
+.mapFormButtons {
+  display: flex;
+  justify-content: center;
+}
+
 .submitButtonFix {
   text-align: center;
 }
+
 /* -----------------MESSAGE SIDEBAR SPECIFIC -------------- */
 .msgRow {
   flex-direction: column;

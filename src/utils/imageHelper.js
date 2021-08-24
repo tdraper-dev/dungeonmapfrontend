@@ -19,6 +19,25 @@ const convertBuffertoBlob = (buffer) => {
 }
 
 
+
+
+function readFile(file) {
+  return new Promise((resolve, reject) => {
+    let reader = new FileReader()
+
+    reader.addEventListener("loadend", e => resolve(e.target.result))
+    reader.addEventListener("error", reject)
+
+    reader.readAsArrayBuffer(file)
+  })
+}
+
+const getAsByteArray = async(file) => {
+  return new Uint8Array(await readFile(file))
+}
+
+
 export default {
-  convertBuffertoBlob
+  convertBuffertoBlob,
+  getAsByteArray
 }

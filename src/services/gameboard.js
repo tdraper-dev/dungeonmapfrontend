@@ -8,7 +8,6 @@ let defaultImage;
 fetch(default64)
 .then((res) => res.blob())
 .then((blob) => {
-  console.log(blob);
   defaultImage=blob
 });
 

@@ -10,6 +10,7 @@ import AddContentCircle from './AddContentCircle'
 import LoadingSquare from './LoadingSquare'
 import Icon from './Icon'
 
+
 function LogoutButton() {
   const auth = useAuth()
 
@@ -105,6 +106,7 @@ function BoardDisplay(props) {
 
 function CreateBoard({setVisible, createNewBoard}) {
   const [boardName, setBoardName] = useState('')
+  const [imagePreview, setImagePreview] = useState('')
   const boxRef = useRef();
   const fileRef = useRef();
   const regTest = /image\/(png|jpeg)/
@@ -130,6 +132,12 @@ function CreateBoard({setVisible, createNewBoard}) {
     if(!boxRef.current || !boxRef.current.contains(event.target)) {
         setVisible(false)
     }
+  }
+
+  const thumbnailPreview = async () => {
+    const fileBuffer = await imageUtility.getAsByteArray(fileRef.current.files[0])
+    const newImage = await imageUtility.convertBuffertoBlob(fileBuffer)
+    setImagePreview(newImage)
   }
  
   useEffect(() => {
@@ -159,9 +167,14 @@ function CreateBoard({setVisible, createNewBoard}) {
           ref={fileRef}
           id="fileUploadDash"
           name="file"
+          onChange={thumbnailPreview}
         />
+        {imagePreview
+          ? <img alt="Thumbnail preview of map" src={imagePreview} className="imagePreview" />
+          : null
+        }
         <button className="col-6 mt-4 submitButtons buttons" type='submit'>Create</button>
-      </form>
+      </form> 
     </div>
   )
 }
