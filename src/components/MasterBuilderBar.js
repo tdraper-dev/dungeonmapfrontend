@@ -32,7 +32,7 @@ function BuildIcon({ createIcon, boardId, visible }) {
  
   return (
     <div className={`${visible ? 'visibleTool ' : ''}buildIconFormBox`}>
-      <form onSubmit={handleSubmit} className="changeMapRow row mt-5">
+      <form onSubmit={handleSubmit} className="changeMapRow row mt-3">
 
         <label className="col-4 mb-1" htmlFor='iconContentInput'>Content: </label>
         <input
@@ -78,7 +78,7 @@ function BuildIcon({ createIcon, boardId, visible }) {
             </div>
           : null
         }
-        <button className="ms-2 mt-3 col-6 submitButtonFix" type="submit">Create Icon</button>
+        <button className={`cake ms-2 mt-3 col-6 submitButtonFix ${content ? 'glide' : ''}`} type="submit">Create Icon</button>
       </form>
     </div>
   )
