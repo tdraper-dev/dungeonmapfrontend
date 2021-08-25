@@ -11,6 +11,7 @@ import LoadingSquare from './LoadingSquare'
 import Icon from './Icon'
 import { useNotify } from '../services/use-notification'
 import { NotificationError, NotificationSuccess } from './Notification'
+import imageHelper from '../utils/imageHelper'
 
 
 function LogoutButton() {
@@ -124,7 +125,7 @@ function CreateBoard({setVisible, createNewBoard}) {
       }
     } else {
       notify.notify({
-        notification: 'Map file types accepted are .png or .jpeg',
+        notification: 'Image file types accepted are .png or .jpeg',
         errorType: 'mapImage'
       })
     }
@@ -136,14 +137,20 @@ function CreateBoard({setVisible, createNewBoard}) {
     }
   }
 
-  const thumbnailPreview = async () => {
-    if(regTest.test(fileRef.current.files[0])) {
-      const fileBuffer = await imageUtility.getAsByteArray(fileRef.current.files[0])
-      const newImage = await imageUtility.convertBuffertoBlob(fileBuffer)
+  const preview = async() => {
+    const file = fileRef.current.files[0]
+    setImagePreview('')
+    try {
+      const newImage = await imageHelper.thumbnailPreviewBuilder(file)
       setImagePreview(newImage)
+    } catch(error) {
+      notify.notify({
+        notification: error.notification,
+        errorType: error.errorType
+      })
     }
   }
- 
+
   useEffect(() => {
     document.addEventListener('click', checkForClick)
     return () => {
@@ -171,7 +178,7 @@ function CreateBoard({setVisible, createNewBoard}) {
           ref={fileRef}
           id="fileUploadDash"
           name="file"
-          onChange={thumbnailPreview}
+          onChange={preview}
         />
         {imagePreview
           ? <img alt="Thumbnail preview of map" src={imagePreview} className="imagePreview" />

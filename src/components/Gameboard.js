@@ -14,6 +14,7 @@ import { useAuth } from '../services/use-auth'
 import { useNotify } from '../services/use-notification'
 import { BsThreeDotsVertical } from 'react-icons/bs'
 import { NotificationSuccess, NotificationError } from './Notification'
+import WornMap from '../images/wornMap(resized).jpg'
 
 
 function MapImageView(props) {
@@ -53,7 +54,7 @@ function MapTray({ mapSrc, loading, icons, setIcons, deleteIcon, updatePosition,
                   updatePosition={updatePosition}
                 /> 
             })}
-            <img draggable="false" id='gameBoardMap' className="noselect gameboardMapImage mapImage img-fluid" alt='' src={mapSrc} />
+            <img draggable="false" id='gameBoardMap' className="noselect gameboardMapImage mapImage img-fluid" alt='' src={mapSrc || WornMap} />
           </MapImageView>
       }
     </div>
@@ -154,24 +155,7 @@ function Gameboard(props) {
       if(auth.userId) {
         socketServices.initiateDMSocket(boardId)
       }
-/*
-      socketServices.userEntryExit((statusType) => {
-        if(statusType === 'userConnect') {
-          notify.notify({
-            notification: 'New user has joined the game!',
-            errorType: null,
-            successType: 'newUserJoined'
-          })
-        }
-        if(statusType === "userDisconnect") {
-          notify.notify({
-            notification: 'User has left the game!',
-            errorType: 'userExit',
-            successType: null
-          })
-        }
-      })
-*/
+
       socketServices.addIcon((iconObj) => {
         setIcons(icons => [...icons, iconObj])
       })
@@ -250,14 +234,21 @@ function Gameboard(props) {
         console.log('loading mapImage failed', exception)
       }
     }
+
     const guestAuthorization = async() => {
-      console.log('GUEST', guest)
       if(!location.state) {
-        let guestName = window.prompt('Name?') || 'User'
-        setGuest({...guest, username: guestName })
-        socketServices.initiateGuestSocket(boardId, history, guestName, loadGameBoard)
+        await socketServices
+          .initiateGuestSocket(boardId, history, loadGameBoard, ()=>{
+            let guestName = sessionStorage.getItem('guestUserName') || "$"
+            while (/(\$|{|}|\/|\\|\*|\(|\)\`)+/g.test(guestName)) {
+              guestName = window.prompt('Please input a player name, no special characters permitted') || 'User'
+            }
+            setGuest({...guest, username: guestName })
+            return guestName
+          })
+
       } else {
-        socketServices.initiateGuestSocket(boardId, history, location.state.username, loadGameBoard)
+        socketServices.initiateGuestSocket(boardId, history, loadGameBoard)
       }
     }
 

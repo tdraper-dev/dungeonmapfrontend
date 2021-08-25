@@ -1,5 +1,6 @@
 import axios from 'axios'
 
+
 function blobReaderPromise (buffer) {
   let arraybuffer = Uint8Array.from(buffer).buffer;
   let imageBlob = new Blob([arraybuffer])
@@ -18,9 +19,6 @@ const convertBuffertoBlob = (buffer) => {
   return base64
 }
 
-
-
-
 function readFile(file) {
   return new Promise((resolve, reject) => {
     let reader = new FileReader()
@@ -36,8 +34,31 @@ const getAsByteArray = async(file) => {
   return new Uint8Array(await readFile(file))
 }
 
+const thumbnailPreviewBuilder = async(file = {blank: 'blank'}) => {
+  const regTest = /image\/(png|jpeg)/
+  
+  try {
+    if(regTest.test(file.type)) {
+      
+      const fileBuffer = await getAsByteArray(file)
+      const newImage = await convertBuffertoBlob(fileBuffer)
+      return newImage
+    } else {
+      throw new Error()
+    }
+  } catch(error) {
+    throw {
+      error: new Error(),
+      notification: 'Image file types accepted are .png or .jpeg',
+      errorType: 'mapImage',
+    }
+  }
+
+}
+
 
 export default {
   convertBuffertoBlob,
-  getAsByteArray
+  getAsByteArray,
+  thumbnailPreviewBuilder
 }

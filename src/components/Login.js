@@ -28,10 +28,10 @@ function JoinSession() {
   const handleSubmit = (e) => {
     e.preventDefault()
     const checkName = /(\$|{|}|\/|\\|\*|\(|\)\`)+/g.test(username)
-    const checkSession = /(\$|{|}|\/|\\|\*|\(|\)\`)+/g.test(username)
+    const checkSession = /(\$|{|}|\/|\\|\*|\(|\)\`)+/g.test(sessionID)
 
     if(!checkName && !checkSession && sessionID && username) {
-      socketServices.guestQuickCheck(sessionID, notify, quickCheck);
+      socketServices.guestQuickCheck(sessionID, notify, username, quickCheck);
     } else {
       notify.notify({
         notification: 'Please ensure no special characters in name and valid sessionID',

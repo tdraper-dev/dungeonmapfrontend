@@ -2,19 +2,19 @@ import io from 'socket.io-client'
 
 let socket;
 let verified = false;
+
 //${window.location.protocol}//${window.location.host}
 const initiateDMSocket = (boardId) => {
 
   console.log(`Dungeon Master connecting to socket...`);
   socket = io()
-  console.log('DMsocket', socket)
 
   socket.emit('join', {boardId, username: "DungeonMaster"})
   socket.on('user_joined')
   socket.on('user_disconnect')
 }
 
-const guestQuickCheck = (boardId, notify, callback) => {
+const guestQuickCheck = (boardId, notify, username, callback) => {
 
   socket = io()
 
@@ -24,6 +24,8 @@ const guestQuickCheck = (boardId, notify, callback) => {
     if(check) {
       verified = true;
       callback(boardId)
+      socket.emit('join', { boardId, username })
+      sessionStorage.setItem('guestUserName', username)
     } else {
       disconnectSocket();
       notify.notify({
@@ -34,7 +36,7 @@ const guestQuickCheck = (boardId, notify, callback) => {
   })
 }
 
-const initiateGuestSocket = (boardId, history, username, callback) => {
+const initiateGuestSocket = (boardId, history, callback, naming=null) => {
   if(!socket) {
     socket = io()
 
@@ -42,18 +44,18 @@ const initiateGuestSocket = (boardId, history, username, callback) => {
     
     socket.on('guestCheck', (check) => {
       if(!check) {
-        console.log('no access!')
         disconnectSocket()
         return history.goBack()
       } else {
-        return callback()
+        callback()
+        const username = sessionStorage.getItem('guestUserName') || naming()
+        sessionStorage.setItem('guestUserName', username)
+        socket.emit('join', { boardId, username })
       }
     })
   }
-      console.log('Guest registering to Room')
-      socket.emit('join', { boardId, username })
+      
       socket.on('dm_disconnect', () => {
-        console.log('The guests have received notice from the Server, the DM is gone')
         disconnectSocket()
         return history.goBack()
       })
@@ -62,18 +64,6 @@ const initiateGuestSocket = (boardId, history, username, callback) => {
         return callback()
       }
 }
-
-const userEntryExit = (callback) => {
-  if(socket) {
-    socket.on('user_joined', (data) => {
-      callback(data)
-    })
-    socket.on('user_disconnect', (data) => {
-      callback(data)
-    })
-  }
-}
-
 
 const createIcon = (newIcon) => {
 
@@ -178,7 +168,6 @@ export default {
   initiateDMSocket,
   initiateGuestSocket,
   guestQuickCheck,
-  userEntryExit,
   disconnectSocket,
   dmDisconnecting,
   createIcon,

@@ -5,6 +5,7 @@ import iconService from '../services/icon'
 import socketServices from '../services/socketManager'
 import { useNotify } from '../services/use-notification'
 import { NotificationSuccess, NotificationError } from './Notification'
+import imageHelper from '../utils/imageHelper'
 
 function BuildIcon({ createIcon, boardId, visible }) {
   const [content, setContent] = useState('')
@@ -93,17 +94,16 @@ function BuildMap({setLoading, boardId, setImage64, visible }) {
   const regTest = /image\/(png|jpeg)/
   const notify = useNotify()
 
-  const thumbnailPreview = async () => {
-    let file = fileRef.current.files[0] || { blank: '' }
+  const preview = async() => {
+    const file = fileRef.current.files[0]
     setImagePreview('')
-    if(regTest.test(file.type)) {
-      const fileBuffer = await imageUtility.getAsByteArray(file)
-      const newImage = await imageUtility.convertBuffertoBlob(fileBuffer)
+    try {
+      const newImage = await imageHelper.thumbnailPreviewBuilder(file)
       setImagePreview(newImage)
-    } else {
+    } catch(error) {
       notify.notify({
-        notification: 'Image file types accepted are .png or .jpeg',
-        errorType: 'mapImage'
+        notification: error.notification,
+        errorType: error.errorType
       })
     }
   }
@@ -150,7 +150,7 @@ function BuildMap({setLoading, boardId, setImage64, visible }) {
         type="file" 
         id="fileUpload" 
         name="file"
-        onChange={thumbnailPreview} 
+        onChange={preview} 
         required />
 
       <input type='submit' value='Upload' />
