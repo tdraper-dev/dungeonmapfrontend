@@ -5,8 +5,6 @@ let verified = false;
 
 //${window.location.protocol}//${window.location.host}
 const initiateDMSocket = (boardId) => {
-
-  console.log(`Dungeon Master connecting to socket...`);
   socket = io()
 
   socket.emit('join', {boardId, username: "DungeonMaster"})
