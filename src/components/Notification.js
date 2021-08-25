@@ -1,12 +1,12 @@
 import React from 'react'
 import { useNotify } from '../services/use-notification'
 
-function NotificationError({errorType}) {
+function NotificationError({errorType, style=null}) {
   const notify = useNotify()
 
   return (
     notify.message && notify.errorType === errorType
-    ? <Notification type="errorMessage" notification={notify.message} />
+    ? <Notification style={style} type="errorMessage" notification={notify.message} />
     : null
   )
 }
@@ -22,10 +22,10 @@ function NotificationSuccess({successType}) {
 }
 
 
-function Notification({ notification, type }) {
+function Notification({ notification, type, style }) {
 
   return (
-    <div className={`noselect ${type}`}>
+    <div style={style} className={`noselect ${type}`}>
       {notification}
     </div>
   )

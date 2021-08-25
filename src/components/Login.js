@@ -145,6 +145,7 @@ function SignUp({ handleSignUp }) {
         type='password'
         className="col-lg-6 col-md-8 col-8 mb-2 inputs"
         value={password}
+        minLength={8}
         onChange={({ target }) => setPassword(target.value)}
       />
       <label className="label col-lg-6 col-md-8 col-8 mb-2">Confirm Password</label>
@@ -152,6 +153,7 @@ function SignUp({ handleSignUp }) {
         type='password'
         className="col-lg-6 col-md-8 col-8 mb-2 inputs"
         value={passwordConfirm}
+        minLength={8}
         onChange={({ target }) => setPasswordConfirm(target.value)}
       />
       <div className="notifyBoxes col-lg-6 col-md-8 col-8 mb-2 pt-2">
@@ -178,12 +180,12 @@ function SignUpForm ({ setField }) {
         })
         setField('Login')
       }
-    } catch (exception) {
+    } catch (error) {
       notify.notify({
-        notification: 'Username taken or under 5 character mininmum length',
+        notification: error.response.data.error,
         errorType: 'usernameLength'
       })
-      console.log(exception)
+      console.log(error.response.data)
     }
   }
   return (

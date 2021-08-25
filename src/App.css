@@ -190,6 +190,7 @@ html {
 
 .errorMessage {
   position: absolute;
+  z-index: 1000000;
   left: 140px;
   top: -40px;
   color: black;

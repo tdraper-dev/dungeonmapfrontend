@@ -9,6 +9,8 @@ import imageUtility from '../utils/imageHelper'
 import AddContentCircle from './AddContentCircle'
 import LoadingSquare from './LoadingSquare'
 import Icon from './Icon'
+import { useNotify } from '../services/use-notification'
+import { NotificationError, NotificationSuccess } from './Notification'
 
 
 function LogoutButton() {
@@ -110,21 +112,22 @@ function CreateBoard({setVisible, createNewBoard}) {
   const boxRef = useRef();
   const fileRef = useRef();
   const regTest = /image\/(png|jpeg)/
+  const notify=useNotify()
+
   const handleSubmit = async (e) => {
-    
     e.preventDefault()
-    try {
-      let file = fileRef.current.files[0]
-      if(!file || regTest.test(file.type)) {
+    let file = fileRef.current.files[0]
+    if(!file || regTest.test(file.type)) {
+      const check = await createNewBoard(boardName, file)
+      if(check) {
         setVisible(false)
-        await createNewBoard(boardName, file)
-      } else {
-        throw new Error({ message: 'wrong file type!' })
       }
-    } catch (exception) {
-      console.log(exception)
+    } else {
+      notify.notify({
+        notification: 'Map file types accepted are .png or .jpeg',
+        errorType: 'mapImage'
+      })
     }
-    
   }
 
   const checkForClick = (event) => {
@@ -173,6 +176,8 @@ function CreateBoard({setVisible, createNewBoard}) {
           : null
         }
         <button className="col-6 mt-4 submitButtons buttons" type='submit'>Create</button>
+        <NotificationError errorType='mapTitle' />
+        <NotificationError errorType='mapImage' />
       </form> 
     </div>
   )
@@ -247,6 +252,7 @@ function Dashboard() {
   const [displayImage, setDisplayImage] = useState(null)
   const [icons, setIcons] = useState([])
   const [loading, setLoading] = useState(true)
+  const notify = useNotify();
 
   const createNewBoard = async(boardName, file) => {
     setLoading(true)
@@ -263,6 +269,12 @@ function Dashboard() {
         document.getElementsByClassName('thumbnailBox')[boards.length].click()
       }
     } catch (exception) {
+      setLoading(false)
+      console.log('OH NO!')
+      notify.notify({
+        notification: 'Please ensure no special characters in map name',
+        errorType: 'mapTitle'
+      })
       console.log(exception)
     }
   }

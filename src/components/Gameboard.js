@@ -154,7 +154,7 @@ function Gameboard(props) {
       if(auth.userId) {
         socketServices.initiateDMSocket(boardId)
       }
-
+/*
       socketServices.userEntryExit((statusType) => {
         if(statusType === 'userConnect') {
           notify.notify({
@@ -171,7 +171,7 @@ function Gameboard(props) {
           })
         }
       })
-      
+*/
       socketServices.addIcon((iconObj) => {
         setIcons(icons => [...icons, iconObj])
       })

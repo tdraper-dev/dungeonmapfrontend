@@ -3,14 +3,16 @@ import gameBoardService from '../services/gameboard'
 import imageUtility from '../utils/imageHelper'
 import iconService from '../services/icon'
 import socketServices from '../services/socketManager'
+import { useNotify } from '../services/use-notification'
+import { NotificationSuccess, NotificationError } from './Notification'
 
 function BuildIcon({ createIcon, boardId, visible }) {
   const [content, setContent] = useState('')
   const [color, setColor] = useState('rgba(250,235,215,1)')
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault()
-    createIcon({
+    await createIcon({
       content,
       color,
       boardId
@@ -79,33 +81,57 @@ function BuildIcon({ createIcon, boardId, visible }) {
           : null
         }
         <button className='cake ms-2 mt-3 col-6 submitButtonFix' type="submit">Create Icon</button>
+    
       </form>
+      <NotificationError style={{left: '50px', bottom: '50px', top: 'unset'}}errorType='iconContent' />
     </div>
   )
 }
 
 function BuildMap({setLoading, boardId, setImage64, visible }) {
   const [imagePreview, setImagePreview] = useState('')
+  const regTest = /image\/(png|jpeg)/
+  const notify = useNotify()
 
   const thumbnailPreview = async () => {
-    const fileBuffer = await imageUtility.getAsByteArray(fileRef.current.files[0])
-    const newImage = await imageUtility.convertBuffertoBlob(fileBuffer)
-    setImagePreview(newImage)
+    let file = fileRef.current.files[0]
+    if(regTest.test(file.type)) {
+      const fileBuffer = await imageUtility.getAsByteArray(file)
+      const newImage = await imageUtility.convertBuffertoBlob(fileBuffer)
+      setImagePreview(newImage)
+    } else {
+      notify.notify({
+        notification: 'Image file types accepted are .png or .jpeg',
+        errorType: 'mapImage'
+      })
+    }
   }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
     setLoading(true)
-    let file = fileRef.current.files[0]
-    const buffer = await gameBoardService.updateGameBoardImage(file, boardId);
-    const mapImage = await imageUtility.convertBuffertoBlob(buffer.data)
-    if(mapImage) {
-      socketServices.changeMap()
+    try {
+      let file = fileRef.current.files[0]
+      console.log(file)
+      const buffer = await gameBoardService.updateGameBoardImage(file, boardId);
+      const mapImage = await imageUtility.convertBuffertoBlob(buffer.data)
+      if(mapImage) {
+        socketServices.changeMap()
+      }
+      await setImage64(mapImage)
+      setImagePreview('')
+      setLoading(false)
+    } catch(exception) {
+      console.log(exception.response.data.error)
+      setLoading(false)
+      notify.notify({
+        notification: exception.response.data.error,
+        errorType: 'mapImage'
+      })
     }
-    await setImage64(mapImage)
-    setImagePreview('')
-    setLoading(false)
+
   }
+
 
   const fileRef = useRef()
   return (
@@ -129,7 +155,7 @@ function BuildMap({setLoading, boardId, setImage64, visible }) {
           : null
         }
       </div>
-
+      <NotificationError style={{left: '50px', top: '150px'}} errorType='mapImage' />
     </form>
   )
 }
@@ -149,11 +175,20 @@ function MasterBuilder({
 }) {
   const [option, setOption] = useState('')
   const[navBarVis, setNavBarVis] = useState(true)
+  const notify = useNotify()
 
   const createIcon = async (iconInfo) => {
-    const newIcon = await iconService.createIcon(iconInfo)
-    socketServices.createIcon(newIcon)
-    setIcons(icons.concat(newIcon))
+    try {
+      const newIcon = await iconService.createIcon(iconInfo)
+      socketServices.createIcon(newIcon)
+      setIcons(icons.concat(newIcon))
+    } catch(exception) {
+      notify.notify({
+        notification: 'Not accepted characters: $, }, {, /, \\, *, ), (, ` ',
+        errorType: 'iconContent'
+      })
+    }
+
   }
 
   const toggleMovement = () => {
