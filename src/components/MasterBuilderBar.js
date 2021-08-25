@@ -94,7 +94,8 @@ function BuildMap({setLoading, boardId, setImage64, visible }) {
   const notify = useNotify()
 
   const thumbnailPreview = async () => {
-    let file = fileRef.current.files[0]
+    let file = fileRef.current.files[0] || { blank: '' }
+    setImagePreview('')
     if(regTest.test(file.type)) {
       const fileBuffer = await imageUtility.getAsByteArray(file)
       const newImage = await imageUtility.convertBuffertoBlob(fileBuffer)
@@ -109,27 +110,32 @@ function BuildMap({setLoading, boardId, setImage64, visible }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    setLoading(true)
-    try {
-      let file = fileRef.current.files[0]
-      console.log(file)
-      const buffer = await gameBoardService.updateGameBoardImage(file, boardId);
-      const mapImage = await imageUtility.convertBuffertoBlob(buffer.data)
-      if(mapImage) {
-        socketServices.changeMap()
+    let file = fileRef.current.files[0] || null
+    if(regTest.test(file.type)) {
+      try {
+        setLoading(true)
+        const buffer = await gameBoardService.updateGameBoardImage(file, boardId);
+        const mapImage = await imageUtility.convertBuffertoBlob(buffer.data)
+        if(mapImage) {
+          socketServices.changeMap()
+        }
+        await setImage64(mapImage)
+        setImagePreview('')
+        setLoading(false)
+      } catch(exception) {
+        setLoading(false)
+        notify.notify({
+          notification: exception.response.data.error,
+          errorType: 'mapImage'
+        })
       }
-      await setImage64(mapImage)
-      setImagePreview('')
-      setLoading(false)
-    } catch(exception) {
-      console.log(exception.response.data.error)
-      setLoading(false)
+    } else {
       notify.notify({
-        notification: exception.response.data.error,
+        notification: 'Unsupported file format',
         errorType: 'mapImage'
       })
     }
-
+  
   }
 
 
