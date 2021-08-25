@@ -137,9 +137,11 @@ function CreateBoard({setVisible, createNewBoard}) {
   }
 
   const thumbnailPreview = async () => {
-    const fileBuffer = await imageUtility.getAsByteArray(fileRef.current.files[0])
-    const newImage = await imageUtility.convertBuffertoBlob(fileBuffer)
-    setImagePreview(newImage)
+    if(regTest.test(fileRef.current.files[0])) {
+      const fileBuffer = await imageUtility.getAsByteArray(fileRef.current.files[0])
+      const newImage = await imageUtility.convertBuffertoBlob(fileBuffer)
+      setImagePreview(newImage)
+    }
   }
  
   useEffect(() => {
