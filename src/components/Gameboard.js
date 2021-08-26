@@ -140,7 +140,6 @@ function Gameboard(props) {
     username: ''
   })
   const auth = useAuth()
-  const notify = useNotify()
   const boardId = props.match.params.id
   let history = useHistory();
   const location = useLocation();
