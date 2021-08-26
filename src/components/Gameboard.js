@@ -1,5 +1,4 @@
 import React, { useState, useRef, useEffect } from 'react'
-import { Redirect } from 'react-router-dom'
 import { useHistory, useLocation } from "react-router-dom"
 import axios from 'axios'
 import gameBoardService from '../services/gameboard'
@@ -13,7 +12,6 @@ import iconService from '../services/icon'
 import { useAuth } from '../services/use-auth'
 import { useNotify } from '../services/use-notification'
 import { BsThreeDotsVertical } from 'react-icons/bs'
-import { NotificationSuccess, NotificationError } from './Notification'
 import WornMap from '../images/wornMap(resized).jpg'
 
 

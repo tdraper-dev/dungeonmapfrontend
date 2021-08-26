@@ -1,10 +1,10 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef } from 'react'
 import gameBoardService from '../services/gameboard'
 import imageUtility from '../utils/imageHelper'
 import iconService from '../services/icon'
 import socketServices from '../services/socketManager'
 import { useNotify } from '../services/use-notification'
-import { NotificationSuccess, NotificationError } from './Notification'
+import { NotificationError } from './Notification'
 import imageHelper from '../utils/imageHelper'
 
 function BuildIcon({ createIcon, boardId, visible }) {

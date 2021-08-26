@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { Switch, Route, Link, Redirect, useRouteMatch } from 'react-router-dom'
-import { BsXCircle, BsCheckCircle, BsMicFill } from 'react-icons/bs'
+import { Link } from 'react-router-dom'
+import { BsXCircle, BsCheckCircle } from 'react-icons/bs'
 import { useAuth } from '../services/use-auth'
 import gameBoardService from '../services/gameboard'
 import VisibleButton from './VisibleButton'
@@ -10,7 +10,7 @@ import AddContentCircle from './AddContentCircle'
 import LoadingSquare from './LoadingSquare'
 import Icon from './Icon'
 import { useNotify } from '../services/use-notification'
-import { NotificationError, NotificationSuccess } from './Notification'
+import { NotificationError } from './Notification'
 import imageHelper from '../utils/imageHelper'
 
 

@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { Switch, Route, Link, Redirect } from 'react-router-dom'
+import React from 'react'
+import { Switch, Route, Redirect } from 'react-router-dom'
 import Login from './Login'
 import Dashboard from './Dashboard'
 import { useAuth } from '../services/use-auth'

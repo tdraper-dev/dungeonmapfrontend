@@ -1,6 +1,3 @@
-import axios from 'axios'
-
-
 function blobReaderPromise (buffer) {
   let arraybuffer = Uint8Array.from(buffer).buffer;
   let imageBlob = new Blob([arraybuffer])

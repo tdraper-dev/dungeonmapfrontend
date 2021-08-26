@@ -1,15 +1,6 @@
-import React, { useEffect, useCallback } from 'react'
+import React from 'react'
 import Draggable from './DragComponent'
-import iconService from '../services/icon'
-import socketServices from '../services/socketManager'
 
-function debounce(func, timeout = 1000) {
-  let timer;
-  return (...args) => {
-    clearTimeout(timer)
-    timer = setTimeout(() => { func.apply(this, args); }, timeout)
-  }
-}
 
 
 
