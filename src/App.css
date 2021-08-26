@@ -400,6 +400,33 @@ html {
   font-weight: 600;
 }
 
+.createdBy {
+  position: absolute;
+  width: fit-content;
+  padding-right: 5px;
+  right: 0;
+  top: 0;
+
+}
+.createdBy a {
+  color: white;
+  font-size: 20px;
+  text-decoration: none;
+  transition: 300ms;
+}
+.createdBy a:hover {
+  font-size: 25px;
+  transition: 300ms;
+  text-decoration: underline;
+}
+@media(max-width: 992px) {
+  .createdBy a {
+    font-size: 12px;
+  }
+  .createdBy a:hover {
+    font-size: 15px;
+  }
+}
 
 /* ------------------------------------------------------- */
 

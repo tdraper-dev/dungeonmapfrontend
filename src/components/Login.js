@@ -225,6 +225,17 @@ const DemoButton = () => {
   )
 }
 
+const CreatorLogo = () => {
+
+  return (
+    <div className="createdBy">
+      <a href="https://tdraper-dev.github.io/" target="_blank" rel="noreferrer" title="Link to Travis Draper's technical portfolio">
+        Created by Travis Draper
+      </a>
+    </div>
+  )
+}
+
 function Login() {
   const [field, setField] = useState('Login')
 
@@ -234,6 +245,7 @@ function Login() {
 
   return (
     <div id="background">
+      <CreatorLogo/>
     <NotificationSuccess successType='userCreated' />
     <h1 className="noselect loginTitle">
         Dungeon Map!
@@ -257,6 +269,7 @@ function Login() {
           
       </div>
     </div>
+    
   </div>
   )
 }
