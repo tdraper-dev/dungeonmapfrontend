@@ -4,14 +4,6 @@ const baseUrl = '/api/gameboards'
 
 let token = null
 
-let defaultImage;
-/*
-fetch(default64)
-.then((res) => res.blob())
-.then((blob) => {
-  defaultImage=blob
-});
-*/
 
 const setToken = (newToken) => {
   !newToken

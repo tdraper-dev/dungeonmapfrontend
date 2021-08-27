@@ -50,12 +50,18 @@ const thumbnailPreviewBuilder = async(file = {blank: 'blank'}) => {
       errorType: 'mapImage',
     }
   }
-
 }
+
+function b64toBlob(dataURI, type) {
+  return new Blob([Buffer.from(dataURI.split(',')[1], 'base64')], { 
+    type: type 
+   });
+ }
 
 
 export default {
   convertBuffertoBlob,
   getAsByteArray,
-  thumbnailPreviewBuilder
+  thumbnailPreviewBuilder,
+  b64toBlob
 }
