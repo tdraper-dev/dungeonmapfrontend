@@ -107,7 +107,9 @@ html {
   width: 100%;
   overflow-x: hidden;
 }
-
+#root {
+  position: relative;
+}
 
 
 @keyframes spinning {
@@ -293,6 +295,7 @@ html {
   background-color: antiquewhite;
 }
 .loginContainer {
+  position: relative;
   justify-content: center;
   color: white;
   text-align: center;
@@ -420,6 +423,9 @@ html {
   text-decoration: underline;
 }
 @media(max-width: 992px) {
+  .createdBy {
+    top: 0;
+  }
   .createdBy a {
     font-size: 12px;
   }

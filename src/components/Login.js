@@ -245,12 +245,13 @@ function Login() {
 
   return (
     <div id="background">
-      <CreatorLogo/>
+    <CreatorLogo/>
     <NotificationSuccess successType='userCreated' />
     <h1 className="noselect loginTitle">
         Dungeon Map!
     </h1>
     <div className='loginContainer row mx-3'>
+    
       <div className='loginBox notifyBoxes d-flex'>
         <h2 className="noselect titles formTitle">Login</h2>
         <div className="formBoxContainer py-5">
@@ -269,7 +270,6 @@ function Login() {
           
       </div>
     </div>
-    
   </div>
   )
 }
